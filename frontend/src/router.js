@@ -8,7 +8,7 @@ export class Router {
             {
                 route: '/',
                 title: 'Дашборд',
-                template: '/templates/dashboard',
+                template: '/templates/dashboard.html',
                 layout: '/templates/layout.html',
                 load: () => {
 
@@ -17,13 +17,13 @@ export class Router {
             {
                 route: '/404',
                 title: '404',
-                template: '/templates/404',
+                template: '/templates/404.html',
                 layout: false
             },
             {
                 route: '/login',
                 title: 'Авторизация',
-                template: '/templates/login',
+                template: '/templates/login.html',
                 layout: false,
                 load: () => {
 
@@ -32,7 +32,7 @@ export class Router {
             {
                 route: '/sign-up',
                 title: 'Регистрация',
-                template: '/templates/sign-up',
+                template: '/templates/sign-up.html',
                 layout: false,
                 load: () => {
 
@@ -41,7 +41,7 @@ export class Router {
             {
                 route: '/income&expenses',
                 title: 'Доходы и расходы',
-                template: '/templates/income_and_expenses',
+                template: '/templates/income_and_expenses.html',
                 layout: '/templates/layout.html'
             }
         ]
