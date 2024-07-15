@@ -1,7 +1,43 @@
-SIGN-UP
-
 <a href="/sign-up">sign-up</a>
 <a href="/login">login</a>
 <a href="/">dash</a>
 <a href="/404">404</a>
 <a href="/income&expenses">expenses</a>
+
+<form>
+    <img class="mb-5" src="/images/logo.svg" alt="" width="171" height="70">
+    <h1 class="h3 mb-3 fw-medium">Создайте аккаунт</h1>
+
+    <div class="form-floating mb-2">
+        <input type="text" class="form-control" id="floatingName" placeholder="Alexandra">
+        <div class="placeholder-image">
+            <img src="/images/person.svg" alt="">
+        </div>
+        <label for="floatingName">ФИО</label>
+    </div>
+    <div class="form-floating mb-2">
+        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+        <div class="placeholder-image">
+            <img src="/images/mail.svg" alt="">
+        </div>
+        <label for="floatingInput">Электронная почта</label>
+    </div>
+    <div class="form-floating mb-2">
+        <input type="password" class="form-control" id="floatingPassword" placeholder="Пароль">
+        <div class="placeholder-image">
+            <img src="/images/lock.svg" alt="">
+        </div>
+        <label for="floatingPassword">Пароль</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="floatingRepeatPassword" placeholder="Пароль">
+        <div class="placeholder-image">
+            <img src="/images/lock.svg" alt="">
+        </div>
+        <label for="floatingRepeatPassword">Пароль</label>
+    </div>
+    <button class="btn btn-primary w-100 py-2 mb-2" type="submit">Войти</button>
+    <div class="text-start">
+        <p>Уже есть аккаунт? <a class="ms-2" href="/login">Войдите в систему</a></p>
+    </div>
+</form>
