@@ -41,7 +41,7 @@ export class Router {
             {
                 route: '/income&expenses',
                 title: 'Доходы и расходы',
-                template: '/templates/income_and_expenses.html',
+                template: '/templates/income&expenses.html',
                 layout: '/templates/layout.html'
             }
         ]
@@ -68,6 +68,8 @@ export class Router {
             if (newRoute.load && typeof newRoute.load === 'function') {
                 newRoute.load();
             }
+        } else {
+            window.location = '/404';
         }
     }
 }
