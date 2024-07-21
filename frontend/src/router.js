@@ -62,7 +62,17 @@ export class Router {
             }
 
             if (newRoute.template) {
-                this.mainContentElement.innerHTML = await fetch(newRoute.template).then(response => response.text());
+                let contentBlock = this.mainContentElement;
+                if (newRoute.layout) {
+                    this.mainContentElement.innerHTML = await fetch(newRoute.layout).then(response => response.text());
+                    contentBlock.classList.add('d-flex');
+                    contentBlock.classList.add('flex-nowrap');
+                    contentBlock = document.getElementById('inner-content');
+                } else {
+                    contentBlock.classList.remove('d-flex');
+                    contentBlock.classList.remove('flex-nowrap');
+                }
+                contentBlock.innerHTML = await fetch(newRoute.template).then(response => response.text());
             }
 
             if (newRoute.load && typeof newRoute.load === 'function') {
