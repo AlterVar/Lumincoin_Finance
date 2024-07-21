@@ -50,9 +50,44 @@ export class Router {
     init() {
         window.addEventListener('DOMContentLoaded', this.newRoute.bind(this));
         window.addEventListener('popstate', this.newRoute.bind(this));
+        window.addEventListener("click", this.openNewRoute.bind(this));
     }
 
-    async newRoute() {
+    async openNewRoute(e) {
+        let element = null;
+        if (e.target.nodeName === 'A') {
+            element = e.target;
+        } else if (e.target.parentNode.nodeName === 'A') {
+            element = e.target.parentNode;
+        }
+        if (element) {
+            e.preventDefault();
+
+            const url = element.href.replace(window.location.origin, '')
+            if (!url || url === '/#' || url.startsWith('javascript:void(0)')) {
+                return;
+            }
+
+            const currentRoute = window.location.pathname;
+            history.pushState({}, '', url);
+            await this.newRoute(null, currentRoute);
+        }
+    }
+
+    async newRoute(e, oldRoute = null) {
+        if (oldRoute) {
+            const currentRoute = this.routes.find(item => item.route === oldRoute);
+            if (currentRoute.styles && currentRoute.styles.length > 0) {
+                currentRoute.styles.forEach(style => {
+                    document.querySelector(`link[href='/css/${style}']`).remove();
+                })
+            }
+
+            if (currentRoute.unload && typeof currentRoute.unload === 'function') {
+                currentRoute.unload();
+            }
+        }
+
         const url = window.location.pathname;
         const newRoute = this.routes.find(item => item.route === url);
 
