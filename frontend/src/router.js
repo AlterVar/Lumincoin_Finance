@@ -10,6 +10,7 @@ export class Router {
                 title: 'Дашборд',
                 template: '/templates/dashboard.html',
                 layout: '/templates/layout.html',
+                styles: ['sidebars.css'],
                 load: () => {
 
                 }
@@ -25,6 +26,7 @@ export class Router {
                 title: 'Авторизация',
                 template: '/templates/login.html',
                 layout: false,
+                styles: ['sign-in.css'],
                 load: () => {
 
                 }
@@ -34,6 +36,7 @@ export class Router {
                 title: 'Регистрация',
                 template: '/templates/sign-up.html',
                 layout: false,
+                styles: ['sign-in.css'],
                 load: () => {
 
                 }
@@ -92,6 +95,16 @@ export class Router {
         const newRoute = this.routes.find(item => item.route === url);
 
         if (newRoute) {
+            if (newRoute.styles && newRoute.styles.length > 0) {
+                newRoute.styles.forEach(style => {
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = '/css/' + style;
+
+                    document.head.insertBefore(link, this.pageTitleElement);
+                })
+            }
+
             if (newRoute.title) {
                 this.pageTitleElement.innerText = newRoute.title;
             }
@@ -114,7 +127,9 @@ export class Router {
                 newRoute.load();
             }
         } else {
-            window.location = '/404';
+            console.log('No route found');
+            history.pushState({}, '', '/404');
+            await this.newRoute();
         }
     }
 }
