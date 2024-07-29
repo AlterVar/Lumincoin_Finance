@@ -45,7 +45,8 @@ export class Router {
                 route: '/income&expenses',
                 title: 'Доходы и расходы',
                 template: '/templates/income&expenses.html',
-                layout: '/templates/layout.html'
+                layout: '/templates/layout.html',
+                styles: ['sidebars.css'],
             }
         ]
     }
