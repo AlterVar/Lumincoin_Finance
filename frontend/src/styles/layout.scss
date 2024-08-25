@@ -1,0 +1,39 @@
+.side {
+  color: #052C65;
+  width: 220px;
+  .logo {
+    img {
+      width: 98px;
+      height: 40px;
+    }
+  }
+
+  .nav {
+    .nav-link, .accordion-button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+
+      &.active {
+        color: white;
+
+        svg {
+          path {
+            fill: white;
+          }
+        }
+      }
+    }
+
+    .btn-toggle {
+      padding: 8px 16px;
+      &:after {
+        margin-left: 75%;
+      }
+    }
+  }
+  .dropdown-toggle::after {
+    display: none;
+  }
+}
