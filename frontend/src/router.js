@@ -24,7 +24,7 @@ export class Router {
             {
                 route: '/login',
                 title: 'Авторизация',
-                template: '/templates/login.html',
+                template: '/templates/auth/login.html',
                 layout: false,
                 styles: ['sign-in.css'],
                 load: () => {
@@ -34,7 +34,7 @@ export class Router {
             {
                 route: '/sign-up',
                 title: 'Регистрация',
-                template: '/templates/sign-up.html',
+                template: '/templates/auth/sign-up.html',
                 layout: false,
                 styles: ['sign-in.css'],
                 load: () => {
