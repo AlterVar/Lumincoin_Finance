@@ -9,5 +9,18 @@ body {
 
   .main-content {
     height: 100%;
+    color: #052C65;
+  }
+
+  a {
+    text-decoration: none;
+  }
+}
+
+.income-and-expenses {
+  .filter {
+    .btn {
+      width: 100px;
+    }
   }
 }
