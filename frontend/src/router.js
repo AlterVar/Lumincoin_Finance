@@ -26,7 +26,6 @@ export class Router {
                 title: 'Авторизация',
                 template: '/templates/auth/login.html',
                 layout: false,
-                styles: ['sign-in.css'],
                 load: () => {
 
                 }
@@ -36,7 +35,6 @@ export class Router {
                 title: 'Регистрация',
                 template: '/templates/auth/sign-up.html',
                 layout: false,
-                styles: ['sign-in.css'],
                 load: () => {
 
                 }
