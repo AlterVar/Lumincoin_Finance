@@ -40,7 +40,7 @@ export class Router {
                 }
             },
             {
-                route: '/operations-list',
+                route: '/operations',
                 title: 'Доходы и расходы',
                 template: '/templates/operations/operations-list.html',
                 layout: '/templates/layout.html',
