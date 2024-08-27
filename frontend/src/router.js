@@ -40,9 +40,16 @@ export class Router {
                 }
             },
             {
-                route: '/income&expenses',
+                route: '/operations-list',
                 title: 'Доходы и расходы',
-                template: '/templates/income&expenses.html',
+                template: '/templates/operations/operations-list.html',
+                layout: '/templates/layout.html',
+                styles: ['sidebars.css'],
+            },
+            {
+                route: '/operations/create',
+                title: 'Доходы и расходы',
+                template: '/templates/operations/operations-create.html',
                 layout: '/templates/layout.html',
                 styles: ['sidebars.css'],
             }

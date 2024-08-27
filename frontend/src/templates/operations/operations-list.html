@@ -1,4 +1,4 @@
-<div class="income-and-expenses">
+<div class="operations">
     <section class="page-header m-5">
         <div class="container-fluid">
             <h1>Доходы и расходы</h1>
@@ -7,8 +7,8 @@
     <section class="content ms-5 mt-5">
         <div class="container-fluid">
             <div class="d-flex gap-2">
-                <button class="btn btn-success px-3" type="button">Создать доход</button>
-                <button class="btn btn-danger px-3" type="button">Создать расход</button>
+                <a href="/operations/create" class="btn btn-success px-3" type="button">Создать доход</a>
+                <a class="btn btn-danger px-3" type="button">Создать расход</a>
             </div>
             <div class="filter d-flex gap-3 mt-5">
                 <button type="button" class="btn btn-outline-secondary">Сегодня</button>
@@ -45,8 +45,8 @@
                         <td>500$</td>
                         <td>21.08.2024</td>
                         <td></td>
-                        <td>
-                            <a href="javascript:void(0)">
+                        <td class="d-flex justify-content-end gap-2">
+                            <a href="javascript:void(0)" class="delete" data-bs-toggle="modal" data-bs-target="#delete-btn">
                                 <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M4.5 5.5C4.77614 5.5 5 5.72386 5 6V12C5 12.2761 4.77614 12.5 4.5 12.5C4.22386 12.5 4 12.2761 4 12V6C4 5.72386 4.22386 5.5 4.5 5.5Z" fill="black"/>
                                 <path d="M7 5.5C7.27614 5.5 7.5 5.72386 7.5 6V12C7.5 12.2761 7.27614 12.5 7 12.5C6.72386 12.5 6.5 12.2761 6.5 12V6C6.5 5.72386 6.72386 5.5 7 5.5Z" fill="black"/>
@@ -66,4 +66,15 @@
             </div>
         </div>
     </section>
+    <div class="modal fade" id="delete-btn">
+        <div class="modal-dialog h-100 d-flex align-items-center">
+            <div class="modal-content">
+                    <h5 class="modal-title text-center pt-5">Вы действительно хотите удалить операцию?</h5>
+                <div class="modal-footer border-0 d-flex justify-content-center pt-3 pb-5">
+                    <button type="button" class="btn btn-success">Да, удалить</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Не удалять</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
