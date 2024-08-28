@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
+    "chart.js": "^4.4.4",
     "webpack-dev-server": "^5.0.4"
   }
 }

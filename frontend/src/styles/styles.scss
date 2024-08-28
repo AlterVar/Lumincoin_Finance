@@ -10,10 +10,22 @@ body {
   .main-content {
     height: 100%;
     color: #052C65;
+
+    .inner-content {
+      margin-left: 220px;
+    }
   }
 
   a {
     text-decoration: none;
+  }
+}
+
+.dashboard {
+  .charts {
+    .chart {
+      max-height: 440px;
+    }
   }
 }
 

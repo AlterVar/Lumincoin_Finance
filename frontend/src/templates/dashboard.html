@@ -1,8 +1,37 @@
-DASH
-
-<a href="/sign-up">sign-up</a>
-<a href="/login">login</a>
-<a href="/">dash</a>
-<a href="/404">404</a>
-<a href="/income&expenses">expenses</a>
-
+<div class="dashboard">
+    <section class="page-header m-5">
+        <div class="container-fluid">
+            <h1>Главная</h1>
+        </div>
+    </section>
+    <section class="content ms-5 mt-5 overflow-scroll">
+        <div class="container-fluid">
+            <div class="d-flex gap-2">
+                <a href="/operations/create" class="btn btn-success px-3" type="button">Создать доход</a>
+                <a href="/operations/create" class="btn btn-danger px-3" type="button">Создать расход</a>
+            </div>
+            <div class="filter d-flex gap-3 mt-5">
+                <button type="button" class="btn btn-outline-secondary">Сегодня</button>
+                <button type="button" class="btn btn-outline-secondary">Неделя</button>
+                <button type="button" class="btn btn-outline-secondary">Месяц</button>
+                <button type="button" class="btn btn-outline-secondary">Год</button>
+                <button type="button" class="btn btn-outline-secondary">Все</button>
+                <button type="button" class="btn btn-outline-secondary">Интервал</button>
+                <div class="interval">
+                    <span>с </span>
+                    <button type="button" class="btn btn-link">Дата</button>
+                    <span>по </span>
+                    <button type="button" class="btn btn-link">Дата</button>
+                </div>
+            </div>
+        </div>
+        <div class="charts d-flex">
+            <div class="chart col-md-6">
+                <canvas id="income-pie-chart"></canvas>
+            </div>
+            <div class="chart col-md-6">
+                <canvas id="expense-pie-chart"></canvas>
+            </div>
+        </div>
+    </section>
+</div>

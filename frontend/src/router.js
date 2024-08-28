@@ -1,3 +1,6 @@
+import {FileUtils} from "./scripts/utils/file-utils";
+import {Dashboard} from "./scripts/components/dashboard";
+
 export class Router {
     constructor() {
         this.pageTitleElement = document.getElementById('page-title');
@@ -11,8 +14,9 @@ export class Router {
                 template: '/templates/dashboard.html',
                 layout: '/templates/layout.html',
                 styles: ['sidebars.css'],
+                scripts: ['chart.js'],
                 load: () => {
-
+                    new Dashboard();
                 }
             },
             {
@@ -141,6 +145,12 @@ export class Router {
                 })
             }
 
+            if (currentRoute.scripts && currentRoute.scripts.length > 0) {
+                currentRoute.scripts.forEach(script => {
+                    document.querySelector(`script[src='/js/${script}']`).remove();
+                })
+            }
+
             if (currentRoute.unload && typeof currentRoute.unload === 'function') {
                 currentRoute.unload();
             }
@@ -158,6 +168,12 @@ export class Router {
 
                     document.head.insertBefore(link, this.pageTitleElement);
                 })
+            }
+
+            if (newRoute.scripts && newRoute.scripts.length > 0) {
+                for (const script of newRoute.scripts) {
+                    await FileUtils.loadPageScript('/js/' + script);
+                }
             }
 
             if (newRoute.title) {
