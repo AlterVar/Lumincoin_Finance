@@ -66,6 +66,20 @@ export class Router {
                 template: '/templates/income/income-list.html',
                 layout: '/templates/layout.html',
                 styles: ['sidebars.css'],
+            },
+            {
+                route: '/income/create',
+                title: 'Доходы и расходы',
+                template: '/templates/income/income-create.html',
+                layout: '/templates/layout.html',
+                styles: ['sidebars.css'],
+            },
+            {
+                route: '/income/edit',
+                title: 'Доходы и расходы',
+                template: '/templates/income/income-edit.html',
+                layout: '/templates/layout.html',
+                styles: ['sidebars.css'],
             }
         ]
     }
