@@ -83,22 +83,22 @@ export class Router {
             },
             {
                 route: '/expense',
-                title: 'расходы',
-                template: '/templates/income/expense-list.html',
+                title: 'Расходы',
+                template: '/templates/expense/expense-list.html',
                 layout: '/templates/layout.html',
                 styles: ['sidebars.css'],
             },
             {
                 route: '/expense/create',
                 title: 'Создание расхода',
-                template: '/templates/income/expense-create.html',
+                template: '/templates/expense/expense-create.html',
                 layout: '/templates/layout.html',
                 styles: ['sidebars.css'],
             },
             {
                 route: '/expense/edit',
                 title: 'Редактирование расхода',
-                template: '/templates/income/expense-edit.html',
+                template: '/templates/expense/expense-edit.html',
                 layout: '/templates/layout.html',
                 styles: ['sidebars.css'],
             }
