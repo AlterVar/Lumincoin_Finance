@@ -2,44 +2,93 @@ import Chart from 'chart.js/auto'
 
 export class Dashboard {
     constructor() {
-        const data = [
-            { year: 2010, count: 10 },
-            { year: 2011, count: 20 },
-            { year: 2012, count: 15 },
-            { year: 2013, count: 25 },
-            { year: 2014, count: 22 },
-            { year: 2015, count: 30 },
-            { year: 2016, count: 28 },
-        ];
+        const dataIncome = {
+            labels: [
+                'Red',
+                'Orange',
+                'Yellow',
+                'Green',
+                'Blue'
+            ],
+            datasets: [{
+                data: [25, 40, 15, 10, 10],
+                backgroundColor: [
+                    '#DC3545',
+                    '#FD7E14',
+                    '#FFC107',
+                    '#20C997',
+                    '#0D6EFD'
+                ],
+            }]
+        }
+
 
         new Chart(
             document.getElementById('income-pie-chart'),
             {
                 type: 'pie',
-                data: {
-                    labels: data.map(row => row.year),
-                    datasets: [
-                        {
-                            label: 'Acquisitions by year',
-                            data: data.map(row => row.count)
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            color: '#052C65',
+                            font: {
+                                size: 28
+                            },
+                            text: 'Доходы'
+                        },
+                        legend: {
+                            labels: {
+                                boxWidth: 35
+                            }
                         }
-                    ]
-                }
+                    }
+                },
+                data: dataIncome
             }
         );
+
+        const dataExpense = {
+            labels: [
+                'Red',
+                'Orange',
+                'Yellow',
+                'Green',
+                'Blue'
+            ],
+            datasets: [{
+                data: [40, 30, 15, 5, 10],
+                backgroundColor: [
+                    '#DC3545',
+                    '#FD7E14',
+                    '#FFC107',
+                    '#20C997',
+                    '#0D6EFD'
+                ],
+            }]
+        }
         new Chart(
             document.getElementById('expense-pie-chart'),
             {
                 type: 'pie',
-                data: {
-                    labels: data.map(row => row.year),
-                    datasets: [
-                        {
-                            label: 'Acquisitions by year',
-                            data: data.map(row => row.count)
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Расходы',
+                            color: '#052C65',
+                            font: {
+                                size: 28
+                            },
+                        },
+                        legend: {
+                            labels: {
+                                boxWidth: 35
+                            }
                         }
-                    ]
-                }
+                    }
+                },
+                data: dataExpense
             }
         );
     }

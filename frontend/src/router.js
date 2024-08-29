@@ -14,7 +14,7 @@ export class Router {
                 template: '/templates/dashboard.html',
                 layout: '/templates/layout.html',
                 styles: ['sidebars.css'],
-                scripts: ['chart.js'],
+                scripts: ['chart.umd.js'],
                 load: () => {
                     new Dashboard();
                 }
@@ -44,6 +44,11 @@ export class Router {
                 }
             },
             {
+                route: '/logout',
+                load: () => {
+                }
+            },
+            {
                 route: '/operations',
                 title: 'Доходы и расходы',
                 template: '/templates/operations/operations-list.html',
@@ -63,6 +68,12 @@ export class Router {
                 template: '/templates/operations/operations-edit.html',
                 layout: '/templates/layout.html',
                 styles: ['sidebars.css'],
+            },
+            {
+                route: '/operations/delete',
+                load: () => {
+
+                }
             },
             {
                 route: '/income',
@@ -86,6 +97,11 @@ export class Router {
                 styles: ['sidebars.css'],
             },
             {
+                route: '/income/delete',
+                load: () => {
+                }
+            },
+            {
                 route: '/expense',
                 title: 'Расходы',
                 template: '/templates/expense/expense-list.html',
@@ -105,6 +121,11 @@ export class Router {
                 template: '/templates/expense/expense-edit.html',
                 layout: '/templates/layout.html',
                 styles: ['sidebars.css'],
+            },
+            {
+                route: '/expense/delete',
+                load: () => {
+                }
             }
         ]
     }
@@ -185,11 +206,9 @@ export class Router {
                 if (newRoute.layout) {
                     this.mainContentElement.innerHTML = await fetch(newRoute.layout).then(response => response.text());
                     contentBlock.classList.add('d-flex');
-                    contentBlock.classList.add('flex-nowrap');
                     contentBlock = document.getElementById('inner-content');
                 } else {
                     contentBlock.classList.remove('d-flex');
-                    contentBlock.classList.remove('flex-nowrap');
                 }
                 contentBlock.innerHTML = await fetch(newRoute.template).then(response => response.text());
             }

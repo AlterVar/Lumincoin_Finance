@@ -8,6 +8,7 @@ module.exports = {
     output: {
         filename: 'app.js',
         path: path.resolve(__dirname, 'dist'),
+        publicPath: '/',
     },
     devServer: {
         static: {
@@ -40,7 +41,7 @@ module.exports = {
                 {from: "./node_modules/bootstrap/dist/css/bootstrap.min.css", to: "css"},
                 {from: "./src/styles/bootstrap", to: "css"},
                 {from: "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js", to: "js"},
-                {from: "./node_modules/chart.js/dist/chart.js", to: "js"}
+                {from: "./node_modules/chart.js/dist/chart.umd.js", to: "js"}
             ],
         }),
     ],

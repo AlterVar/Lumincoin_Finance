@@ -24,7 +24,9 @@ body {
 .dashboard {
   .charts {
     .chart {
-      max-height: 440px;
+      canvas {
+        width: 440px;
+      }
     }
   }
 }
