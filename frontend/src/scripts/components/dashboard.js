@@ -86,6 +86,11 @@ export class Dashboard {
                                 boxWidth: 35
                             }
                         }
+                    },
+                    elements: {
+                        point: {
+                            rotation: 180
+                        }
                     }
                 },
                 data: dataExpense

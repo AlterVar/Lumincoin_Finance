@@ -1,5 +1,6 @@
 import {FileUtils} from "./scripts/utils/file-utils";
 import {Dashboard} from "./scripts/components/dashboard";
+import {Logout} from "./scripts/components/logout";
 
 export class Router {
     constructor() {
@@ -46,6 +47,7 @@ export class Router {
             {
                 route: '/logout',
                 load: () => {
+                    new Logout(this.openNewRoute.bind(this));
                 }
             },
             {
@@ -133,10 +135,16 @@ export class Router {
     init() {
         window.addEventListener('DOMContentLoaded', this.newRoute.bind(this));
         window.addEventListener('popstate', this.newRoute.bind(this));
-        window.addEventListener("click", this.openNewRoute.bind(this));
+        window.addEventListener("click", this.clickHandler.bind(this));
     }
 
-    async openNewRoute(e) {
+    async openNewRoute(url) {
+        const currentRoute = window.location.pathname;
+        history.pushState({}, '', url);
+        await this.newRoute(null, currentRoute);
+    }
+
+    async clickHandler(e) {
         let element = null;
         if (e.target.nodeName === 'A') {
             element = e.target;
@@ -151,9 +159,7 @@ export class Router {
                 return;
             }
 
-            const currentRoute = window.location.pathname;
-            history.pushState({}, '', url);
-            await this.newRoute(null, currentRoute);
+            await this.openNewRoute(url);
         }
     }
 
