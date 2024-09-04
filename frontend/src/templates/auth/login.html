@@ -1,8 +1,10 @@
 <div class="outer d-flex align-items-center py-4 bg-body-tertiary">
     <div class="form-signin w-100 m-auto">
-        <form class="text-center">
-            <img class="mb-5" src="/images/logo.svg" alt="" width="171" height="70">
-            <h1 class="h3 mb-3 fw-medium">Вход</h1>
+        <form>
+            <div class="form-header text-center">
+                <img class="mb-5" src="/images/logo.svg" alt="" width="171" height="70">
+                <h1 class="h3 mb-3 fw-medium">Вход</h1>
+            </div>
 
             <div class="form-floating mb-2">
                 <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
@@ -10,6 +12,7 @@
                     <img src="/images/mail.svg" alt="">
                 </div>
                 <label for="floatingInput">Электронная почта</label>
+                <span id="email-error" class="error invalid-feedback">Введите корректный E-mail</span>
             </div>
             <div class="form-floating mb-2">
                 <input type="password" class="form-control" id="floatingPassword" placeholder="Пароль">
@@ -17,6 +20,7 @@
                     <img src="/images/lock.svg" alt="">
                 </div>
                 <label for="floatingPassword">Пароль</label>
+                <span id="password-error" class="error invalid-feedback">Введите пароль</span>
             </div>
 
             <div class="form-check text-start mb-3 d-flex align-items-center">
