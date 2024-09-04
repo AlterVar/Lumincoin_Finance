@@ -1,6 +1,12 @@
 .sidebar {
   color: #052C65;
   width: 220px;
+  a, button {
+    color: #052C65;
+    &:hover {
+      color: #052C65;
+    }
+  }
   .logo {
     img {
       width: 98px;
@@ -12,16 +18,39 @@
     .nav-link, .accordion-button {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      line-height: normal;
       font-size: 14px;
+      box-shadow: none;
 
       &.active {
         color: white;
+        background-color: #0d6efd;
 
         svg {
           path {
             fill: white;
           }
+        }
+
+      }
+    }
+
+    .accordion-button {
+      justify-content: space-between;
+      border-radius: var(--bs-accordion-inner-border-radius);
+      svg {
+        transition: var(--bs-accordion-btn-icon-transition);
+      }
+
+      &:after {
+        content: none;
+      }
+
+      &:not(.collapsed) {
+        background-color: initial;
+        svg {
+          transform: rotate(90deg);
         }
       }
     }
