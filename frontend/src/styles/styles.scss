@@ -21,6 +21,14 @@ body {
   }
 }
 
+.filter {
+  .interval {
+    button {
+      color: #6C757D;
+    }
+  }
+}
+
 .dashboard {
   .charts {
     .chart {
@@ -41,7 +49,9 @@ body {
   .table-content {
     .table {
       text-align: center;
-
+      th {
+        color: #052C65;
+      }
     }
   }
 }
