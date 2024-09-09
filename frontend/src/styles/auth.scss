@@ -1,9 +1,31 @@
+html,
+body {
+  height: 100%;
+}
+
 .outer {
   height: 100vh;
 }
 
 .form-signin {
   max-width: 400px;
+  padding: 1rem;
+
+  .form-floating:focus-within {
+    z-index: 2;
+  }
+
+  input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
 
   form {
     max-width: 397px;
@@ -50,6 +72,10 @@
       left: 0;
       z-index: 3;
       background-color: #E9ECEF;
+
+      &.is-invalid {
+        border-color: #dc3545;
+      }
 
       img {
         margin: auto;
