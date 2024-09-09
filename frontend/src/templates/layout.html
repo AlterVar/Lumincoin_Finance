@@ -78,7 +78,18 @@
                     </div>
                 </li>
             </ul>
-            <div>Баланс: <span id="balance" class="text-primary ms-2">500$</span></div>
+            <div class="dropdown">
+                <a href="javascript:void(0)"
+                   class="d-flex align-items-center text-decoration-none dropdown-toggle"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    Баланс:<span id="balance" class="text-primary ms-2">500$</span>
+                </a>
+                <ul class="dropdown-menu text-small shadow">
+                    <li class="d-flex">
+                        <input id="balance-input" class="dropdown-item" type="number" placeholder="500$" value="">
+                    </li>
+                </ul>
+            </div>
             <hr>
             <div class="dropdown">
                 <a href="javascript:void(0)"
