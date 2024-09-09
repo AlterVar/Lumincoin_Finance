@@ -211,10 +211,7 @@ export class Router {
                 let contentBlock = this.mainContentElement;
                 if (newRoute.layout) {
                     this.mainContentElement.innerHTML = await fetch(newRoute.layout).then(response => response.text());
-                    contentBlock.classList.add('d-flex');
                     contentBlock = document.getElementById('inner-content');
-                } else {
-                    contentBlock.classList.remove('d-flex');
                 }
                 contentBlock.innerHTML = await fetch(newRoute.template).then(response => response.text());
             }

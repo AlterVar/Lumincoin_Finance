@@ -1,12 +1,12 @@
 <div class="dashboard">
-    <section class="page-header m-5">
+    <section class="page-header pt-5 ms-2 ms-md-5 mb-3 mb-md-5">
         <div class="container-fluid">
             <h1>Главная</h1>
         </div>
     </section>
-    <section class="content ms-5 mt-5">
+    <section class="page-content ms-2 ms-md-5 mt-3 mt-md-5">
         <div class="container-fluid">
-            <div class="filter d-flex gap-3 mt-5">
+            <div class="filter d-flex flex-wrap gap-2 gap-md-3 mt-3 mt-md-5">
                 <button type="button" class="btn btn-outline-secondary">Сегодня</button>
                 <button type="button" class="btn btn-outline-secondary">Неделя</button>
                 <button type="button" class="btn btn-outline-secondary">Месяц</button>
@@ -20,13 +20,13 @@
                     <button type="button" class="btn btn-link">Дата</button>
                 </div>
             </div>
-            <div class="charts d-flex mt-5">
-                <div class="chart col-md-6">
-                    <canvas class="m-auto" id="income-pie-chart"></canvas>
+            <div class="charts d-flex flex-column flex-lg-row mt-3 mt-md-5 pe-0 pe-md-5">
+                <div class="chart position-relative m-auto col-6">
+                    <canvas id="income-pie-chart"></canvas>
                 </div>
-                <div class="border border-light-subtle"></div>
-                <div class="chart col-md-6">
-                    <canvas class="m-auto" id="expense-pie-chart"></canvas>
+                <div class="d-none d-lg-block border border-light-subtle"></div>
+                <div class="chart position-relative m-auto col-6 mt-4 mt-lg-0">
+                    <canvas id="expense-pie-chart"></canvas>
                 </div>
             </div>
         </div>

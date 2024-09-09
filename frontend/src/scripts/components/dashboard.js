@@ -28,6 +28,7 @@ export class Dashboard {
             {
                 type: 'pie',
                 options: {
+                    responsive: true,
                     plugins: {
                         title: {
                             display: true,
@@ -72,6 +73,7 @@ export class Dashboard {
             {
                 type: 'pie',
                 options: {
+                    responsive: true,
                     plugins: {
                         title: {
                             display: true,

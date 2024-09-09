@@ -1,12 +1,21 @@
 .sidebar {
   color: #052C65;
-  width: 220px;
+  max-width: 400px;
+  @media (min-width: 768px) {
+    max-width: 220px;
+  }
   a, button {
     color: #052C65;
+    fill: #052C65;
     &:hover {
       color: #052C65;
     }
   }
+  .btn-close {
+    --bs-btn-close-bg: none;
+    opacity: 1;
+  }
+
   .logo {
     img {
       width: 98px;

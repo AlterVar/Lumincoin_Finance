@@ -1,20 +1,42 @@
 <div class="operations-create">
-    <section class="page-header m-5">
+    <section class="page-header pt-5 ms-2 ms-md-5 mb-3 mb-md-5">
         <div class="container-fluid">
             <h1>Создание дохода/расхода</h1>
         </div>
     </section>
-    <section class="page-content">
-        <form class="mt-5 ms-5 d-flex flex-column w-25">
-            <input id="operation-type" type="text" class="form-control mb-3" aria-label="Тип" value="Тип..." readonly>
-            <input id="operation-category" type="text" class="form-control mb-3" placeholder="Категория...">
-            <input id="operation-amount" type="text" class="form-control mb-3" placeholder="Сумма в $...">
-            <input id="operation-date" type="text" class="form-control mb-3" placeholder="Дата...">
-            <input id="operation-comment" type="text" class="form-control mb-3" placeholder="Комментарий...">
-            <div class="controls">
-                <a href="/operations" id="create-operation" class="btn btn-success">Создать</a>
-                <a href="/operations" class="btn btn-danger">Отмена</a>
-            </div>
-        </form>
+    <section class="page-content ms-2 ms-md-5 mt-3 mt-md-5">
+        <div class="container-fluid">
+            <form class="d-flex flex-column">
+                <div class="row">
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <input id="operation-type" type="text" class="form-control mb-3" aria-label="Тип" placeholder="Тип..." value="">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <input id="operation-category" type="text" class="col-12 col-sm-9 col-md-6 form-control mb-3" placeholder="Категория...">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <input id="operation-amount" type="text" class="col-12 col-sm-9 col-md-6 form-control mb-3" placeholder="Сумма в $...">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <input id="operation-date" type="text" class="col-12 col-sm-9 col-md-6 form-control mb-3" placeholder="Дата...">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <input id="operation-comment" type="text" class="col-12 col-sm-9 col-md-6 form-control mb-3" placeholder="Комментарий...">
+                    </div>
+                </div>
+                <div class="controls">
+                    <a href="/operations" id="create-operation" class="btn btn-success">Создать</a>
+                    <a href="/operations" class="btn btn-danger">Отмена</a>
+                </div>
+            </form>
+        </div>
     </section>
 </div>
