@@ -47,9 +47,9 @@
 
     .accordion-button {
       justify-content: space-between;
-      border-radius: var(--bs-accordion-inner-border-radius);
       svg {
         transition: var(--bs-accordion-btn-icon-transition);
+        fill: #052C65;
       }
 
       &:after {
@@ -57,9 +57,19 @@
       }
 
       &:not(.collapsed) {
-        background-color: initial;
+        background-color: #0d6efd;
+        color: white;
         svg {
           transform: rotate(90deg);
+          fill: white;
+        }
+      }
+    }
+
+    .accordion-collapse {
+      &.show {
+        .accordion-body {
+          border: 1px solid #0d6efd;
         }
       }
     }
