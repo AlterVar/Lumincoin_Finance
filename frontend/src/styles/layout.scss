@@ -67,7 +67,7 @@
     }
 
     .accordion-collapse {
-      &.show {
+      &.collapsing, &.show {
         .accordion-body {
           border: 1px solid #0d6efd;
         }
