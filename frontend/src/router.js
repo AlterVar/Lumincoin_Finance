@@ -212,6 +212,7 @@ export class Router {
                 if (newRoute.layout) {
                     this.mainContentElement.innerHTML = await fetch(newRoute.layout).then(response => response.text());
                     contentBlock = document.getElementById('inner-content');
+                    this.activateMenuItem(newRoute);
                 }
                 contentBlock.innerHTML = await fetch(newRoute.template).then(response => response.text());
             }
@@ -224,5 +225,23 @@ export class Router {
             history.pushState({}, '', '/404');
             await this.newRoute();
         }
+    }
+
+    activateMenuItem(route) {
+        document.querySelectorAll('.sidebar .nav-link').forEach(item => {
+            const href = item.getAttribute('href');
+            if ((route.route.includes(href) && href !== '/') || (route.route === '/' && href === '/')) {
+                if ((route.route === '/expense' && href === '/expense') || (route.route === '/income' && href === '/income')) {
+                    document.getElementById('collapse-btn').classList.remove('collapsed');
+                    document.getElementById('collapse-btn').setAttribute('aria-expanded', 'true');
+                    document.getElementById('flush-collapseOne').classList.add('show');
+                }
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+
+        })
+
     }
 }

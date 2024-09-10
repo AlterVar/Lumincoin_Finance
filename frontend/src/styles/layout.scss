@@ -47,6 +47,7 @@
 
     .accordion-button {
       justify-content: space-between;
+      font-family: "Roboto", sans-serif;
       svg {
         transition: var(--bs-accordion-btn-icon-transition);
         fill: #052C65;
@@ -70,6 +71,17 @@
       &.collapsing, &.show {
         .accordion-body {
           border: 1px solid #0d6efd;
+          border-bottom-left-radius: var(--bs-accordion-inner-border-radius);
+          border-bottom-right-radius: var(--bs-accordion-inner-border-radius);
+
+          .nav-link {
+              border-radius: 0;
+            &.active {
+              a {
+                color: white;
+              }
+            }
+          }
         }
       }
     }

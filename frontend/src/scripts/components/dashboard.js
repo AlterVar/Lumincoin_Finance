@@ -29,6 +29,7 @@ export class Dashboard {
                 type: 'pie',
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         title: {
                             display: true,
@@ -74,6 +75,7 @@ export class Dashboard {
                 type: 'pie',
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         title: {
                             display: true,
