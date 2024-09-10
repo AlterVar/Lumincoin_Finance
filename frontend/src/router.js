@@ -1,7 +1,6 @@
 import {FileUtils} from "./scripts/utils/file-utils";
 import {Dashboard} from "./scripts/components/dashboard";
 import {Logout} from "./scripts/components/auth/logout";
-import {Login} from "./scripts/components/auth/login";
 
 export class Router {
     constructor() {
@@ -33,7 +32,6 @@ export class Router {
                 template: '/templates/auth/login.html',
                 layout: false,
                 load: () => {
-                    new Login(this.openNewRoute.bind(this));
                 }
             },
             {
