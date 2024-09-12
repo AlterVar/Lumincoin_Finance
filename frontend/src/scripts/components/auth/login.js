@@ -1,6 +1,7 @@
 import {AuthUtils} from "../../utils/auth-utils";
 import config from "../../config/config";
 import {ValidationUtils} from "../../utils/validation-utils";
+import {RequestUtils} from "../../utils/request-utils";
 
 export class Login {
     constructor(openNewRoute) {
@@ -15,53 +16,29 @@ export class Login {
             this.openNewRoute('/');
         }
 
-        this.inputArray = [{element: this.emailInputElement, options: {pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/}},
+        this.inputArray = [{
+            element: this.emailInputElement,
+            options: {pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/}
+        },
             {element: this.passwordInputElement}]
         document.getElementById('process-button').addEventListener('click', this.login.bind(this));
     }
 
-    //TODO: оптимизация запросов
     async login() {
         this.commonErrorElement.style.display = "none";
-        if(ValidationUtils.validateForm(this.inputArray)) {
-            const result = {
-                error: false,
-                response: null
-            }
 
-            const params = {
-                method: 'POST',
-                headers: {
-                    "Content-type": "application/json",
-                    "Asset": "application/json",
-                }
-            };
-            let body = {
+        if (ValidationUtils.validateForm(this.inputArray)) {
+            let loginResult = await RequestUtils.sendRequest('/login', 'POST', false, {
                 email: this.emailInputElement.value,
                 password: this.passwordInputElement.value,
                 rememberMe: this.rememberMeElement.checked
+            });
+            if (loginResult) {
+                AuthUtils.setAuthInfo(loginResult.response.tokens.accessToken, loginResult.response.tokens.refreshToken,
+                    {id: loginResult.response.user.id, name: loginResult.response.user.name});
+                return this.openNewRoute("/");
             }
-            if (body) {
-                params.body = JSON.stringify(body);
-            }
-
-            let response = await fetch(config.api + '/login', params);
-            result.response = await response.json();
-            if (result.response.error) {
-                result.error = true;
-            }
-
-            if (result.error || !result.response || (result.response && (!result.response.tokens.accessToken
-                || !result.response.tokens.refreshToken || !result.response.user.id || !result.response.user.name))) {
-                this.commonErrorElement.style.display = "block";
-            } else {
-                let loginResult = result.response;
-                if (loginResult) {
-                    AuthUtils.setAuthInfo(loginResult.tokens.accessToken, loginResult.tokens.refreshToken,
-                        {id: loginResult.user.id, name: loginResult.user.name});
-                    return this.openNewRoute("/");
-                }
-            }
+            this.commonErrorElement.style.display = "block";
         }
     }
 }

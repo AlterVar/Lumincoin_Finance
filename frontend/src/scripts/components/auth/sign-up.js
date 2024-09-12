@@ -1,6 +1,6 @@
 import {AuthUtils} from "../../utils/auth-utils";
 import {ValidationUtils} from "../../utils/validation-utils";
-import config from "../../config/config";
+import {RequestUtils} from "../../utils/request-utils";
 
 export class SignUp {
     constructor(openNewRoute) {
@@ -25,64 +25,30 @@ export class SignUp {
         document.getElementById('process-button').addEventListener('click', this.signup.bind(this));
     }
 
-    //TODO: оптимизация запросов
     async signup() {
         this.commonErrorElement.style.display = "none";
         this.inputArray.find(input => input.element === this.passwordRepeatInputElement).options.compareTo = this.passwordInputElement.value;
         if(ValidationUtils.validateForm(this.inputArray)) {
-            const result = {
-                error: false,
-                response: null
-            }
-
-            const params = {
-                method: 'POST',
-                headers: {
-                    "Content-type": "application/json",
-                    "Asset": "application/json",
-                }
-            };
-            let body = {
+            let signupResult = await RequestUtils.sendRequest('/signup', 'POST', false, {
                 name: this.nameInputElement.value,
                 email: this.emailInputElement.value,
                 password: this.passwordInputElement.value,
                 passwordRepeat: this.passwordRepeatInputElement.value
-            }
-            if (body) {
-                params.body = JSON.stringify(body);
-            }
+            })
 
-            let response = await fetch(config.api + '/signup', params);
-            result.response = await response.json();
-            if (result.response.error) {
-                result.error = true;
-            }
-            if (!result.error || result.response) {
-                let body = {
-                    email: result.response.user.email,
+            if (signupResult) {
+                let loginResult = await RequestUtils.sendRequest('/login', 'POST', false, {
+                    email: signupResult.response.user.email,
                     password: this.passwordInputElement.value,
                     rememberMe: true
-                }
-                if (body) {
-                    params.body = JSON.stringify(body);
-                }
-                let response = await fetch(config.api + '/login', params);
-                result.response = await response.json();
-                if (result.response.error) {
-                    result.error = true;
-                }
-                if (result.response && (!result.response.tokens.accessToken
-                    || !result.response.tokens.refreshToken || !result.response.user.id || !result.response.user.name)) {
-                    this.commonErrorElement.style.display = "block";
-                } else {
-                    let loginResult = result.response;
-                    if (loginResult) {
-                        AuthUtils.setAuthInfo(loginResult.tokens.accessToken, loginResult.tokens.refreshToken,
-                            {id: loginResult.user.id, name: loginResult.user.name});
-                        return this.openNewRoute("/");
-                    }
+                });
+                if (loginResult) {
+                    AuthUtils.setAuthInfo(loginResult.response.tokens.accessToken, loginResult.response.tokens.refreshToken,
+                        {id: loginResult.response.user.id, name: loginResult.response.user.name});
+                    return this.openNewRoute("/");
                 }
             }
+                this.commonErrorElement.style.display = "block";
         }
     }
 }

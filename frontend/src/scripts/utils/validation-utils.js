@@ -16,7 +16,6 @@ export class ValidationUtils {
 
     static validateFields(field, options) {
         let condition = field.value;
-        console.log(condition);
         if (options) {
             if (options.hasOwnProperty('pattern')) {
                 condition = field.value && field.value.match(options.pattern);
