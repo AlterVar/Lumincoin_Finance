@@ -1,6 +1,8 @@
 import {FileUtils} from "./scripts/utils/file-utils";
 import {Dashboard} from "./scripts/components/dashboard";
-import {Logout} from "./scripts/components/logout";
+import {Logout} from "./scripts/components/auth/logout";
+import {Login} from "./scripts/components/auth/login";
+import {SignUp} from "./scripts/components/auth/sign-up";
 
 export class Router {
     constructor() {
@@ -17,7 +19,7 @@ export class Router {
                 styles: ['sidebars.css'],
                 scripts: ['chart.umd.js'],
                 load: () => {
-                    new Dashboard();
+                    new Dashboard(this.openNewRoute.bind(this));
                 }
             },
             {
@@ -32,7 +34,7 @@ export class Router {
                 template: '/templates/auth/login.html',
                 layout: false,
                 load: () => {
-
+                    new Login(this.openNewRoute.bind(this));
                 }
             },
             {
@@ -41,7 +43,7 @@ export class Router {
                 template: '/templates/auth/sign-up.html',
                 layout: false,
                 load: () => {
-
+                    new SignUp(this.openNewRoute.bind(this));
                 }
             },
             {

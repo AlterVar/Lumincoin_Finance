@@ -4,6 +4,7 @@
             <div class="form-header text-center">
                 <img class="mb-5" src="/images/logo.svg" alt="" width="171" height="70">
                 <h1 class="page-heading mb-3 fw-medium">Создайте аккаунт</h1>
+                <div id = "common-error" class="error invalid-feedback text-center mb-3">Неправильный email или пароль</div>
             </div>
 
             <div class="form-floating mb-2">
@@ -12,7 +13,7 @@
                     <img src="/images/person.svg" alt="">
                 </div>
                 <label for="floatingName">ФИО</label>
-                <div id="name-error" class="error invalid-feedback">Введите ваше имя и фамилию</div>
+                <div id="name-error" class="error invalid-feedback">Введите ваше имя и фамилию с заглавной буквы, через пробел</div>
             </div>
             <div class="form-floating mb-2">
                 <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
@@ -36,9 +37,9 @@
                     <img src="/images/lock.svg" alt="">
                 </div>
                 <label for="floatingRepeatPassword">Подтверждение пароля</label>
-                <span id="password-repeat-error" class="error invalid-feedback">пароль и повторение пароля должны совпадать</span>
+                <span id="password-repeat-error" class="error invalid-feedback">Пароль и повторение пароля должны совпадать</span>
             </div>
-            <button class="btn btn-primary w-100 py-2 mb-2" type="submit">Войти</button>
+            <button class="btn btn-primary w-100 py-2 mb-2" type="button" id="process-button">Зарегистрироваться</button>
             <div class="text-start">
                 <p>Уже есть аккаунт? <a class="ms-2" href="/login">Войдите в систему</a></p>
             </div>
