@@ -7,6 +7,7 @@ export class Dashboard {
         if (!AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
             this.openNewRoute('/login');
         }
+
         this.loadCharts();
     }
 

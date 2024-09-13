@@ -21,7 +21,7 @@ export class RequestUtils {
         if (useAuth) {
             token = AuthUtils.getAuthInfo(AuthUtils.accessTokenKey);
             if (token) {
-                params.headers ["authorization"] = token;
+                params.headers ["x-auth-token"] = token;
             }
         }
 
@@ -33,10 +33,10 @@ export class RequestUtils {
         try {
             response = await fetch(config.api + url, params);
             result.response = await response.json();
-            if (result.response.error) {
-                result.error = true;
-                return result;
-            }
+            // if (result.response.error) {
+            //     result.error = true;
+            //     return result;
+            // }
         } catch (e) {
             result.error = true;
             return result;
