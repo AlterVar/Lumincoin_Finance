@@ -33,6 +33,10 @@ export class RequestUtils {
         try {
             response = await fetch(config.api + url, params);
             result.response = await response.json();
+            if (result.response.error) {
+                result.error = true;
+                return result;
+            }
         } catch (e) {
             result.error = true;
             return result;

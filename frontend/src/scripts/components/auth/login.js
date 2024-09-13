@@ -33,7 +33,7 @@ export class Login {
                 password: this.passwordInputElement.value,
                 rememberMe: this.rememberMeElement.checked
             });
-            if (loginResult) {
+            if (!loginResult.error) {
                 AuthUtils.setAuthInfo(loginResult.response.tokens.accessToken, loginResult.response.tokens.refreshToken,
                     {id: loginResult.response.user.id, name: loginResult.response.user.name});
                 return this.openNewRoute("/");

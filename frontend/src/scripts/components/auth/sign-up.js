@@ -17,9 +17,9 @@ export class SignUp {
         }
 
         this.inputArray = [
-            {element: this.nameInputElement, options: {pattern: /^[А-Я][а-я]*(-[А-Я][а-я]*)?\s[А-Я][а-я]*$/}},
+            {element: this.nameInputElement, options: {pattern: /^[А-Я][а-я]*(-[А-Я][а-я]*)?\s[А-Я][а-я]*?\s[А-Я][а-я]*$/}},
             {element: this.emailInputElement, options: {pattern: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/}},
-            {element: this.passwordInputElement, options: {pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/}},
+            {element: this.passwordInputElement, options: {pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/}},
             {element: this.passwordRepeatInputElement, options: {compareTo: this.passwordInputElement.value}}
         ]
         document.getElementById('process-button').addEventListener('click', this.signup.bind(this));
@@ -29,8 +29,11 @@ export class SignUp {
         this.commonErrorElement.style.display = "none";
         this.inputArray.find(input => input.element === this.passwordRepeatInputElement).options.compareTo = this.passwordInputElement.value;
         if(ValidationUtils.validateForm(this.inputArray)) {
+            const userName = this.nameInputElement.value.split(' ');
+
             let signupResult = await RequestUtils.sendRequest('/signup', 'POST', false, {
-                name: this.nameInputElement.value,
+                name: userName[1],
+                lastName: userName[0],
                 email: this.emailInputElement.value,
                 password: this.passwordInputElement.value,
                 passwordRepeat: this.passwordRepeatInputElement.value
