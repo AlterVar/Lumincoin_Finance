@@ -16,6 +16,7 @@ import {ExpenseCreate} from "./scripts/components/expense/expense-create";
 import {ExpenseEdit} from "./scripts/components/expense/expense-edit";
 import {ExpenseDelete} from "./scripts/components/expense/expense-delete";
 import {BalanceUtils} from "./scripts/utils/balance-utils";
+import {Layout} from "./scripts/components/layout";
 
 export class Router {
     constructor() {
@@ -256,7 +257,7 @@ export class Router {
                 if (newRoute.layout) {
                     this.mainContentElement.innerHTML = await fetch(newRoute.layout).then(response => response.text());
                     contentBlock = document.getElementById('inner-content');
-                    await BalanceUtils.getBalance();
+                    new Layout();
                     this.activateMenuItem(newRoute);
                 }
                 contentBlock.innerHTML = await fetch(newRoute.template).then(response => response.text());
