@@ -15,7 +15,6 @@ import {ExpenseList} from "./scripts/components/expense/expense-list";
 import {ExpenseCreate} from "./scripts/components/expense/expense-create";
 import {ExpenseEdit} from "./scripts/components/expense/expense-edit";
 import {ExpenseDelete} from "./scripts/components/expense/expense-delete";
-import {BalanceUtils} from "./scripts/utils/balance-utils";
 import {Layout} from "./scripts/components/layout";
 
 export class Router {
@@ -30,7 +29,7 @@ export class Router {
                 title: 'Дашборд',
                 template: '/templates/dashboard.html',
                 layout: '/templates/layout.html',
-                styles: ['sidebars.css'],
+                styles: ['sidebars.css', 'datepicker.material.css'],
                 scripts: ['chart.umd.js'],
                 load: () => {
                     new Dashboard(this.openNewRoute.bind(this));
@@ -71,7 +70,7 @@ export class Router {
                 title: 'Доходы и расходы',
                 template: '/templates/operations/operations-list.html',
                 layout: '/templates/layout.html',
-                styles: ['sidebars.css'],
+                styles: ['sidebars.css', 'datepicker.material.css'],
                 load: () => {
                     new OperationsList(this.openNewRoute.bind(this));
                 }

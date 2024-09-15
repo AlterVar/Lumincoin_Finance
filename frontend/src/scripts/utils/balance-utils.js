@@ -9,7 +9,6 @@ export class BalanceUtils {
             balanceElement.innerText = balanceResult.response.balance + '$';
             return;
         }
-        console.log('error');
     }
 
     static async updateBalance() {
