@@ -3,7 +3,7 @@ import {AuthUtils} from "./auth-utils";
 
 export class RequestUtils {
 
-    static async sendRequest(url, method = 'GET', useAuth = false, body = null) {
+    static async sendRequest(url, method = 'GET', useAuth = true, body = null) {
         const result = {
             error: false,
             response: null

@@ -2,7 +2,7 @@ import {AuthUtils} from "../../utils/auth-utils";
 import {RequestUtils} from "../../utils/request-utils";
 import {CommonUtils} from "../../utils/common-utils";
 import {DateUtils} from "../../utils/date-utils";
-import config from "../../config/config";
+import {FilterUtils} from "../../utils/filter-utils";
 
 
 export class OperationsList {
@@ -11,7 +11,9 @@ export class OperationsList {
         this.filterButton = document.querySelectorAll('.filter-btn');
         this.intervalFromElement = document.getElementById('interval-from');
         this.intervalToElement = document.getElementById('interval-to');
+        this.operationDeleteButton = document.getElementById('delete-operation-btn');
 
+        this.operationDeleteButton.onclick = this.deleteRedirect.bind(this);
 
         if (!AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
             this.openNewRoute('/login');
@@ -23,7 +25,7 @@ export class OperationsList {
             const that = this;
             const button = this.filterButton[i];
             button.addEventListener('click', function () {
-                that.activateFilter(button);
+                that.getOperations(FilterUtils.activateFilter(button));
             });
         }
 
@@ -54,35 +56,16 @@ export class OperationsList {
             trElement.insertCell().innerText = record.comment;
             trElement.insertCell().innerHTML = CommonUtils.generateTools('operations', record.id);
 
+
             recordsElement.appendChild(trElement);
         }
     }
 
-    activateFilter(currentFilter) {
-        for (let i = 0; i < this.filterButton.length; i++) {
-            this.filterButton[i].classList.remove('active');
-        }
-        currentFilter.classList.add('active');
-        this.chooseFilter(currentFilter);
-    }
+    deleteRedirect(e) {
+        e.preventDefault();
 
-    chooseFilter(currentFilter) {
-        let filterType = CommonUtils.getFilterType(currentFilter.innerText);
-        if (filterType === config.filterTypes.interval) {
-            const dateFrom = this.intervalFromElement.innerText;
-            const dateTo = this.intervalToElement.innerText;
-            if (!dateFrom || dateFrom === 'Дата' || !dateTo || dateTo === 'Дата') {
-                return;
-            }
-            filterType += '&&dateFrom=' + DateUtils.formatDate(dateFrom, '.') + '&dateTo=' + DateUtils.formatDate(dateTo, '.');
-        }
-        if (filterType === config.filterTypes.today) {
-            const todayFrom = new Date();
-            const dateFrom = (new Intl.DateTimeFormat("ru-RU").format(todayFrom)).toString()
-            const todayTo = new Date();
-            const dateTo = (new Intl.DateTimeFormat("ru-RU").format(todayTo)).toString()
-            filterType = 'interval'+'&&dateFrom=' + DateUtils.formatDate(dateFrom, '.') + '&dateTo=' + DateUtils.formatDate(dateTo, '.');
-        }
-        this.getOperations(filterType);
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        this.openNewRoute('operations/delete?id=' + id);
     }
 }
