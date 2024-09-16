@@ -1,4 +1,4 @@
-import config from "../config/config";
+import Datepicker from "../datepicker";
 
 export class DateUtils {
     static formatDate(date, separator) {
@@ -11,9 +11,6 @@ export class DateUtils {
         switch (separator) {
             case '-':
                 dateParts = date.split('-');
-                // year = parseInt(dateParts[0], 10);
-                // month = parseInt(dateParts[1], 10) - 1;
-                // day = parseInt(dateParts[2], 10);
                 year = dateParts[0];
                 month = dateParts[1];
                 day = dateParts[2];
@@ -23,35 +20,37 @@ export class DateUtils {
 
             case '.':
                 dateParts = date.split('.');
-                // year = parseInt(dateParts[0], 10);
-                // month = parseInt(dateParts[1], 10) - 1;
-                // day = parseInt(dateParts[2], 10);
                 year = dateParts[2];
                 month = dateParts[1];
                 day = dateParts[0];
                 newSeparator = '-';
                 newDate = year+newSeparator+month+newSeparator+day;
-
         }
-        // let newDate = new Date(year, month, day);
-        // return (new Intl.DateTimeFormat("ru-RU").format(newDate)).toString();
         return newDate;
     }
 
-    //TODO datepicker
-    static getDateRange () {
-        
-        // switch (e) {
-        //     case e.target === '#interval-from-input':
-        //         const dateFrom = document.getElementById('interval-from');
-        //         const intervalFromInputElement = document.getElementById('interval-from-input');
-        //         dateFrom.innerText = intervalFromInputElement.value;
-        //         break;
-        //     case 'to':
-        //         const dateTo = document.getElementById('interval-to');
-        //         const intervalToInputElement = document.getElementById('interval-to-input');
-        //         dateTo.innerText = intervalToInputElement.value;
-        //         break;
-        // }
+    //Datepicker
+    static activateDatePickers (fromElement, toElement) {
+        const that = this;
+        new Datepicker(fromElement, {
+            onChange: function () {
+                that.getDateFromPicker(fromElement, null)
+            }
+        });
+
+        new Datepicker(toElement, {
+            onChange: function () {
+                that.getDateFromPicker(null, toElement)
+            }
+        });
+    }
+
+    static getDateFromPicker(fromElement, toElement) {
+        if (fromElement && fromElement.getAttribute('data-value')) {
+            fromElement.innerText = fromElement.getAttribute('data-value');
+        }
+        if (toElement && toElement.getAttribute('data-value')) {
+            toElement.innerText = toElement.getAttribute('data-value');
+        }
     }
 }

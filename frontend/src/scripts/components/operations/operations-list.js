@@ -3,7 +3,6 @@ import {RequestUtils} from "../../utils/request-utils";
 import {CommonUtils} from "../../utils/common-utils";
 import {DateUtils} from "../../utils/date-utils";
 import config from "../../config/config";
-import Datepicker from '../../datepicker.js';
 
 
 export class OperationsList {
@@ -18,34 +17,17 @@ export class OperationsList {
             this.openNewRoute('/login');
         }
 
-        this.activateDatepickers();
-        this.getOperations('all');
+        DateUtils.activateDatePickers(this.intervalFromElement, this.intervalToElement);
 
-        //TODO убрать из конструктора
         for (let i = 0; i < this.filterButton.length; i++) {
-            let that = this;
-            let filterType = null;
-            this.filterButton[i].addEventListener('click', function () {
-                that.activateFilter(that.filterButton, that.filterButton[i]);
-                filterType = CommonUtils.getFilterType(that.filterButton[i].innerText);
-                if (filterType === config.filterTypes.interval) {
-                    const dateFrom = that.intervalFromElement.innerText;
-                    const dateTo = that.intervalToElement.innerText;
-                    if (!dateFrom || dateFrom === 'Дата' || !dateTo || dateTo === 'Дата') {
-                        return;
-                    }
-                    filterType += '&&dateFrom=' + DateUtils.formatDate(dateFrom, '.') + '&dateTo=' + DateUtils.formatDate(dateTo, '.');
-                }
-                if (filterType === config.filterTypes.today) {
-                        const todayFrom = new Date();
-                        const dateFrom = (new Intl.DateTimeFormat("ru-RU").format(todayFrom)).toString()
-                        const todayTo = new Date();
-                        const dateTo = (new Intl.DateTimeFormat("ru-RU").format(todayTo)).toString()
-                    filterType = 'interval'+'&&dateFrom=' + DateUtils.formatDate(dateFrom, '.') + '&dateTo=' + DateUtils.formatDate(dateTo, '.');
-                }
-                that.getOperations(filterType);
+            const that = this;
+            const button = this.filterButton[i];
+            button.addEventListener('click', function () {
+                that.activateFilter(button);
             });
         }
+
+        this.getOperations('all');
     }
 
     async getOperations(filter) {
@@ -76,31 +58,31 @@ export class OperationsList {
         }
     }
 
-    activateFilter(filters, currentFilter) {
-        for (let i = 0; i < filters.length; i++) {
-            filters[i].classList.remove('active');
+    activateFilter(currentFilter) {
+        for (let i = 0; i < this.filterButton.length; i++) {
+            this.filterButton[i].classList.remove('active');
         }
         currentFilter.classList.add('active');
+        this.chooseFilter(currentFilter);
     }
 
-    //TODO вынести в отдельную утилитку
-    activateDatepickers() {
-        let that = this
-        this.intervalFromDatepicker = new Datepicker(this.intervalFromElement, {
-            onChange: this.getDateFromPicker.bind(that)
-        });
-
-        this.intervalToDatepicker = new Datepicker(this.intervalToElement, {
-            onChange: this.getDateFromPicker.bind(that)
-        });
-    }
-
-    getDateFromPicker() {
-        if (this.intervalFromElement.getAttribute('data-value')) {
-            this.intervalFromElement.innerText = this.intervalFromElement.getAttribute('data-value');
+    chooseFilter(currentFilter) {
+        let filterType = CommonUtils.getFilterType(currentFilter.innerText);
+        if (filterType === config.filterTypes.interval) {
+            const dateFrom = this.intervalFromElement.innerText;
+            const dateTo = this.intervalToElement.innerText;
+            if (!dateFrom || dateFrom === 'Дата' || !dateTo || dateTo === 'Дата') {
+                return;
+            }
+            filterType += '&&dateFrom=' + DateUtils.formatDate(dateFrom, '.') + '&dateTo=' + DateUtils.formatDate(dateTo, '.');
         }
-        if (this.intervalToElement.getAttribute('data-value')) {
-            this.intervalToElement.innerText = this.intervalToElement.getAttribute('data-value');
+        if (filterType === config.filterTypes.today) {
+            const todayFrom = new Date();
+            const dateFrom = (new Intl.DateTimeFormat("ru-RU").format(todayFrom)).toString()
+            const todayTo = new Date();
+            const dateTo = (new Intl.DateTimeFormat("ru-RU").format(todayTo)).toString()
+            filterType = 'interval'+'&&dateFrom=' + DateUtils.formatDate(dateFrom, '.') + '&dateTo=' + DateUtils.formatDate(dateTo, '.');
         }
+        this.getOperations(filterType);
     }
 }
