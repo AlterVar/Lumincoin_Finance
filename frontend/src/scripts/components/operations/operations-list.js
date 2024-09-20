@@ -8,7 +8,7 @@ import {FilterUtils} from "../../utils/filter-utils";
 export class OperationsList {
     constructor(openNewRoute) {
         this.openNewRoute = openNewRoute;
-        this.filterButton = document.querySelectorAll('.filter-btn');
+        this.filterButtonArray = document.querySelectorAll('.filter-btn');
         this.intervalFromElement = document.getElementById('interval-from');
         this.intervalToElement = document.getElementById('interval-to');
         this.operationDeleteButton = document.getElementById('delete-operation-btn');
@@ -21,9 +21,9 @@ export class OperationsList {
 
         DateUtils.activateDatePickers(this.intervalFromElement, this.intervalToElement);
 
-        for (let i = 0; i < this.filterButton.length; i++) {
+        for (let i = 0; i < this.filterButtonArray.length; i++) {
             const that = this;
-            const button = this.filterButton[i];
+            const button = this.filterButtonArray[i];
             button.addEventListener('click', function () {
                 that.getOperations(FilterUtils.activateFilter(button));
             });
@@ -36,9 +36,6 @@ export class OperationsList {
         const operationsResult = await RequestUtils.sendRequest('/operations?period=' + filter, "GET", true)
         if (operationsResult) {
             this.createTable(operationsResult.response);
-        }
-        if (operationsResult.redirect) {
-            this.openNewRoute('/login');
         }
     }
 
@@ -58,6 +55,18 @@ export class OperationsList {
 
 
             recordsElement.appendChild(trElement);
+        }
+
+        this.activateDeleteButton();
+    }
+
+    activateDeleteButton() {
+        this.deleteButtonArray = document.querySelectorAll('.delete');
+        for (let i = 0; i < this.deleteButtonArray.length; i++) {
+            const button = this.deleteButtonArray[i];
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+            });
         }
     }
 
