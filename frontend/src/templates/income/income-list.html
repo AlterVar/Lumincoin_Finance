@@ -6,44 +6,9 @@
     </section>
     <section class="page-content mx-2 mx-md-3 mx-lg-5 mt-3 mt-md-5">
         <div class="container-fluid">
-            <div class="row gap-2 gap-lg-0 mt-3 mt-md-4">
-                <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 p-2">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title">Депозиты</h3>
-                            <a href="/income/edit" class="btn btn-primary">Редактировать</a>
-                            <a href="javascript:void(0)"  data-bs-toggle="modal" data-bs-target="#income-delete-btn" class="btn btn-danger">Удалить</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 p-2">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title">Зарплата</h3>
-                            <a href="/income/edit" class="btn btn-primary">Редактировать</a>
-                            <a href="javascript:void(0)"  data-bs-toggle="modal" data-bs-target="#income-delete-btn" class="btn btn-danger">Удалить</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 p-2">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title">Сбережения</h3>
-                            <a href="/income/edit" class="btn btn-primary">Редактировать</a>
-                            <a href="javascript:void(0)"  data-bs-toggle="modal" data-bs-target="#income-delete-btn" class="btn btn-danger">Удалить</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 p-2">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title">Инвестиции</h3>
-                            <a href="/income/edit" class="btn btn-primary">Редактировать</a>
-                            <a href="javascript:void(0)"  data-bs-toggle="modal" data-bs-target="#income-delete-btn" class="btn btn-danger">Удалить</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 p-2">
+            <div id="cards" class="row gap-2 gap-lg-0 mt-3 mt-md-4">
+
+                <div id='add-card' class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 p-2">
                     <a href="/income/create" class="card align-items-center">
                         <div class="card-body w-100 d-flex align-items-center justify-content-center">
                             <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -55,12 +20,12 @@
             </div>
         </div>
     </section>
-    <div class="modal fade" id="income-delete-btn">
+    <div class="modal fade" id="income-delete">
         <div class="modal-dialog h-100 d-flex align-items-center">
             <div class="modal-content">
                 <h5 class="modal-title text-center pt-4 lh-1">Вы действительно хотите удалить категорию? Связанные доходы будут удалены навсегда.</h5>
                 <div class="modal-footer border-0 d-flex justify-content-center pt-3 pb-4">
-                    <button type="button" class="btn btn-success">Да, удалить</button>
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="delete-income-btn">Да, удалить</button>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Не удалять</button>
                 </div>
             </div>

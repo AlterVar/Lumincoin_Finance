@@ -276,7 +276,7 @@ export class Router {
         document.querySelectorAll('.sidebar .nav-link').forEach(item => {
             const href = item.getAttribute('href');
             if ((route.route.includes(href) && href !== '/') || (route.route === '/' && href === '/')) {
-                if ((route.route === '/expense' && href === '/expense') || (route.route === '/income' && href === '/income')) {
+                if ((route.route.includes('/expense') && href.includes('/expense')) || (route.route.includes('/income') && href.includes('/income'))) {
                     document.getElementById('collapse-btn').classList.remove('collapsed');
                     document.getElementById('collapse-btn').setAttribute('aria-expanded', 'true');
                     document.getElementById('flush-collapseOne').classList.add('show');

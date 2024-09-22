@@ -8,16 +8,16 @@ import {FilterUtils} from "../../utils/filter-utils";
 export class OperationsList {
     constructor(openNewRoute) {
         this.openNewRoute = openNewRoute;
+        if (!AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
+            this.openNewRoute('/login');
+        }
+
         this.filterButtonArray = document.querySelectorAll('.filter-btn');
         this.intervalFromElement = document.getElementById('interval-from');
         this.intervalToElement = document.getElementById('interval-to');
         this.operationDeleteButton = document.getElementById('delete-operation-btn');
 
         this.operationDeleteButton.onclick = this.deleteRedirect.bind(this);
-
-        if (!AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
-            this.openNewRoute('/login');
-        }
 
         DateUtils.activateDatePickers(this.intervalFromElement, this.intervalToElement);
 

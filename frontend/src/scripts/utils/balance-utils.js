@@ -21,7 +21,7 @@ export class BalanceUtils {
 
         if (balanceInputElement.value !== balanceElement.innerText) {
             let balanceUpdateResult = await RequestUtils.sendRequest('/balance', 'PUT', true, {
-                newBalance: balanceInputElement.value
+                newBalance: parseInt(balanceInputElement.value)
             });
             if (!balanceUpdateResult.error) {
                 balanceElement.innerText = balanceUpdateResult.response.balance + '$';

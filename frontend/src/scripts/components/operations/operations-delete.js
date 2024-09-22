@@ -15,14 +15,9 @@ export class OperationsDelete {
     }
 
     async deleteOperation(id) {
-        let result = {
-            error: false,
-            redirect: null
-        }
         const deleteResult = await RequestUtils.sendRequest('/operations/' + id, 'DELETE');
-
         if (deleteResult.error || !deleteResult.response) {
-            result.error = ('Возникла ошибка при удалении фрилансера. Обратитесь в поддержку');
+            console.log(error)
         }
         this.openNewRoute('/operations');
     }
