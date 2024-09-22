@@ -71,4 +71,23 @@ export class CommonUtils {
         '<a href="?id=' + id + '" data-bs-toggle="modal" data-bs-target="#delete-modal"' +
             ' class="btn btn-danger delete">Удалить</a>'
     }
+
+    static getColor(number) {
+        const colors = ['#FF0000', '#FFA500', '#FFFF00', '#008000', '#0000FF', '#800080', '#800000', '#808000', '#00FF00', '#00FFFF',
+                        '#000080', '#FF00FF', '#FF69B4', '#00FA9A', '#87CEEB', '#006400', '#8B4513']
+        if (!colors[number]) {
+            const newColor = this.getRandomColor();
+            colors.push(newColor);
+        }
+        return colors[number];
+    }
+
+    static getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
 }
