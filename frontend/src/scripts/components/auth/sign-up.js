@@ -47,7 +47,7 @@ export class SignUp {
                 });
                 if (loginResult) {
                     AuthUtils.setAuthInfo(loginResult.response.tokens.accessToken, loginResult.response.tokens.refreshToken,
-                        {id: loginResult.response.user.id, name: loginResult.response.user.name});
+                        {id: loginResult.response.user.id, name: loginResult.response.user.name, lastName: loginResult.response.user.lastName});
                     return this.openNewRoute("/");
                 }
             }
