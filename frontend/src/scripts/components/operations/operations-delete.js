@@ -17,7 +17,7 @@ export class OperationsDelete {
     async deleteOperation(id) {
         const deleteResult = await RequestUtils.sendRequest('/operations/' + id, 'DELETE');
         if (deleteResult.error || !deleteResult.response) {
-            console.log(error)
+            console.log('error')
         }
         this.openNewRoute('/operations');
     }

@@ -7,17 +7,17 @@
     <section class="page-content ms-2 ms-md-5 mt-3 mt-md-5">
         <div class="container-fluid">
             <div class="filter d-flex flex-wrap gap-2 gap-md-3 mt-3 mt-md-5">
-                <button type="button" class="btn btn-outline-secondary">Сегодня</button>
-                <button type="button" class="btn btn-outline-secondary">Неделя</button>
-                <button type="button" class="btn btn-outline-secondary">Месяц</button>
-                <button type="button" class="btn btn-outline-secondary">Год</button>
-                <button type="button" class="btn btn-outline-secondary">Все</button>
-                <button type="button" class="btn btn-outline-secondary">Интервал</button>
+                <button type="button" class="btn btn-outline-secondary filter-btn">Сегодня</button>
+                <button type="button" class="btn btn-outline-secondary filter-btn">Неделя</button>
+                <button type="button" class="btn btn-outline-secondary filter-btn">Месяц</button>
+                <button type="button" class="btn btn-outline-secondary filter-btn">Год</button>
+                <button type="button" class="btn btn-outline-secondary filter-btn">Все</button>
+                <button type="button" class="btn btn-outline-secondary filter-btn">Интервал</button>
                 <div class="interval">
                     <span>с </span>
-                    <button type="button" class="btn btn-link">Дата</button>
+                    <button type="button" class="btn btn-link" id="interval-from">Дата</button>
                     <span>по </span>
-                    <button type="button" class="btn btn-link">Дата</button>
+                    <button type="button" class="btn btn-link" id="interval-to">Дата</button>
                 </div>
             </div>
             <div class="charts d-flex flex-column flex-lg-row mt-3 mt-md-5 pe-0 pe-md-5">
