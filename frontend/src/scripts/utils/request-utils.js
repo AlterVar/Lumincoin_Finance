@@ -6,7 +6,8 @@ export class RequestUtils {
     static async sendRequest(url, method = 'GET', useAuth = true, body = null) {
         const result = {
             error: false,
-            response: null
+            response: null,
+            redirect: null
         }
 
         const params = {
@@ -49,6 +50,7 @@ export class RequestUtils {
                     if (updateTokenResult) {
                         return this.sendRequest(url, method, useAuth, body);
                     } else {
+                        await AuthUtils.deleteAuthInfo();
                         result.redirect = '/login';
                     }
                 }

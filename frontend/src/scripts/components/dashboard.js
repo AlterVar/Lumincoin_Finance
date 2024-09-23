@@ -15,17 +15,6 @@ export class Dashboard {
         this.findElements();
         this.getIncomeCategories();
         this.getExpenseCategories();
-        this.getOperations('all');
-
-        DateUtils.activateDatePickers(this.intervalFromElement, this.intervalToElement);
-
-        for (let i = 0; i < this.filterButtonArray.length; i++) {
-            const that = this;
-            const button = this.filterButtonArray[i];
-            button.addEventListener('click', function () {
-                that.getOperations(FilterUtils.activateFilter(button));
-            });
-        }
 
         this.incomeChart = new Chart(
             document.getElementById('income-pie-chart'),
@@ -85,6 +74,18 @@ export class Dashboard {
                 data: []
             }
         );
+
+        this.getOperations('all');
+
+        DateUtils.activateDatePickers(this.intervalFromElement, this.intervalToElement);
+
+        for (let i = 0; i < this.filterButtonArray.length; i++) {
+            const that = this;
+            const button = this.filterButtonArray[i];
+            button.addEventListener('click', function () {
+                that.getOperations(FilterUtils.activateFilter(button));
+            });
+        }
     }
 
     findElements() {
@@ -94,27 +95,30 @@ export class Dashboard {
     }
 
     async getIncomeCategories() {
-        const that = this;
-        const incomeCategories = await RequestUtils.sendRequest('/categories/income');
-        if (!incomeCategories.error) {
-            that.incomeCategoriesInfo = incomeCategories.response;
+        const incomeCategoriesResponse = await RequestUtils.sendRequest('/categories/income');
+        if (incomeCategoriesResponse.error) {
+            alert(incomeCategoriesResponse.response.message);
+            return incomeCategoriesResponse.redirect ? this.openNewRoute(incomeCategoriesResponse.redirect) : null;
         }
+        this.incomeCategoriesInfo = incomeCategoriesResponse.response;
     }
 
     async getExpenseCategories() {
-        const that = this;
-        const expenseCategories = await RequestUtils.sendRequest('/categories/expense');
-        if (!expenseCategories.error) {
-            that.expenseCategoriesInfo = expenseCategories.response;
+        const expenseCategoriesResponse = await RequestUtils.sendRequest('/categories/expense');
+        if (expenseCategoriesResponse.error) {
+            console.log(expenseCategoriesResponse.response.message);
+            return expenseCategoriesResponse.redirect ? this.openNewRoute(expenseCategoriesResponse.redirect) : null;
         }
+        this.expenseCategoriesInfo = expenseCategoriesResponse.response;
     }
 
     async getOperations(filter) {
-        const that = this;
-        const operationsResult = await RequestUtils.sendRequest('/operations?period=' + filter, "GET", true)
-        if (!operationsResult.error) {
-            await that.loadChartsData(operationsResult.response);
+        let operationsResponse = await RequestUtils.sendRequest('/operations?period=' + filter);
+        if (operationsResponse.error) {
+            console.log(operationsResponse.response.message);
+            return operationsResponse.redirect ? this.openNewRoute(operationsResponse.redirect) : null;
         }
+        this.loadChartsData(operationsResponse.response);
     }
 
     async loadChartsData(operationsInfo) {
