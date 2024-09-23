@@ -283,8 +283,6 @@ export class Router {
             } else {
                 item.classList.remove('active');
             }
-
         })
-
     }
 }
