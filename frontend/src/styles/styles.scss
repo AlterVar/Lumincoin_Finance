@@ -7,7 +7,7 @@ body {
   font-family: "Roboto", sans-serif;
 
   .main-content {
-    height: 100%;
+    height: 100vh;
     color: #052C65;
 
     .inner-content {
@@ -29,6 +29,11 @@ body {
       color: #6C757D;
     }
   }
+}
+
+.sidebar {
+  position: fixed;
+  height: 100vh;
 }
 
 .dashboard {
@@ -85,5 +90,6 @@ body {
     }
   }
 }
+
 
 
