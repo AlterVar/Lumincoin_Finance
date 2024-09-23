@@ -11,18 +11,22 @@ export class IncomeCreate {
 
         this.incomeCreateButton = document.getElementById('create-income');
         this.incomeTitleElement = document.getElementById('income-title');
+        this.errorElenent = document.getElementById('category-error');
         this.incomeCreateButton.addEventListener('click', this.createIncome.bind(this));
     }
 
-    async createIncome() {
-        if (this.incomeTitleElement) {
+    async createIncome(e) {
+        e.preventDefault();
+        if (this.incomeTitleElement.value) {
+            this.errorElenent.classList.remove('d-block');
             const createIncomeResult = await RequestUtils.sendRequest('/categories/income', 'POST', true, {
                 title: this.incomeTitleElement.value
             })
 
             if (!createIncomeResult.error) {
-                this.openNewRoute('/income');
+                return this.openNewRoute('/income');
             }
         }
+        this.errorElenent.classList.add('d-block');
     }
 }

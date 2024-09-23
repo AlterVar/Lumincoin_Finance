@@ -103,7 +103,7 @@ export class Dashboard {
         await Promise.all(loadCategories).then((responses) => {
             responses.forEach(resp => {
                 if (resp.error) {
-                    alert(resp.response.message);
+                    console.log(resp.message);
                     return resp.redirect ? this.openNewRoute(resp.redirect) : null;
                 }
             })
@@ -122,6 +122,7 @@ export class Dashboard {
     activateDatePickers (fromElement, toElement) {
         const that = this;
         const intervalElement = document.getElementById('interval-filter');
+
         new Datepicker(fromElement, {
             onChange: async function () {
                 DateUtils.getDateFromPicker(fromElement, null);

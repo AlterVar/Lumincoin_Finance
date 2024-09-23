@@ -1,6 +1,8 @@
 import {RequestUtils} from "../utils/request-utils";
 
 export class OperationsService {
+
+    //TODO: переписать все запросы в сервисы, раз уж он все равно понадобился
     static async getOperations(filter) {
         const returnObj = {
             error: false,

@@ -38,8 +38,8 @@ export class OperationsList {
 
     async init () {
         this.operationDeleteButton.onclick = this.deleteRedirect.bind(this);
-        this.activateDatePickers(this.intervalFromElement, this.intervalToElement);
 
+        this.activateDatePickers(this.intervalFromElement, this.intervalToElement);
         const operationsResponse = await OperationsService.getOperations(FilterUtils.activateFilter(this.filterButtonArray[0]));
         if (operationsResponse.redirect) {
             return this.openNewRoute(operationsResponse.redirect);
@@ -50,6 +50,8 @@ export class OperationsList {
     activateDatePickers (fromElement, toElement) {
         const that = this;
         const intervalElement = document.getElementById('interval-filter');
+
+        //TODO: убрать активацию функции при загрузке страницы
         new Datepicker(fromElement, {
             onChange: async function () {
                 DateUtils.getDateFromPicker(fromElement, null);

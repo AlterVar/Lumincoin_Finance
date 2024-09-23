@@ -11,11 +11,14 @@ export class ExpenseCreate {
 
         this.expenseCreateButton = document.getElementById('create-expense');
         this.expenseTitleElement = document.getElementById('expense-title');
+        this.errorElenent = document.getElementById('category-error');
         this.expenseCreateButton.addEventListener('click', this.createExpense.bind(this));
     }
 
-    async createExpense() {
-        if (this.expenseTitleElement) {
+    async createExpense(e) {
+        e.preventDefault();
+        if (this.expenseTitleElement.value) {
+            this.errorElenent.classList.remove('d-block');
             const createExpenseResult = await RequestUtils.sendRequest('/categories/expense', 'POST', true, {
                 title: this.expenseTitleElement.value
             })
@@ -24,5 +27,6 @@ export class ExpenseCreate {
                 this.openNewRoute('/expense');
             }
         }
+        this.errorElenent.classList.add('d-block');
     }
 }
