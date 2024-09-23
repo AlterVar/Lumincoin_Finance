@@ -1,5 +1,6 @@
 import {AuthUtils} from "../../utils/auth-utils";
 import {RequestUtils} from "../../utils/request-utils";
+import {ValidationUtils} from "../../utils/validation-utils";
 
 export class OperationsCreate {
     constructor(openNewRoute) {
@@ -11,7 +12,7 @@ export class OperationsCreate {
         this.findElements();
 
         const that = this;
-        this.operationTypeSelect.onchange = function() {
+        this.operationTypeSelect.onchange = function () {
             that.getCategories(that.operationTypeSelect.selectedIndex);
         }
         this.createOperationButton.addEventListener('click', this.createOperation.bind(this));
@@ -26,6 +27,12 @@ export class OperationsCreate {
         this.dateInputElement = document.getElementById('operation-date');
         this.commentInputElement = document.getElementById('operation-comment');
 
+        this.operationArray = [
+            {element: this.amountInputElement},
+            {element: this.dateInputElement},
+            {element: this.commentInputElement}
+        ]
+
         this.urlParams = new URLSearchParams(window.location.search);
         this.categoriesType = this.urlParams.get('type');
 
@@ -37,12 +44,12 @@ export class OperationsCreate {
         this.getCategories(this.operationTypeSelect.selectedIndex);
     }
 
-    async getCategories (typeIndex) {
+    async getCategories(typeIndex) {
         let type = this.operationTypeSelectOptions[typeIndex].value;
         let categoriesList = await RequestUtils.sendRequest('/categories/' + type);
-            if (!categoriesList.error) {
-                this.fillSelects(categoriesList.response);
-            }
+        if (!categoriesList.error) {
+            this.fillSelects(categoriesList.response);
+        }
     }
 
     async fillSelects(categories) {
@@ -62,18 +69,21 @@ export class OperationsCreate {
         }
     }
 
-    async createOperation () {
-        let categoryIndex = this.operationCategorieSelect.options.selectedIndex;
-        let createResult = await RequestUtils.sendRequest('/operations', 'POST', true, {
-            type: this.operationTypeSelectOptions[this.operationTypeSelect.selectedIndex].value,
-            amount: this.amountInputElement.value,
-            date: this.dateInputElement.value,
-            comment: this.commentInputElement.value,
-            category_id: categoryIndex + 1
-        });
+    async createOperation(e) {
+        e.preventDefault();
+        if (ValidationUtils.validateForm(this.operationArray)) {
+            let categoryIndex = this.operationCategorieSelect.options.selectedIndex;
+            let createResult = await RequestUtils.sendRequest('/operations', 'POST', true, {
+                type: this.operationTypeSelectOptions[this.operationTypeSelect.selectedIndex].value,
+                amount: this.amountInputElement.value,
+                date: this.dateInputElement.value,
+                comment: this.commentInputElement.value,
+                category_id: categoryIndex + 1
+            });
 
-        if(!createResult.error) {
-            this.openNewRoute('/operations');
+            if (!createResult.error) {
+                this.openNewRoute('/operations');
+            }
         }
     }
 }
