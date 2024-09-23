@@ -13,8 +13,7 @@ export class Dashboard {
         }
 
         this.findElements();
-        this.getIncomeCategories();
-        this.getExpenseCategories();
+        this.getIncomeCategories().then(this.getExpenseCategories()).then(this.getOperations('today'));
 
         this.incomeChart = new Chart(
             document.getElementById('income-pie-chart'),
@@ -74,8 +73,6 @@ export class Dashboard {
                 data: []
             }
         );
-
-        this.getOperations('all');
 
         DateUtils.activateDatePickers(this.intervalFromElement, this.intervalToElement);
 

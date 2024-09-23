@@ -43,16 +43,16 @@ export class RequestUtils {
             result.error = true;
             if (useAuth && response.status === 401) {
                 if (!token) {
+                    AuthUtils.deleteAuthInfo();
                     result.redirect = '/login';
                 } else {
                     const updateTokenResult = await AuthUtils.updateTokens();
 
                     if (updateTokenResult) {
                         return this.sendRequest(url, method, useAuth, body);
-                    } else {
-                        await AuthUtils.deleteAuthInfo();
-                        result.redirect = '/login';
                     }
+
+                    result.redirect = '/login';
                 }
             }
         }

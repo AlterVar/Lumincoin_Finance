@@ -29,7 +29,7 @@ export class OperationsList {
             });
         }
 
-        this.getOperations('all');
+        this.getOperations('today');
     }
 
     async getOperations(filter) {
