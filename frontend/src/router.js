@@ -1,6 +1,20 @@
 import {FileUtils} from "./scripts/utils/file-utils";
 import {Dashboard} from "./scripts/components/dashboard";
 import {Logout} from "./scripts/components/auth/logout";
+import {Login} from "./scripts/components/auth/login";
+import {SignUp} from "./scripts/components/auth/sign-up";
+import {OperationsList} from "./scripts/components/operations/operations-list";
+import {OperationsCreate} from "./scripts/components/operations/operations-create";
+import {OperationsEdit} from "./scripts/components/operations/operations-edit";
+import {OperationsDelete} from "./scripts/components/operations/operations-delete";
+import {IncomeList} from "./scripts/components/income/income-list";
+import {IncomeCreate} from "./scripts/components/income/income-create";
+import {IncomeEdit} from "./scripts/components/income/income-edit";
+import {IncomeDelete} from "./scripts/components/income/income-delete";
+import {ExpenseList} from "./scripts/components/expense/expense-list";
+import {ExpenseCreate} from "./scripts/components/expense/expense-create";
+import {ExpenseEdit} from "./scripts/components/expense/expense-edit";
+import {ExpenseDelete} from "./scripts/components/expense/expense-delete";
 
 export class Router {
     constructor() {
@@ -17,7 +31,7 @@ export class Router {
                 styles: ['sidebars.css'],
                 scripts: ['chart.umd.js'],
                 load: () => {
-                    new Dashboard();
+                    new Dashboard(this.openNewRoute.bind(this));
                 }
             },
             {
@@ -32,6 +46,7 @@ export class Router {
                 template: '/templates/auth/login.html',
                 layout: false,
                 load: () => {
+                    new Login(this.openNewRoute.bind(this));
                 }
             },
             {
@@ -40,7 +55,7 @@ export class Router {
                 template: '/templates/auth/sign-up.html',
                 layout: false,
                 load: () => {
-
+                    new SignUp(this.openNewRoute.bind(this));
                 }
             },
             {
@@ -55,6 +70,9 @@ export class Router {
                 template: '/templates/operations/operations-list.html',
                 layout: '/templates/layout.html',
                 styles: ['sidebars.css'],
+                load: () => {
+                    new OperationsList(this.openNewRoute.bind(this));
+                }
             },
             {
                 route: '/operations/create',
@@ -62,6 +80,9 @@ export class Router {
                 template: '/templates/operations/operations-create.html',
                 layout: '/templates/layout.html',
                 styles: ['sidebars.css'],
+                load: () => {
+                    new OperationsCreate(this.openNewRoute.bind(this));
+                }
             },
             {
                 route: '/operations/edit',
@@ -69,11 +90,14 @@ export class Router {
                 template: '/templates/operations/operations-edit.html',
                 layout: '/templates/layout.html',
                 styles: ['sidebars.css'],
+                load: () => {
+                    new OperationsEdit(this.openNewRoute.bind(this));
+                }
             },
             {
                 route: '/operations/delete',
                 load: () => {
-
+                    new OperationsDelete(this.openNewRoute.bind(this));
                 }
             },
             {
@@ -82,6 +106,9 @@ export class Router {
                 template: '/templates/income/income-list.html',
                 layout: '/templates/layout.html',
                 styles: ['sidebars.css'],
+                load: () => {
+                    new IncomeList(this.openNewRoute.bind(this));
+                }
             },
             {
                 route: '/income/create',
@@ -89,6 +116,9 @@ export class Router {
                 template: '/templates/income/income-create.html',
                 layout: '/templates/layout.html',
                 styles: ['sidebars.css'],
+                load: () => {
+                    new IncomeCreate(this.openNewRoute.bind(this));
+                }
             },
             {
                 route: '/income/edit',
@@ -96,10 +126,14 @@ export class Router {
                 template: '/templates/income/income-edit.html',
                 layout: '/templates/layout.html',
                 styles: ['sidebars.css'],
+                load: () => {
+                    new IncomeEdit(this.openNewRoute.bind(this));
+                }
             },
             {
                 route: '/income/delete',
                 load: () => {
+                    new IncomeDelete(this.openNewRoute.bind(this));
                 }
             },
             {
@@ -108,6 +142,9 @@ export class Router {
                 template: '/templates/expense/expense-list.html',
                 layout: '/templates/layout.html',
                 styles: ['sidebars.css'],
+                load: () => {
+                    new ExpenseList(this.openNewRoute.bind(this));
+                }
             },
             {
                 route: '/expense/create',
@@ -115,6 +152,9 @@ export class Router {
                 template: '/templates/expense/expense-create.html',
                 layout: '/templates/layout.html',
                 styles: ['sidebars.css'],
+                load: () => {
+                    new ExpenseCreate(this.openNewRoute.bind(this));
+                }
             },
             {
                 route: '/expense/edit',
@@ -122,10 +162,14 @@ export class Router {
                 template: '/templates/expense/expense-edit.html',
                 layout: '/templates/layout.html',
                 styles: ['sidebars.css'],
+                load: () => {
+                    new ExpenseEdit(this.openNewRoute.bind(this));
+                }
             },
             {
                 route: '/expense/delete',
                 load: () => {
+                    new ExpenseDelete(this.openNewRoute.bind(this));
                 }
             }
         ]

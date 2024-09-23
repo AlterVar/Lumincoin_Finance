@@ -1,7 +1,16 @@
 import Chart from 'chart.js/auto'
+import {AuthUtils} from "../utils/auth-utils";
 
 export class Dashboard {
-    constructor() {
+    constructor(openNewRoute) {
+        this.openNewRoute = openNewRoute;
+        if (!AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
+            this.openNewRoute('/login');
+        }
+        this.loadCharts();
+    }
+
+    loadCharts() {
         const dataIncome = {
             labels: [
                 'Red',
@@ -21,8 +30,6 @@ export class Dashboard {
                 ],
             }]
         }
-
-
         new Chart(
             document.getElementById('income-pie-chart'),
             {

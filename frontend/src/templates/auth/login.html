@@ -1,18 +1,19 @@
-<div class="outer d-flex align-items-center py-4 bg-body-tertiary">
+<div class="outer d-flex align-items-center py-4 m-auto">
     <div class="container-fluid form-signin w-100 m-auto">
         <form>
             <div class="form-header text-center">
                 <img class="mb-5" src="/images/logo.svg" alt="" width="171" height="70">
                 <h1 class="page-heading mb-3 fw-medium">Вход</h1>
+                <div id = "common-error" class="error invalid-feedback text-center mb-3">Неправильный email или пароль</div>
             </div>
 
             <div class="form-floating mb-2">
-                <input type="email" class="form-control is-invalid" id="floatingInput" placeholder="name@example.com">
-                <div class="placeholder-image is-invalid">
+                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <div class="placeholder-image">
                     <img src="/images/mail.svg" alt="">
                 </div>
                 <label for="floatingInput">Электронная почта</label>
-                <span id="email-error" class="d-block error invalid-feedback">Введите корректный E-mail</span>
+                <span id="email-error" class="error invalid-feedback">Введите корректный E-mail</span>
             </div>
             <div class="form-floating mb-2">
                 <input type="password" class="form-control" id="floatingPassword" placeholder="Пароль">
@@ -29,7 +30,7 @@
                     Запомнить меня
                 </label>
             </div>
-            <button class="btn btn-primary w-100 py-2 mb-2" type="submit">Войти</button>
+            <button id="process-button" class="btn btn-primary w-100 py-2 mb-2" type="button">Войти</button>
             <div class="text-start">
                 <p>Еще нет аккаунта? <a class="ms-2" href="/sign-up">Пройдите регистрацию</a></p>
             </div>
