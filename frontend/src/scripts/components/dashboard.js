@@ -4,6 +4,8 @@ import {DateUtils} from "../utils/date-utils";
 import {FilterUtils} from "../utils/filter-utils";
 import {RequestUtils} from "../utils/request-utils";
 import {CommonUtils} from "../utils/common-utils";
+import Datepicker from "../datepicker";
+import {OperationsService} from "../services/operations-service";
 
 export class Dashboard {
     constructor(openNewRoute) {
@@ -13,7 +15,7 @@ export class Dashboard {
         }
 
         this.findElements();
-        this.getIncomeCategories().then(this.getExpenseCategories()).then(this.getOperations('today'));
+        this.init();
 
         this.incomeChart = new Chart(
             document.getElementById('income-pie-chart'),
@@ -74,13 +76,16 @@ export class Dashboard {
             }
         );
 
-        DateUtils.activateDatePickers(this.intervalFromElement, this.intervalToElement);
 
+        const that = this;
         for (let i = 0; i < this.filterButtonArray.length; i++) {
-            const that = this;
             const button = this.filterButtonArray[i];
-            button.addEventListener('click', function () {
-                that.getOperations(FilterUtils.activateFilter(button));
+            button.addEventListener('click', async function () {
+                const operationsResponse = await OperationsService.getOperations(FilterUtils.activateFilter(button));
+                if (operationsResponse.redirect) {
+                    that.openNewRoute(operationsResponse.redirect);
+                }
+                that.loadChartsData(operationsResponse.operations);
             });
         }
     }
@@ -91,31 +96,57 @@ export class Dashboard {
         this.intervalToElement = document.getElementById('interval-to');
     }
 
-    async getIncomeCategories() {
-        const incomeCategoriesResponse = await RequestUtils.sendRequest('/categories/income');
-        if (incomeCategoriesResponse.error) {
-            alert(incomeCategoriesResponse.response.message);
-            return incomeCategoriesResponse.redirect ? this.openNewRoute(incomeCategoriesResponse.redirect) : null;
+    async init() {
+        const categories = ['income', 'expense'];
+        const loadCategories = categories.map(category => RequestUtils.sendRequest('/categories/' + category));
+
+        await Promise.all(loadCategories).then((responses) => {
+            responses.forEach(resp => {
+                if (resp.error) {
+                    alert(resp.response.message);
+                    return resp.redirect ? this.openNewRoute(resp.redirect) : null;
+                }
+            })
+            this.incomeCategoriesInfo = responses[0].response;
+            this.expenseCategoriesInfo = responses[1].response;
+        })
+
+        this.activateDatePickers(this.intervalFromElement, this.intervalToElement);
+        const operationsResponse = await OperationsService.getOperations(FilterUtils.activateFilter(this.filterButtonArray[0]));
+        if (operationsResponse.redirect) {
+            this.openNewRoute(operationsResponse.redirect)
         }
-        this.incomeCategoriesInfo = incomeCategoriesResponse.response;
+        this.loadChartsData(operationsResponse.operations);
     }
 
-    async getExpenseCategories() {
-        const expenseCategoriesResponse = await RequestUtils.sendRequest('/categories/expense');
-        if (expenseCategoriesResponse.error) {
-            console.log(expenseCategoriesResponse.response.message);
-            return expenseCategoriesResponse.redirect ? this.openNewRoute(expenseCategoriesResponse.redirect) : null;
-        }
-        this.expenseCategoriesInfo = expenseCategoriesResponse.response;
-    }
+    activateDatePickers (fromElement, toElement) {
+        const that = this;
+        const intervalElement = document.getElementById('interval-filter');
+        new Datepicker(fromElement, {
+            onChange: async function () {
+                DateUtils.getDateFromPicker(fromElement, null);
+                const operationsResponse = await OperationsService.getOperations(FilterUtils.activateFilter(intervalElement));
+                if (operationsResponse && operationsResponse.redirect) {
+                    return that.openNewRoute(operationsResponse.redirect);
+                }
+                if (operationsResponse && !operationsResponse.redirect && !operationsResponse.error) {
+                    that.loadChartsData(operationsResponse.operations);
+                }
+            }
+        });
 
-    async getOperations(filter) {
-        let operationsResponse = await RequestUtils.sendRequest('/operations?period=' + filter);
-        if (operationsResponse.error) {
-            console.log(operationsResponse.response.message);
-            return operationsResponse.redirect ? this.openNewRoute(operationsResponse.redirect) : null;
-        }
-        this.loadChartsData(operationsResponse.response);
+        new Datepicker(toElement, {
+            onChange: async function () {
+                DateUtils.getDateFromPicker(null, toElement);
+                const operationsResponse = await OperationsService.getOperations(FilterUtils.activateFilter(intervalElement));
+                if (operationsResponse && operationsResponse.redirect) {
+                    return that.openNewRoute(operationsResponse.redirect);
+                }
+                if (operationsResponse && !operationsResponse.redirect && !operationsResponse.error) {
+                    that.loadChartsData(operationsResponse.operations);
+                }
+            }
+        });
     }
 
     async loadChartsData(operationsInfo) {

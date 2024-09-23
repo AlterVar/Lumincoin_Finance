@@ -1,8 +1,9 @@
 import {AuthUtils} from "../../utils/auth-utils";
-import {RequestUtils} from "../../utils/request-utils";
 import {CommonUtils} from "../../utils/common-utils";
 import {DateUtils} from "../../utils/date-utils";
 import {FilterUtils} from "../../utils/filter-utils";
+import Datepicker from "../../datepicker";
+import {OperationsService} from "../../services/operations-service";
 
 
 export class OperationsList {
@@ -12,31 +13,69 @@ export class OperationsList {
             this.openNewRoute('/login');
         }
 
-        this.filterButtonArray = document.querySelectorAll('.filter-btn');
-        this.intervalFromElement = document.getElementById('interval-from');
-        this.intervalToElement = document.getElementById('interval-to');
-        this.operationDeleteButton = document.getElementById('delete-operation-btn');
-
-        this.operationDeleteButton.onclick = this.deleteRedirect.bind(this);
-
-        DateUtils.activateDatePickers(this.intervalFromElement, this.intervalToElement);
+        this.findElements();
+        this.init()
 
         for (let i = 0; i < this.filterButtonArray.length; i++) {
             const that = this;
             const button = this.filterButtonArray[i];
-            button.addEventListener('click', function () {
-                that.getOperations(FilterUtils.activateFilter(button));
+            button.addEventListener('click', async function () {
+                const operationsResponse = await OperationsService.getOperations(FilterUtils.activateFilter(button));
+                if (operationsResponse.redirect) {
+                    return that.openNewRoute(operationsResponse.redirect);
+                }
+                that.createTable(operationsResponse.operations);
             });
         }
-
-        this.getOperations('today');
     }
 
-    async getOperations(filter) {
-        const operationsResult = await RequestUtils.sendRequest('/operations?period=' + filter, "GET", true)
-        if (operationsResult) {
-            this.createTable(operationsResult.response);
+    findElements() {
+        this.filterButtonArray = document.querySelectorAll('.filter-btn');
+        this.intervalFromElement = document.getElementById('interval-from');
+        this.intervalToElement = document.getElementById('interval-to');
+        this.operationDeleteButton = document.getElementById('delete-operation-btn');
+    }
+
+    async init () {
+        this.operationDeleteButton.onclick = this.deleteRedirect.bind(this);
+        this.activateDatePickers(this.intervalFromElement, this.intervalToElement);
+
+        const operationsResponse = await OperationsService.getOperations(FilterUtils.activateFilter(this.filterButtonArray[0]));
+        if (operationsResponse.redirect) {
+            return this.openNewRoute(operationsResponse.redirect);
         }
+        this.createTable(operationsResponse.operations);
+    }
+
+    activateDatePickers (fromElement, toElement) {
+        const that = this;
+        const intervalElement = document.getElementById('interval-filter');
+        new Datepicker(fromElement, {
+            onChange: async function () {
+                DateUtils.getDateFromPicker(fromElement, null);
+                const operationsResponse = await OperationsService.getOperations(FilterUtils.activateFilter(intervalElement));
+                if (operationsResponse && operationsResponse.redirect) {
+                    return that.openNewRoute(operationsResponse.redirect);
+                }
+                if (operationsResponse && !operationsResponse.redirect && !operationsResponse.error) {
+                    that.createTable(operationsResponse.operations);
+                }
+            }
+        });
+
+        new Datepicker(toElement, {
+            onChange: async function () {
+                DateUtils.getDateFromPicker(null, toElement);
+                const operationsResponse = await OperationsService.getOperations(FilterUtils.activateFilter(intervalElement));
+                if (operationsResponse && operationsResponse.redirect) {
+                    return that.openNewRoute(operationsResponse.redirect);
+                }
+                if (operationsResponse && !operationsResponse.redirect && !operationsResponse.error) {
+                    that.createTable(operationsResponse.operations);
+                }
+
+            }
+        });
     }
 
     createTable(operations) {

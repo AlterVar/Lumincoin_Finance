@@ -1,4 +1,6 @@
 import Datepicker from "../datepicker";
+import {OperationsService} from "../services/operations-service";
+import {FilterUtils} from "./filter-utils";
 
 export class DateUtils {
     static formatDate(date, separator) {
@@ -27,22 +29,6 @@ export class DateUtils {
                 newDate = year+newSeparator+month+newSeparator+day;
         }
         return newDate;
-    }
-
-    //Datepicker
-    static activateDatePickers (fromElement, toElement) {
-        const that = this;
-        new Datepicker(fromElement, {
-            onChange: function () {
-                that.getDateFromPicker(fromElement, null)
-            }
-        });
-
-        new Datepicker(toElement, {
-            onChange: function () {
-                that.getDateFromPicker(null, toElement)
-            }
-        });
     }
 
     static getDateFromPicker(fromElement, toElement) {
