@@ -12,6 +12,7 @@ export class Dashboard {
         this.openNewRoute = openNewRoute;
         if (!AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
             this.openNewRoute('/login');
+            return;
         }
 
         this.findElements();

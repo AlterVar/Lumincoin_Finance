@@ -8,7 +8,8 @@ export class OperationsDelete {
         const id = urlParams.get('id');
 
         if (!id) {
-            return this.openNewRoute('/')
+            this.openNewRoute('/');
+            return;
         }
 
         this.deleteOperation(id);

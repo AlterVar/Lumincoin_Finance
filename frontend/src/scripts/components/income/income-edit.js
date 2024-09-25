@@ -7,6 +7,7 @@ export class IncomeEdit {
 
         if (!AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
             this.openNewRoute('/login');
+            return;
         }
 
         this.incomeTitleElement = document.getElementById('income-title');

@@ -8,6 +8,7 @@ export class IncomeList {
 
         if (!AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
             this.openNewRoute('/login');
+            return;
         }
         this.cardsElement = document.getElementById('cards');
         this.addCardElement = document.getElementById('add-card');

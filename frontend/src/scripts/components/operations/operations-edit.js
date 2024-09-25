@@ -7,6 +7,7 @@ export class OperationsEdit {
 
         if (!AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
             this.openNewRoute('/login');
+            return;
         }
 
         this.findElements();

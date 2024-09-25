@@ -11,6 +11,7 @@ export class OperationsList {
         this.openNewRoute = openNewRoute;
         if (!AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
             this.openNewRoute('/login');
+            return;
         }
 
         this.findElements();

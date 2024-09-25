@@ -8,6 +8,7 @@ export class OperationsCreate {
 
         if (!AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
             this.openNewRoute('/login');
+            return;
         }
         this.findElements();
 

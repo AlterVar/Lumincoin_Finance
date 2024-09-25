@@ -7,6 +7,7 @@ export class IncomeCreate {
 
         if (!AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
             this.openNewRoute('/login');
+            return;
         }
 
         this.incomeCreateButton = document.getElementById('create-income');

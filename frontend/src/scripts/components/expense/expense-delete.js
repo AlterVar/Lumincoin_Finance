@@ -7,6 +7,7 @@ export class ExpenseDelete {
 
         if (!AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
             this.openNewRoute('/login');
+            return;
         }
 
         const urlParams = new URLSearchParams(window.location.search);

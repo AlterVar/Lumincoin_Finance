@@ -7,6 +7,7 @@ export class ExpenseEdit {
 
         if (!AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
             this.openNewRoute('/login');
+            return;
         }
 
         this.expenseTitleElement = document.getElementById('expense-title');

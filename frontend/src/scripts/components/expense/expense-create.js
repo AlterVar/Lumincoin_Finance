@@ -7,6 +7,7 @@ export class ExpenseCreate {
 
         if (!AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
             this.openNewRoute('/login');
+            return;
         }
 
         this.expenseCreateButton = document.getElementById('create-expense');

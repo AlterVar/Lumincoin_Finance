@@ -7,6 +7,7 @@ export class IncomeDelete {
 
         if (!AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
             this.openNewRoute('/login');
+            return;
         }
 
         const urlParams = new URLSearchParams(window.location.search);
