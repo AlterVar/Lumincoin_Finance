@@ -23,6 +23,7 @@ export class OperationsCreate {
         this.operationTypeSelect = document.getElementById('operation-type');
         this.operationTypeSelectOptions = this.operationTypeSelect.options;
         this.operationCategorieSelect = document.getElementById('operation-category');
+        this.operationCategorieSelectOptions = this.operationCategorieSelect.options
         this.createOperationButton = document.getElementById('create-operation');
         this.amountInputElement = document.getElementById('operation-amount');
         this.dateInputElement = document.getElementById('operation-date');
@@ -54,9 +55,9 @@ export class OperationsCreate {
     }
 
     async fillSelects(categories) {
-        if (this.operationCategorieSelect.options.length > 0) {
-            for (let i = this.operationCategorieSelect.options.length; i > 0; i--) {
-                this.operationCategorieSelect.options.remove(this.operationCategorieSelect[0]);
+        if (this.operationCategorieSelectOptions.length > 0) {
+            for (let i = this.operationCategorieSelectOptions.length; i > 0; i--) {
+                this.operationCategorieSelectOptions.remove(this.operationCategorieSelect[0]);
             }
         }
 
@@ -73,13 +74,13 @@ export class OperationsCreate {
     async createOperation(e) {
         e.preventDefault();
         if (ValidationUtils.validateForm(this.operationArray)) {
-            let categoryIndex = this.operationCategorieSelect.options.selectedIndex;
+            let categoryIndex = parseInt(this.operationCategorieSelectOptions[this.operationCategorieSelectOptions.selectedIndex].id);
             let createResult = await RequestUtils.sendRequest('/operations', 'POST', true, {
                 type: this.operationTypeSelectOptions[this.operationTypeSelect.selectedIndex].value,
                 amount: this.amountInputElement.value,
                 date: this.dateInputElement.value,
                 comment: this.commentInputElement.value,
-                category_id: categoryIndex + 1
+                category_id: categoryIndex
             });
 
             if (!createResult.error) {
