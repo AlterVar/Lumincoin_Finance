@@ -38,7 +38,7 @@ export class OperationsList {
     }
 
     async init () {
-        this.operationDeleteButton.onclick = this.deleteRedirect.bind(this);
+        this.operationDeleteButton.addEventListener('click', this.deleteRedirect.bind(this));
 
         this.activateDatePickers(this.intervalFromElement, this.intervalToElement);
         const operationsResponse = await OperationsService.getOperations(FilterUtils.activateFilter(this.filterButtonArray[0]));
@@ -107,16 +107,13 @@ export class OperationsList {
         for (let i = 0; i < this.deleteButtonArray.length; i++) {
             const button = this.deleteButtonArray[i];
             button.addEventListener('click', function (e) {
-                e.preventDefault();
+                    window.location.hesh = "#" + this.id;
             });
         }
     }
 
-    deleteRedirect(e) {
-        e.preventDefault();
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const id = urlParams.get('id');
+    deleteRedirect() {
+        const id = window.location.hesh.substring(1);
         this.openNewRoute('operations/delete?id=' + id);
     }
 }

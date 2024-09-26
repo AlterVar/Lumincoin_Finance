@@ -7,24 +7,24 @@ export class BalanceUtils {
         let balanceResult = await RequestUtils.sendRequest('/balance', 'GET', true);
         if (!balanceResult.error) {
             balanceElement.innerText = balanceResult.response.balance + '$';
-            return;
         }
     }
 
     static async updateBalance() {
         const balanceElement = document.getElementById('balance');
         const balanceInputElement = document.getElementById('balance-input');
+        const balanceValue = parseInt(balanceInputElement.value);
 
-        if (!balanceInputElement.value) {
-            balanceInputElement.value = '0';
+        if (!balanceValue) {
+            balanceInputElement.value = 0;
         }
 
-        if (balanceInputElement.value !== balanceElement.innerText) {
+        if (balanceValue !== parseInt(balanceElement.innerText)) {
             let balanceUpdateResult = await RequestUtils.sendRequest('/balance', 'PUT', true, {
-                newBalance: parseInt(balanceInputElement.value)
+                newBalance: balanceValue
             });
             if (!balanceUpdateResult.error) {
-                balanceElement.innerText = balanceUpdateResult.response.balance + '$';
+                balanceElement.innerText = balanceUpdateResult.response.balance.toString() + '$';
             } else {
                 alert('Не удалось обновить баланс, обратитесь в службу поддержки');
             }

@@ -12,14 +12,14 @@ export class ExpenseCreate {
 
         this.expenseCreateButton = document.getElementById('create-expense');
         this.expenseTitleElement = document.getElementById('expense-title');
-        this.errorElenent = document.getElementById('category-error');
+        this.errorElement = document.getElementById('category-error');
         this.expenseCreateButton.addEventListener('click', this.createExpense.bind(this));
     }
 
     async createExpense(e) {
         e.preventDefault();
         if (this.expenseTitleElement.value) {
-            this.errorElenent.classList.remove('d-block');
+            this.errorElement.classList.remove('d-block');
             const createExpenseResult = await RequestUtils.sendRequest('/categories/expense', 'POST', true, {
                 title: this.expenseTitleElement.value
             })
@@ -27,7 +27,11 @@ export class ExpenseCreate {
             if (!createExpenseResult.error) {
                 this.openNewRoute('/expense');
             }
+
+            if (createExpenseResult.response.message === 'This record already exists') {
+                this.errorElement.innerText = 'Такая категория уже существует';
+            }
         }
-        this.errorElenent.classList.add('d-block');
+        this.errorElement.classList.add('d-block');
     }
 }

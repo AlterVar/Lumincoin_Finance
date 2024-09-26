@@ -198,8 +198,9 @@ export class Router {
         if (element) {
             e.preventDefault();
 
+            const currentRoute = window.location.pathname;
             const url = element.href.replace(window.location.origin, '')
-            if (!url || url === '/#' || url.startsWith('javascript:void(0)')) {
+            if (!url || url === '/#' || url.replace('#', '') === currentRoute || url.startsWith('javascript:void(0)')) {
                 return;
             }
 
