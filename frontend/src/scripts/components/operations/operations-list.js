@@ -86,6 +86,9 @@ export class OperationsList {
         recordsElement.innerHTML = '';
         for (let i = 0; i < operations.length; i++) {
             let record = operations[i];
+            if (!record.category) {
+                record.category = 'неизвестна';
+            }
             const trElement = document.createElement('tr');
             trElement.insertCell().innerText = i + 1;
             trElement.insertCell().innerHTML = CommonUtils.getOperationType(record.type);

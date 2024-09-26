@@ -4,8 +4,8 @@ export class BalanceUtils {
 
     static async getBalance() {
         const balanceElement = document.getElementById('balance');
-        let balanceResult = await RequestUtils.sendRequest('/balance', 'GET', true);
-        if (!balanceResult.error) {
+        let balanceResult = await RequestUtils.sendRequest('/balance');
+        if (!balanceResult.error && !balanceResult.response.error) {
             balanceElement.innerText = balanceResult.response.balance + '$';
         }
     }

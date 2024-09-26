@@ -13,13 +13,30 @@ export class IncomeDelete {
         const urlParams = new URLSearchParams(window.location.search);
         const id = urlParams.get('id');
 
-        this.deleteIncomeCategory(id);
+        this.deleteOperations(id);
     }
 
     async deleteIncomeCategory(id) {
-        const deleteResult = await RequestUtils.sendRequest('/categories/income/' + id, 'DELETE');
-        if (!deleteResult.error) {
+        const categoryResult = await RequestUtils.sendRequest('/categories/income/' + id, 'DELETE');
+        if (categoryResult && !categoryResult.error) {
             return this.openNewRoute('/income');
         }
+    }
+
+    async deleteOperations(id) {
+        const categoryResult = await RequestUtils.sendRequest('/categories/income/' + id);
+        if (!categoryResult.error) {
+            const operationsList = await RequestUtils.sendRequest('/operations?period=all');
+            if (operationsList && !operationsList.error) {
+                const operationsToDelete = operationsList.response.filter(item => item.category === categoryResult.response.title);
+                for (let i = 0; i < operationsToDelete.length; i++) {
+                    const deleteResult = await RequestUtils.sendRequest('/operations/' + operationsToDelete[i].id, 'DELETE');
+                    if (deleteResult.error) {
+                        return this.openNewRoute('/income');
+                    }
+                }
+            }
+        }
+        this.deleteIncomeCategory(id);
     }
 }

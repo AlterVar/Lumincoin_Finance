@@ -66,8 +66,6 @@ export class IncomeList {
     }
 
     deleteRedirect(e) {
-        e.preventDefault();
-
         const urlParams = new URLSearchParams(window.location.search);
         const id = urlParams.get('id');
         this.openNewRoute('/income/delete?id=' + id);

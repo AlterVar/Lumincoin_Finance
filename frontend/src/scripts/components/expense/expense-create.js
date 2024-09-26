@@ -31,7 +31,8 @@ export class ExpenseCreate {
             if (createExpenseResult.response.message === 'This record already exists') {
                 this.errorElement.innerText = 'Такая категория уже существует';
             }
+        } else {
+            this.errorElement.classList.add('d-block');
         }
-        this.errorElement.classList.add('d-block');
     }
 }
