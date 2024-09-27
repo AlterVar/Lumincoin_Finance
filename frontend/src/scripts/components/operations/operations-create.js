@@ -28,6 +28,7 @@ export class OperationsCreate {
         this.amountInputElement = document.getElementById('operation-amount');
         this.dateInputElement = document.getElementById('operation-date');
         this.commentInputElement = document.getElementById('operation-comment');
+        this.errorElement = document.getElementById('error');
 
         this.operationArray = [
             {element: this.amountInputElement},
@@ -73,16 +74,19 @@ export class OperationsCreate {
 
     async createOperation(e) {
         e.preventDefault();
+        this.errorElement.classList.remove('d-block');
         if (ValidationUtils.validateForm(this.operationArray)) {
             let categoryIndex = parseInt(this.operationCategorieSelectOptions[this.operationCategorieSelectOptions.selectedIndex].id);
             let createResult = await RequestUtils.sendRequest('/operations', 'POST', true, {
                 type: this.operationTypeSelectOptions[this.operationTypeSelect.selectedIndex].value,
-                amount: this.amountInputElement.value,
+                amount: parseInt(this.amountInputElement.value),
                 date: this.dateInputElement.value,
                 comment: this.commentInputElement.value,
                 category_id: categoryIndex
             });
-
+            if (createResult.response.error && createResult.response.message === "This record already exists") {
+                this.errorElement.classList.add('d-block');
+            }
             if (!createResult.error) {
                 this.openNewRoute('/operations');
             }

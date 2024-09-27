@@ -15,12 +15,14 @@ import {ExpenseList} from "./scripts/components/expense/expense-list";
 import {ExpenseCreate} from "./scripts/components/expense/expense-create";
 import {ExpenseEdit} from "./scripts/components/expense/expense-edit";
 import {ExpenseDelete} from "./scripts/components/expense/expense-delete";
-import {Layout} from "./scripts/components/layout";
+import {AuthUtils} from "./scripts/utils/auth-utils";
+import {BalanceUtils} from "./scripts/utils/balance-utils";
 
 export class Router {
     constructor() {
         this.pageTitleElement = document.getElementById('page-title');
         this.mainContentElement = document.getElementById('main-content');
+        this.userName = null;
         this.init();
 
         this.routes = [
@@ -255,16 +257,28 @@ export class Router {
             if (newRoute.template) {
                 let contentBlock = this.mainContentElement;
                 if (newRoute.layout) {
-                    this.mainContentElement.innerHTML = await fetch(newRoute.layout).then(response => response.text());
-                    contentBlock = document.getElementById('inner-content');
-                    new Layout();
+                    contentBlock.innerHTML = await fetch(newRoute.layout).then(response => response.text());
                     this.activateMenuItem(newRoute);
+
+                    const userNameElement = document.getElementById('user-name');
+                    if (!this.userName) {
+                        const userInfo = JSON.parse(AuthUtils.getAuthInfo(AuthUtils.userInfoKey));
+                        if (userInfo) {
+                            this.userName = userInfo.name + ' ' + userInfo.lastName;
+                        }
+                    }
+                    userNameElement.innerText = this.userName;
+
+                    this.balanceInputElement = document.getElementById('balance-input');
+                    this.balanceInputElement.addEventListener('blur', BalanceUtils.updateBalance);
+                    await BalanceUtils.getBalance();
+
+                    contentBlock = document.getElementById('inner-content');
                 }
                 contentBlock.innerHTML = await fetch(newRoute.template).then(response => response.text());
             }
-
             if (newRoute.load && typeof newRoute.load === 'function') {
-                newRoute.load();
+                    newRoute.load();
             }
         } else {
             console.log('No route found');

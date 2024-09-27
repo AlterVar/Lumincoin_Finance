@@ -13,9 +13,13 @@ export class IncomeList {
         this.cardsElement = document.getElementById('cards');
         this.addCardElement = document.getElementById('add-card');
         this.incomeDeleteButton = document.getElementById('delete-income-btn');
+        if (this.incomeDeleteButton) {
+            this.incomeDeleteButton.onclick = this.deleteRedirect.bind(this);
+        }
 
-        this.incomeDeleteButton.onclick = this.deleteRedirect.bind(this);
         this.loadCategoriesInfo();
+
+
     }
 
     async loadCategoriesInfo() {
@@ -27,7 +31,7 @@ export class IncomeList {
 
     showCategories(info) {
         for (let i = 0; i < info.length; i++) {
-            const classes = ['col-12', 'col-sm-10', 'col-md-8', 'col-lg-6', 'col-xl-4', 'p-2'];
+            const classes = ['col-12', 'col-sm-10', 'col-md-8', 'col-lg-6', 'col-xl-4', 'p-2', 'card-wrapper'];
             let card = info[i];
             let cardWrapper = document.createElement('div');
             classes.forEach(item => {
@@ -35,8 +39,12 @@ export class IncomeList {
             })
             let cardElement = document.createElement('div');
             cardElement.classList.add('card');
+            cardElement.classList.add('h-100');
             let cardBody = document.createElement('div');
             cardBody.classList.add('card-body');
+            cardBody.classList.add('d-flex');
+            cardBody.classList.add('flex-column');
+            cardBody.classList.add('justify-content-between');
 
             let cardTitle = document.createElement('h3');
             cardTitle.classList.add('card-title');
@@ -49,7 +57,9 @@ export class IncomeList {
             cardBody.appendChild(cardButtons);
             cardElement.appendChild(cardBody);
             cardWrapper.appendChild(cardElement);
-            this.cardsElement.insertBefore(cardWrapper ,this.addCardElement);
+            if (this.cardsElement && this.addCardElement) {
+                this.cardsElement.insertBefore(cardWrapper ,this.addCardElement);
+            }
         }
 
         this.activateDeleteButton();

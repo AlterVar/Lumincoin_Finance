@@ -28,6 +28,7 @@ export class OperationsEdit {
         this.dateInputElement = document.getElementById('operation-date');
         this.commentInputElement = document.getElementById('operation-comment');
         this.editOperationButton = document.getElementById('edit-operation');
+        this.errorElement = document.getElementById('error');
 
         this.urlParams = new URLSearchParams(window.location.search);
         this.operationId = this.urlParams.get('id');
@@ -91,14 +92,19 @@ export class OperationsEdit {
     }
 
     async editOperation () {
+        this.errorElement.classList.remove('d-block');
         let categoryIndex = parseInt(this.operationCategorieSelectOptions[this.operationCategorieSelectOptions.selectedIndex].id);
         let createResult = await RequestUtils.sendRequest('/operations/' + this.operationId, 'PUT', true, {
             type: this.operationTypeSelectOptions[this.operationTypeSelect.selectedIndex].value,
-            amount: this.amountInputElement.value,
+            amount: parseInt(this.amountInputElement.value),
             date: this.dateInputElement.value,
             comment: this.commentInputElement.value,
             category_id: categoryIndex
         });
+
+        if (createResult.response.error && createResult.response.message === "This record already exists") {
+            this.errorElement.classList.add('d-block');
+        }
 
         if(!createResult.error) {
             this.openNewRoute('/operations');

@@ -6,7 +6,7 @@ export class BalanceUtils {
         const balanceElement = document.getElementById('balance');
         let balanceResult = await RequestUtils.sendRequest('/balance');
         if (!balanceResult.error && !balanceResult.response.error) {
-            balanceElement.innerText = balanceResult.response.balance + '$';
+            balanceElement.innerText = balanceResult.response.balance.toString() + '$';
         }
     }
 

@@ -39,7 +39,7 @@ export class SignUp {
                 passwordRepeat: this.passwordRepeatInputElement.value
             })
 
-            if (signupResult) {
+            if (!signupResult.error) {
                 let loginResult = await RequestUtils.sendRequest('/login', 'POST', false, {
                     email: signupResult.response.user.email,
                     password: this.passwordInputElement.value,

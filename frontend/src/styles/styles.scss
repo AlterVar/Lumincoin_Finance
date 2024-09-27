@@ -81,12 +81,16 @@ body {
 
 .income, .expense {
   .page-content {
-    .card {
-      height: 121px;
-
-      .card-title {
-        color: #052C65;
+    .cards {
+      .card-wrapper {
+        min-height: 137px;
+        .card {
+          .card-title {
+            color: #052C65;
+          }
+        }
       }
+
     }
   }
 }

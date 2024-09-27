@@ -14,7 +14,10 @@ export class ExpenseList {
         this.addCardElement = document.getElementById('add-card');
         this.expenseDeleteButton = document.getElementById('delete-expense-btn');
 
-        this.expenseDeleteButton.onclick = this.deleteRedirect.bind(this);
+        if ( this.expenseDeleteButton) {
+            this.expenseDeleteButton.onclick = this.deleteRedirect.bind(this);
+        }
+
         this.loadCategoriesInfo();
     }
 
@@ -27,7 +30,7 @@ export class ExpenseList {
 
     showCategories(info) {
         for (let i = 0; i < info.length; i++) {
-            const classes = ['col-12', 'col-sm-10', 'col-md-8', 'col-lg-6', 'col-xl-4', 'p-2'];
+            const classes = ['col-12', 'col-sm-10', 'col-md-8', 'col-lg-6', 'col-xl-4', 'p-2', 'card-wrapper'];
             let card = info[i];
             let cardWrapper = document.createElement('div');
             classes.forEach(item => {
@@ -35,8 +38,12 @@ export class ExpenseList {
             })
             let cardElement = document.createElement('div');
             cardElement.classList.add('card');
+            cardElement.classList.add('h-100');
             let cardBody = document.createElement('div');
             cardBody.classList.add('card-body');
+            cardBody.classList.add('d-flex');
+            cardBody.classList.add('flex-column');
+            cardBody.classList.add('justify-content-between');
 
             let cardTitle = document.createElement('h3');
             cardTitle.classList.add('card-title');
@@ -49,7 +56,9 @@ export class ExpenseList {
             cardBody.appendChild(cardButtons);
             cardElement.appendChild(cardBody);
             cardWrapper.appendChild(cardElement);
-            this.cardsElement.insertBefore(cardWrapper ,this.addCardElement);
+            if (this.cardsElement && this.addCardElement) {
+                this.cardsElement.insertBefore(cardWrapper, this.addCardElement);
+            }
         }
 
         this.activateDeleteButton();
