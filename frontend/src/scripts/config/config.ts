@@ -1,6 +1,6 @@
-const host = process.env.HOST;
+const host: string = process.env.HOST;
 
-const config = {
+const config: any = {
     host: host,
     api: host + '/api'
 }

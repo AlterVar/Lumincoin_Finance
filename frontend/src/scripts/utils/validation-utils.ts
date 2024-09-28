@@ -3,8 +3,8 @@ export class ValidationUtils {
 
     }
 
-    static validateForm(inputArray) {
-        let isValid = true;
+    public static validateForm(inputArray) {
+        let isValid: boolean = true;
 
         for (let i = 0; i < inputArray.length; i++) {
             if (!ValidationUtils.validateFields(inputArray[i].element, inputArray[i].options)) {
