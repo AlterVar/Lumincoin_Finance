@@ -19,6 +19,8 @@ import {RouteType} from "./scripts/types/route.type";
 import {AuthUtils} from "./scripts/utils/auth-utils";
 import {UserInfoType} from "./scripts/types/auth-info.type";
 import {BalanceUtils} from "./scripts/utils/balance-utils";
+import {BalanceResponseType} from "./scripts/types/response.type";
+import {beforeLabel} from "chart.js/dist/plugins/plugin.tooltip";
 
 export class Router {
     readonly pageTitleElement: HTMLElement | null;
@@ -197,7 +199,7 @@ export class Router {
         window.addEventListener("click", this.clickHandler.bind(this));
     }
 
-     private async openNewRoute(url): Promise<void> {
+    private async openNewRoute(url): Promise<void> {
         const currentRoute: string = window.location.pathname;
         history.pushState({}, '', url);
         await this.newRoute(null, currentRoute);
@@ -281,11 +283,8 @@ export class Router {
 
                         this.balanceInputElement = document.getElementById('balance-input');
                         if (this.balanceInputElement) {
-                            this.balanceInputElement.addEventListener('blur', BalanceUtils.updateBalance);
-                            await BalanceUtils.getBalance();
+                            this.loadBalance();
                         }
-
-
                         contentBlock = document.getElementById('inner-content');
                     }
                     contentBlock.innerHTML = await fetch(newRoute.template).then(response => response.text());
@@ -299,6 +298,25 @@ export class Router {
             console.log('No route found');
             history.pushState({}, '', '/404');
             await this.newRoute(null);
+        }
+    }
+
+    //TODO: проверить когда запускается обработчик
+    private async loadBalance(): Promise<void> {
+        const that: Router = this;
+        //обработка события
+        this.balanceInputElement!.addEventListener('blur', async function () {
+            const balance: BalanceResponseType = await BalanceUtils.updateBalance();
+            if (balance) {
+                balance.error ? balance.redirect ? await that.openNewRoute(balance.redirect) : null
+                    : that.balanceInputElement!.innerText = balance.balance.toString();
+            }
+        });
+        //получение баланса
+        const balance: BalanceResponseType = await BalanceUtils.getBalance();
+        if (balance) {
+            balance.error ? balance.redirect ? await that.openNewRoute(balance.redirect) : null
+                : that.balanceInputElement!.innerText = balance.balance.toString();
         }
     }
 

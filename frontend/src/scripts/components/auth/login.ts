@@ -29,7 +29,8 @@ export class Login {
         },
             {element: this.passwordInputElement}]
 
-        document.getElementById('process-button').addEventListener('click', this.login.bind(this));
+
+        document.getElementById('process-button')?.addEventListener('click', this.login.bind(this));
     }
 
     private async login(): Promise<void> {

@@ -3,9 +3,9 @@ import {AuthInfoType, UserInfoType} from "../types/auth-info.type";
 import {ErrorResponseType, TokensResponseType} from "../types/response.type";
 
 export class AuthUtils {
-    static accessTokenKey = 'accessToken';
-    static refreshTokenKey = 'refreshToken';
-    static userInfoKey = 'userInfo';
+    public static accessTokenKey: string = 'accessToken';
+    public static refreshTokenKey: string = 'refreshToken';
+    public static userInfoKey: string = 'userInfo';
 
     public static getAuthInfo(key: string | null = null): AuthInfoType | string {
         if (key && [this.accessTokenKey, this.refreshTokenKey, this.userInfoKey].includes(key)) {
@@ -40,6 +40,7 @@ export class AuthUtils {
                 body: JSON.stringify({refreshToken: refreshToken})
             });
 
+            //TODO: а при 200 разве может прийти errorType?
             if (response && response.status === 200) {
                 const tokens: ErrorResponseType | TokensResponseType = await response.json();
                 if ((tokens as ErrorResponseType) && (tokens as ErrorResponseType).error) {

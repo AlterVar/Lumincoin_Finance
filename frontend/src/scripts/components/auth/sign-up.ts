@@ -45,20 +45,20 @@ export class SignUp {
         }
         this.inputArray.find((input: InputType) => input?.element === this.passwordRepeatInputElement).options.compareTo = this.passwordInputElement?.value;
         if(ValidationUtils.validateForm(this.inputArray)) {
-            if (this.nameInputElement) {
+            if (this.nameInputElement && this.emailInputElement && this.passwordInputElement) {
                 const userName: string[] = this.nameInputElement.value.split(' ');
                 let signupResult: SignupResponseType = await AuthService.signUp({
                     name: userName[1],
                     lastName: userName[0],
-                    email: this.emailInputElement?.value,
-                    password: this.passwordInputElement?.value,
+                    email: this.emailInputElement.value,
+                    password: this.passwordInputElement.value,
                     passwordRepeat: this.passwordRepeatInputElement?.value
                 })
 
-                if (signupResult) {
+                if (signupResult && !signupResult.error && signupResult.signup) {
                     let loginResult: LoginResponseType = await AuthService.login({
-                        email: signupResult.signup?.email,
-                        password: this.passwordInputElement?.value,
+                        email: signupResult.signup.email,
+                        password: this.passwordInputElement.value,
                         rememberMe: true
                     });
                     if (loginResult && !loginResult.error && loginResult.login) {
@@ -66,10 +66,10 @@ export class SignUp {
                         this.openNewRoute("/");
                         return;
                     }
-                    if (this.commonErrorElement) {
-                        this.commonErrorElement.style.display = "block";
-                    }
                 }
+            }
+            if (this.commonErrorElement) {
+                this.commonErrorElement.style.display = "block";
             }
         }
     }

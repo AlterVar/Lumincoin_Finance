@@ -41,3 +41,8 @@ export type SignupResponseType = {
     redirect: string | null
     signup: SignupInfoType | null
 }
+export type BalanceResponseType = {
+    error: boolean,
+    redirect: string | null
+    balance: string | null
+}

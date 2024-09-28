@@ -1,4 +1,9 @@
 export type InputType = {
-        element: HTMLElement | null,
-        options?: {pattern?: RegExp, compareTo?: string}
+        element: HTMLInputElement | null,
+        options?: InputOptionsType
+}
+
+export type InputOptionsType = {
+        pattern?: RegExp,
+        compareTo?: string
 }

@@ -1,33 +1,57 @@
 import {RequestUtils} from "./request-utils";
+import {BalanceResponseType, RequestResponseType} from "../types/response.type";
 
 export class BalanceUtils {
 
-    static async getBalance() {
-        const balanceElement = document.getElementById('balance');
-        let balanceResult = await RequestUtils.sendRequest('/balance', 'GET', true);
-        if (!balanceResult.error) {
-            balanceElement.innerText = balanceResult.response.balance + '$';
-            return;
+    public static async getBalance(): Promise<BalanceResponseType> {
+        const resultObj: BalanceResponseType = {
+            error: false,
+            redirect: null,
+            balance: null
+        }
+        //TODO: а сюда может приходить редирект?
+        const balanceElement: HTMLElement | null = document.getElementById('balance');
+        if (balanceElement) {
+            const balanceResult: RequestResponseType = await RequestUtils.sendRequest('/balance', 'GET', true);
+            if (balanceResult.error) {
+                resultObj.error = true;
+                balanceResult.response.error ? alert('Не удалось загрузить баланс. Обратитесь в поддержку') && console.log(balanceResult.response.message)
+                    : balanceResult.redirect ? resultObj.redirect = balanceResult.redirect : console.log('возникла какая-то ошибка');
+            } else {
+                resultObj.balance = balanceResult.response.balance.toString() + '$';
+            }
+            return resultObj;
         }
     }
 
-    static async updateBalance() {
-        const balanceElement = document.getElementById('balance');
-        const balanceInputElement = document.getElementById('balance-input');
+    //TODO: проверить, что приходит при обновлении, укладывается ли это в тип
+    public static async updateBalance(): Promise<BalanceResponseType> {
+        const resultObj: BalanceResponseType = {
+            error: false,
+            redirect: null,
+            balance: null
+        }
+        const balanceElement: HTMLElement | null = document.getElementById('balance');
+        const balanceInputElement: HTMLInputElement | null = <HTMLInputElement>document.getElementById('balance-input');
+        const balanceValue: number = parseInt(balanceInputElement?.value as string);
 
-        if (!balanceInputElement.value) {
+        //TODO: убедиться, что всё правильно работает
+        if (!balanceValue) {
             balanceInputElement.value = '0';
         }
 
-        if (balanceInputElement.value !== balanceElement.innerText) {
-            let balanceUpdateResult = await RequestUtils.sendRequest('/balance', 'PUT', true, {
-                newBalance: parseInt(balanceInputElement.value)
+        if (balanceValue !== parseInt(balanceElement?.innerText as string)) {
+            const balanceUpdateResult: RequestResponseType = await RequestUtils.sendRequest('/balance', 'PUT', true, {
+                newBalance: balanceValue
             });
-            if (!balanceUpdateResult.error) {
-                balanceElement.innerText = balanceUpdateResult.response.balance + '$';
+            if (balanceUpdateResult.error) {
+                resultObj.error = true;
+                balanceUpdateResult.response.error ? alert('Не удалось обновить баланс. Обратитесь в поддержку') && console.log(balanceUpdateResult.response.message)
+                    : balanceUpdateResult.redirect ? resultObj.redirect = balanceUpdateResult.redirect : console.log('возникла какая-то ошибка');
             } else {
-                alert('Не удалось обновить баланс, обратитесь в службу поддержки');
+                resultObj.balance = balanceUpdateResult.response.balance.toString() + '$';
             }
+            return resultObj;
         }
     }
 }
