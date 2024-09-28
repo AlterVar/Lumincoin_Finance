@@ -9,34 +9,40 @@
             <form class="d-flex flex-column">
                 <div class="row">
                     <div class="col-12 col-md-6 col-xl-3">
+                        <span class="error invalid-feedback mb-3" id="error">Такая операция уже существует</span>
                         <select id="operation-type" class="form-control mb-3">
-                            <option value="Доход">Доход</option>
-                            <option value="Расход">Расход</option>
+                            <option class="operation-type" value="income">Доход</option>
+                            <option class="operation-type" value="expense">Расход</option>
                         </select>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <input id="operation-category" type="text" class="col-12 col-sm-9 col-md-6 form-control mb-3" placeholder="Категория...">
+                    <div class="col-12 col-md-6 col-xl-3 mb-3">
+                        <select id="operation-category" type="text" class="col-12 col-sm-9 col-md-6 form-control">
+
+                        </select>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <input id="operation-amount" type="text" class="col-12 col-sm-9 col-md-6 form-control mb-3" placeholder="Сумма в $...">
+                    <div class="col-12 col-md-6 col-xl-3 mb-3">
+                        <input id="operation-amount" type="number" class="col-12 col-sm-9 col-md-6 form-control" placeholder="Сумма в $...">
+                        <span id="amount-error" class="error invalid-feedback">Введите сумму</span>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <input id="operation-date" type="text" class="col-12 col-sm-9 col-md-6 form-control mb-3" placeholder="Дата...">
+                    <div class="col-12 col-md-6 col-xl-3 mb-3">
+                        <input id="operation-date" type="date" class="col-12 col-sm-9 col-md-6 form-control" placeholder="Дата...">
+                        <span id="date-error" class="error invalid-feedback">Введите дату</span>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <input id="operation-comment" type="text" class="col-12 col-sm-9 col-md-6 form-control mb-3" placeholder="Комментарий...">
+                    <div class="col-12 col-md-6 col-xl-3 mb-3">
+                        <input id="operation-comment" type="text" class="col-12 col-sm-9 col-md-6 form-control" placeholder="Комментарий...">
+                        <span id="comment-error" class="error invalid-feedback">Введите комментарий</span>
                     </div>
                 </div>
                 <div class="controls">
-                    <a href="/operations" id="create-operation" class="btn btn-success">Создать</a>
+                    <button id="create-operation" class="btn btn-success">Создать</button>
                     <a href="/operations" class="btn btn-danger">Отмена</a>
                 </div>
             </form>

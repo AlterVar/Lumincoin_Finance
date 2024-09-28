@@ -9,11 +9,12 @@
             <form class="d-flex flex-column">
                 <div class="row">
                     <div class="col-12 col-md-6 col-xl-3">
-                        <input type="text" class="form-control mb-3" placeholder="Название...">
+                        <input id="income-title" type="text" class="form-control mb-3" placeholder="Название...">
+                        <span id="category-error" class="error invalid-feedback mb-3">Введите название категории</span>
                     </div>
                 </div>
                 <div class="controls">
-                    <a href="/income" id="create-income" class="btn btn-success">Создать</a>
+                    <button id="create-income" class="btn btn-success">Создать</button>
                     <a href="/income" class="btn btn-danger">Отмена</a>
                 </div>
             </form>

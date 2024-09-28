@@ -9,31 +9,40 @@
             <form class="d-flex flex-column">
                 <div class="row">
                     <div class="col-12 col-md-6 col-xl-3">
-                        <input id="operation-type" type="text" class="form-control mb-3" aria-label="Тип" placeholder="Тип..." value="">
+                        <span class="error invalid-feedback mb-3" id="error">Такая операция уже существует</span>
+                        <select id="operation-type" class="form-control mb-3">
+                            <option class="operation-type" value="income">Доход</option>
+                            <option class="operation-type" value="expense">Расход</option>
+                        </select>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12 col-md-6 col-xl-3">
-                        <input id="operation-category" type="text" class="col-12 col-sm-9 col-md-6 form-control mb-3" placeholder="Категория...">
+                        <select id="operation-category" class="col-12 col-sm-9 col-md-6 form-control mb-3">
+
+                        </select>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12 col-md-6 col-xl-3">
-                        <input id="operation-amount" type="text" class="col-12 col-sm-9 col-md-6 form-control mb-3" placeholder="Сумма в $...">
+                        <input id="operation-amount" type="number" class="col-12 col-sm-9 col-md-6 form-control mb-3"
+                               placeholder="Сумма в $...">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12 col-md-6 col-xl-3">
-                        <input id="operation-date" type="text" class="col-12 col-sm-9 col-md-6 form-control mb-3" placeholder="Дата...">
+                        <input id="operation-date" type="date" class="col-12 col-sm-9 col-md-6 form-control mb-3"
+                               placeholder="Дата...">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12 col-md-6 col-xl-3">
-                        <input id="operation-comment" type="text" class="col-12 col-sm-9 col-md-6 form-control mb-3" placeholder="Комментарий...">
+                        <input id="operation-comment" type="text" class="col-12 col-sm-9 col-md-6 form-control mb-3"
+                               placeholder="Комментарий...">
                     </div>
                 </div>
                 <div class="controls">
-                    <a href="/operations" id="create-operation" class="btn btn-success">Создать</a>
+                    <button type="button" id="edit-operation" class="btn btn-success">Сохранить</button>
                     <a href="/operations" class="btn btn-danger">Отмена</a>
                 </div>
             </form>
