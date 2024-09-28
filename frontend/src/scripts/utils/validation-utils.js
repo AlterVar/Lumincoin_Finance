@@ -1,7 +1,4 @@
 export class ValidationUtils {
-    constructor() {
-
-    }
 
     static validateForm(inputArray) {
         let isValid = true;

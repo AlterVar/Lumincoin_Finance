@@ -39,7 +39,7 @@ export class SignUp {
                 passwordRepeat: this.passwordRepeatInputElement.value
             })
 
-            if (signupResult) {
+            if (!signupResult.error) {
                 let loginResult = await RequestUtils.sendRequest('/login', 'POST', false, {
                     email: signupResult.response.user.email,
                     password: this.passwordInputElement.value,
@@ -47,7 +47,7 @@ export class SignUp {
                 });
                 if (loginResult) {
                     AuthUtils.setAuthInfo(loginResult.response.tokens.accessToken, loginResult.response.tokens.refreshToken,
-                        {id: loginResult.response.user.id, name: loginResult.response.user.name});
+                        {id: loginResult.response.user.id, name: loginResult.response.user.name, lastName: loginResult.response.user.lastName});
                     return this.openNewRoute("/");
                 }
             }

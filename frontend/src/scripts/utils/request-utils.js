@@ -3,10 +3,11 @@ import {AuthUtils} from "./auth-utils";
 
 export class RequestUtils {
 
-    static async sendRequest(url, method = 'GET', useAuth = false, body = null) {
+    static async sendRequest(url, method = 'GET', useAuth = true, body = null) {
         const result = {
             error: false,
-            response: null
+            response: null,
+            redirect: null
         }
 
         const params = {
@@ -21,7 +22,7 @@ export class RequestUtils {
         if (useAuth) {
             token = AuthUtils.getAuthInfo(AuthUtils.accessTokenKey);
             if (token) {
-                params.headers ["authorization"] = token;
+                params.headers ["x-auth-token"] = token;
             }
         }
 
@@ -42,15 +43,16 @@ export class RequestUtils {
             result.error = true;
             if (useAuth && response.status === 401) {
                 if (!token) {
+                    AuthUtils.deleteAuthInfo();
                     result.redirect = '/login';
                 } else {
                     const updateTokenResult = await AuthUtils.updateTokens();
 
                     if (updateTokenResult) {
                         return this.sendRequest(url, method, useAuth, body);
-                    } else {
-                        result.redirect = '/login';
                     }
+
+                    result.redirect = '/login';
                 }
             }
         }

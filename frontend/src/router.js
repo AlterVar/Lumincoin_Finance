@@ -15,11 +15,14 @@ import {ExpenseList} from "./scripts/components/expense/expense-list";
 import {ExpenseCreate} from "./scripts/components/expense/expense-create";
 import {ExpenseEdit} from "./scripts/components/expense/expense-edit";
 import {ExpenseDelete} from "./scripts/components/expense/expense-delete";
+import {AuthUtils} from "./scripts/utils/auth-utils";
+import {BalanceUtils} from "./scripts/utils/balance-utils";
 
 export class Router {
     constructor() {
         this.pageTitleElement = document.getElementById('page-title');
         this.mainContentElement = document.getElementById('main-content');
+        this.userName = null;
         this.init();
 
         this.routes = [
@@ -28,7 +31,7 @@ export class Router {
                 title: 'Дашборд',
                 template: '/templates/dashboard.html',
                 layout: '/templates/layout.html',
-                styles: ['sidebars.css'],
+                styles: ['sidebars.css', 'datepicker.material.css'],
                 scripts: ['chart.umd.js'],
                 load: () => {
                     new Dashboard(this.openNewRoute.bind(this));
@@ -69,7 +72,7 @@ export class Router {
                 title: 'Доходы и расходы',
                 template: '/templates/operations/operations-list.html',
                 layout: '/templates/layout.html',
-                styles: ['sidebars.css'],
+                styles: ['sidebars.css', 'datepicker.material.css'],
                 load: () => {
                     new OperationsList(this.openNewRoute.bind(this));
                 }
@@ -197,8 +200,9 @@ export class Router {
         if (element) {
             e.preventDefault();
 
+            const currentRoute = window.location.pathname;
             const url = element.href.replace(window.location.origin, '')
-            if (!url || url === '/#' || url.startsWith('javascript:void(0)')) {
+            if (!url || url === '/#' || url.replace('#', '') === currentRoute || url.startsWith('javascript:void(0)')) {
                 return;
             }
 
@@ -253,15 +257,28 @@ export class Router {
             if (newRoute.template) {
                 let contentBlock = this.mainContentElement;
                 if (newRoute.layout) {
-                    this.mainContentElement.innerHTML = await fetch(newRoute.layout).then(response => response.text());
-                    contentBlock = document.getElementById('inner-content');
+                    contentBlock.innerHTML = await fetch(newRoute.layout).then(response => response.text());
                     this.activateMenuItem(newRoute);
+
+                    const userNameElement = document.getElementById('user-name');
+                    if (!this.userName) {
+                        const userInfo = JSON.parse(AuthUtils.getAuthInfo(AuthUtils.userInfoKey));
+                        if (userInfo) {
+                            this.userName = userInfo.name + ' ' + userInfo.lastName;
+                        }
+                    }
+                    userNameElement.innerText = this.userName;
+
+                    this.balanceInputElement = document.getElementById('balance-input');
+                    this.balanceInputElement.addEventListener('blur', BalanceUtils.updateBalance);
+                    await BalanceUtils.getBalance();
+
+                    contentBlock = document.getElementById('inner-content');
                 }
                 contentBlock.innerHTML = await fetch(newRoute.template).then(response => response.text());
             }
-
             if (newRoute.load && typeof newRoute.load === 'function') {
-                newRoute.load();
+                    newRoute.load();
             }
         } else {
             console.log('No route found');
@@ -274,7 +291,7 @@ export class Router {
         document.querySelectorAll('.sidebar .nav-link').forEach(item => {
             const href = item.getAttribute('href');
             if ((route.route.includes(href) && href !== '/') || (route.route === '/' && href === '/')) {
-                if ((route.route === '/expense' && href === '/expense') || (route.route === '/income' && href === '/income')) {
+                if ((route.route.includes('/expense') && href.includes('/expense')) || (route.route.includes('/income') && href.includes('/income'))) {
                     document.getElementById('collapse-btn').classList.remove('collapsed');
                     document.getElementById('collapse-btn').setAttribute('aria-expanded', 'true');
                     document.getElementById('flush-collapseOne').classList.add('show');
