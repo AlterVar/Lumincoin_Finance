@@ -1,26 +1,26 @@
-import Chart from 'chart.js/auto'
+import Chart, {ChartItem} from 'chart.js/auto'
 import {AuthUtils} from "../utils/auth-utils";
 import {DateUtils} from "../utils/date-utils";
 import {FilterUtils} from "../utils/filter-utils";
 import {CommonUtils} from "../utils/common-utils";
-import Datepicker from "../datepicker";
 import {OperationsService} from "../services/operations-service";
 import {CategoriesResponseType, OperationsResponseType} from "../types/response.type";
 import {CategoriesService} from "../services/categories-service";
 import {CategoriesType} from "../types/categories.type";
 import {OperationsType} from "../types/operations.type";
+import {Datepicker} from "../datepicker";
 
 export class Dashboard {
     readonly openNewRoute: (route: string) => {};
-    private incomeChart: Chart<any>;
-    private expenseChart: Chart<any>;
-    private filterButtonArray: NodeList;
-    private intervalFromElement: HTMLElement | null;
-    private intervalToElement: HTMLElement | null;
-    private incomeCategoriesInfo: CategoriesType[] | null;
-    private expenseCategoriesInfo: CategoriesType[] | null;
+    private incomeChart: Chart<any> | null = null;
+    private expenseChart: Chart<any> | null = null;
+    private filterButtonArray: NodeList | null = null;
+    private intervalFromElement: HTMLElement | null = null;
+    private intervalToElement: HTMLElement | null = null;
+    private incomeCategoriesInfo: CategoriesType[] | null = null;
+    private expenseCategoriesInfo: CategoriesType[] | null = null;
 
-    constructor(openNewRoute) {
+    constructor(openNewRoute: (url: string) => Promise<void>) {
         this.openNewRoute = openNewRoute;
         if (!AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
             this.openNewRoute('/login');
@@ -31,7 +31,7 @@ export class Dashboard {
         this.init();
 
         this.incomeChart = new Chart(
-            document.getElementById('income-pie-chart'),
+            document.getElementById('income-pie-chart') as ChartItem,
             {
                 type: 'pie',
                 options: {
@@ -53,12 +53,12 @@ export class Dashboard {
                         }
                     }
                 },
-                data: []
+                data: <any>[]
             }
         );
 
         this.expenseChart = new Chart(
-            document.getElementById('expense-pie-chart'),
+            document.getElementById('expense-pie-chart') as ChartItem,
             {
                 type: 'pie',
                 options: {
@@ -85,25 +85,28 @@ export class Dashboard {
                         }
                     }
                 },
-                data: []
+                data: <any>[]
             }
         );
 
 
         const that: Dashboard = this;
-        for (let i = 0; i < this.filterButtonArray.length; i++) {
-            const button: Node = this.filterButtonArray[i];
-            button.addEventListener('click', async function (): Promise<void> {
-                const operationsResponse: OperationsResponseType = await OperationsService.getOperations(FilterUtils.activateFilter(button));
-                if (operationsResponse.redirect) {
-                    that.openNewRoute(operationsResponse.redirect);
-                    return;
-                }
-                if (operationsResponse.operations) {
-                    that.loadChartsData(operationsResponse.operations);
-                }
-            });
+        if (this.filterButtonArray) {
+            for (let i = 0; i < this.filterButtonArray.length; i++) {
+                const button: Node = this.filterButtonArray[i];
+                button.addEventListener('click', async function (): Promise<void> {
+                    const operationsResponse: OperationsResponseType = await OperationsService.getOperations(FilterUtils.activateFilter(button as HTMLElement));
+                    if (operationsResponse.redirect) {
+                        that.openNewRoute(operationsResponse.redirect);
+                        return;
+                    }
+                    if (operationsResponse.operations as OperationsType[]) {
+                        await that.loadChartsData(operationsResponse.operations as OperationsType[]);
+                    }
+                });
+            }
         }
+
     }
 
     findElements() {
@@ -126,45 +129,50 @@ export class Dashboard {
             this.expenseCategoriesInfo = responses[1].categories as CategoriesType[];
         })
 
-        this.activateDatePickers(this.intervalFromElement, this.intervalToElement);
-        const operationsResponse: OperationsResponseType = await OperationsService.getOperations(FilterUtils.activateFilter(this.filterButtonArray[0]));
-        if (operationsResponse.error && operationsResponse.redirect) {
-            this.openNewRoute(operationsResponse.redirect);
-            return;
+        if (this.intervalFromElement && this.intervalToElement) {
+            this.activateDatePickers(this.intervalFromElement, this.intervalToElement);
         }
-        if (operationsResponse.operations) {
-            this.loadChartsData(operationsResponse.operations);
+        if (this.filterButtonArray) {
+            const operationsResponse: OperationsResponseType = await OperationsService.getOperations(FilterUtils.activateFilter(this.filterButtonArray[0] as HTMLElement));
+            if (operationsResponse.error && operationsResponse.redirect) {
+                this.openNewRoute(operationsResponse.redirect);
+                return;
+            }
+            if (operationsResponse.operations) {
+                await this.loadChartsData(operationsResponse.operations as OperationsType[]);
+            }
         }
+
     }
 
-    private activateDatePickers (fromElement: HTMLElement | null, toElement: HTMLElement | null): void {
+    private activateDatePickers (fromElement: HTMLElement | null = null, toElement: HTMLElement | null = null): void {
         const that: Dashboard = this;
         const intervalElement: HTMLElement | null = document.getElementById('interval-filter');
 
-        new Datepicker(fromElement, {
+        <any>new Datepicker(fromElement, {
             onChange: async function (): Promise<void> {
                 DateUtils.getDateFromPicker(fromElement, null);
-                const operationsResponse: OperationsResponseType = await OperationsService.getOperations(FilterUtils.activateFilter(intervalElement));
+                const operationsResponse: OperationsResponseType = await OperationsService.getOperations(FilterUtils.activateFilter(intervalElement as HTMLElement));
                 if (operationsResponse.error && operationsResponse.redirect) {
                     that.openNewRoute(operationsResponse.redirect);
                     return;
                 }
                 if (operationsResponse && operationsResponse.operations && !operationsResponse.redirect && !operationsResponse.error) {
-                    that.loadChartsData(operationsResponse.operations);
+                    that.loadChartsData(operationsResponse.operations as OperationsType[]);
                 }
             }
         });
 
-        new Datepicker(toElement, {
+        <any>new Datepicker(toElement, {
             onChange: async function (): Promise<void> {
                 DateUtils.getDateFromPicker(null, toElement);
-                const operationsResponse: OperationsResponseType = await OperationsService.getOperations(FilterUtils.activateFilter(intervalElement));
+                const operationsResponse: OperationsResponseType = await OperationsService.getOperations(FilterUtils.activateFilter(intervalElement!));
                 if (operationsResponse.error && operationsResponse.redirect) {
                     that.openNewRoute(operationsResponse.redirect);
                     return;
                 }
                 if (operationsResponse && operationsResponse.operations && !operationsResponse.redirect && !operationsResponse.error) {
-                    that.loadChartsData(operationsResponse.operations);
+                    that.loadChartsData(operationsResponse.operations as OperationsType[]);
                 }
             }
         });
@@ -185,14 +193,14 @@ export class Dashboard {
             }
         }
 
-        this.incomeChart.data = {
+        this.incomeChart!.data = {
             labels: incomeNames,
             datasets: [{
                 data: incomeData,
                 backgroundColor: incomeColors,
             }]
         }
-        this.incomeChart.update();
+        this.incomeChart!.update();
 
         let expenseColors: string[] = [];
         let expenseNames: string[] = [];
@@ -208,14 +216,14 @@ export class Dashboard {
             }
         }
 
-        this.expenseChart.data = {
+        this.expenseChart!.data = {
             labels: expenseNames,
             datasets: [{
                 data: expenseData,
                 backgroundColor: expenseColors,
             }]
         }
-        this.expenseChart.update();
+        this.expenseChart!.update();
 
     }
 }

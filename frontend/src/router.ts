@@ -20,15 +20,14 @@ import {AuthUtils} from "./scripts/utils/auth-utils";
 import {UserInfoType} from "./scripts/types/auth-info.type";
 import {BalanceUtils} from "./scripts/utils/balance-utils";
 import {BalanceResponseType} from "./scripts/types/response.type";
-import {beforeLabel} from "chart.js/dist/plugins/plugin.tooltip";
 
 export class Router {
     readonly pageTitleElement: HTMLElement | null;
     readonly mainContentElement: HTMLElement | null;
     readonly layoutPath: string;
-    private userName: string | null;
+    private userName: string | null = null;
     private routes: RouteType[];
-    private balanceInputElement: HTMLElement | null;
+    private balanceInputElement: HTMLInputElement | null = null;
 
     constructor() {
         this.pageTitleElement = document.getElementById('page-title');
@@ -42,7 +41,7 @@ export class Router {
                 title: 'Дашборд',
                 template: '/templates/dashboard.html',
                 layout: true,
-                styles: ['sidebars.css', 'datepicker.material.css'],
+                styles: ['sidebars.css', /*'datepicker.material.css'*/],
                 scripts: ['chart.umd.js'],
                 load: () => {
                     new Dashboard(this.openNewRoute.bind(this));
@@ -84,7 +83,7 @@ export class Router {
                 title: 'Доходы и расходы',
                 template: '/templates/operations/operations-list.html',
                 layout: true,
-                styles: ['sidebars.css', 'datepicker.material.css'],
+                styles: ['sidebars.css', /*'datepicker.material.css'*/],
                 load: () => {
                     new OperationsList(this.openNewRoute.bind(this));
                 }
@@ -199,13 +198,13 @@ export class Router {
         window.addEventListener("click", this.clickHandler.bind(this));
     }
 
-    private async openNewRoute(url): Promise<void> {
+    private async openNewRoute(url: string): Promise<void> {
         const currentRoute: string = window.location.pathname;
         history.pushState({}, '', url);
-        await this.newRoute(null, currentRoute);
+        await this.newRoute(null, currentRoute as string);
     }
 
-    private async clickHandler(e): Promise<void> {
+    private async clickHandler(e: any): Promise<void> {
         let element: URL | null = null;
         if (e.target.nodeName === 'A') {
             element = e.target;
@@ -224,26 +223,29 @@ export class Router {
         }
     }
 
-    private async newRoute(e, oldRoute = null): Promise<void> {
+    private async newRoute(e: any, oldRoute: string | null = null): Promise<void> {
         if (oldRoute) {
-            const currentRoute: RouteType | null = this.routes.find(item => item.route === oldRoute);
+            const currentRoute: RouteType = this.routes.find((item: RouteType) => item.route === oldRoute) as RouteType;
             if (currentRoute.styles && currentRoute.styles.length > 0) {
                 currentRoute.styles.forEach((style: string) => {
-                    document.querySelector(`link[href='/css/${style}']`).remove();
+                    document.querySelector(`link[href='/css/${style}']`)!.remove();
                 })
             }
 
             if (currentRoute.scripts && currentRoute.scripts.length > 0) {
                 currentRoute.scripts.forEach((script: string) => {
-                    document.querySelector(`script[src='/js/${script}']`).remove();
+                    document.querySelector(`script[src='/js/${script}']`)!.remove();
                 })
             }
         }
 
         const url: string = window.location.pathname;
-        const newRoute: RouteType | null = this.routes.find(item => item.route === url);
+        const newRoute: RouteType = this.routes.find(item => item.route === url) as RouteType;
 
         if (newRoute) {
+            if (newRoute.route === '/logout') {
+                this.userName = null;
+            }
             if (newRoute.styles && newRoute.styles.length > 0) {
                 newRoute.styles.forEach((style: string) => {
                     const link: HTMLLinkElement = document.createElement('link');
@@ -274,20 +276,23 @@ export class Router {
                         const userNameElement = document.getElementById('user-name');
                         if (!this.userName) {
                             const userInfo: UserInfoType | null = JSON.parse(AuthUtils.getAuthInfo(AuthUtils.userInfoKey) as string);
-                            if (userInfo) {
+                            if (userInfo ) {
                                 this.userName = userInfo.name + ' ' + userInfo.lastName;
                             }
-                        } else {
-                            userNameElement.innerText = this.userName;
+                        }
+                        if (userNameElement) {
+                            userNameElement.innerText = this.userName!;
                         }
 
-                        this.balanceInputElement = document.getElementById('balance-input');
+                        this.balanceInputElement = <HTMLInputElement>document.getElementById('balance-input');
                         if (this.balanceInputElement) {
                             this.loadBalance();
                         }
                         contentBlock = document.getElementById('inner-content');
                     }
-                    contentBlock.innerHTML = await fetch(newRoute.template).then(response => response.text());
+                    if (contentBlock) {
+                        contentBlock.innerHTML = await fetch(newRoute.template).then(response => response.text());
+                    }
                 }
             }
 
@@ -309,21 +314,21 @@ export class Router {
             const balance: BalanceResponseType = await BalanceUtils.updateBalance();
             if (balance) {
                 balance.error ? balance.redirect ? await that.openNewRoute(balance.redirect) : null
-                    : that.balanceInputElement!.innerText = balance.balance.toString();
+                    : that.balanceInputElement!.innerText = balance.balance!.toString();
             }
         });
         //получение баланса
         const balance: BalanceResponseType = await BalanceUtils.getBalance();
         if (balance) {
             balance.error ? balance.redirect ? await that.openNewRoute(balance.redirect) : null
-                : that.balanceInputElement!.innerText = balance.balance.toString();
+                : that.balanceInputElement!.innerText = balance.balance!.toString();
         }
     }
 
-    private activateMenuItem(route): void {
+    private activateMenuItem(route: RouteType): void {
         document.querySelectorAll('.sidebar .nav-link').forEach((item: Element) => {
-            const href: string = item.getAttribute('href');
-            if ((route.route.includes(href) && href !== '/') || (route.route === '/' && href === '/')) {
+            const href: string | null = item.getAttribute('href');
+            if (href && (route.route.includes(href) && href !== '/') || (route.route === '/' && href === '/')) {
                 if ((route.route === '/expense' && href === '/expense') || (route.route === '/income' && href === '/income')) {
                     document.getElementById('collapse-btn')?.classList.remove('collapsed');
                     document.getElementById('collapse-btn')?.setAttribute('aria-expanded', 'true');

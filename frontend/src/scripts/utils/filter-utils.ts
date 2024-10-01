@@ -4,38 +4,40 @@ import {DateUtils} from "./date-utils";
 
 export class FilterUtils {
 
-    static activateFilter(currentFilter) {
-        const filterButton = document.querySelectorAll('.filter-btn');
-        const intervalElement = document.getElementById('interval-filter');
+    public static activateFilter(currentFilter: HTMLElement): string {
+        const filterButton: NodeList | null = document.querySelectorAll('.filter-btn');
+        const intervalElement: HTMLElement | null = document.getElementById('interval-filter');
         for (let i = 0; i < filterButton.length; i++) {
-            filterButton[i].classList.remove('active');
+            (filterButton[i] as HTMLElement).classList.remove('active');
         }
-        intervalElement.classList.remove('active');
+        intervalElement?.classList.remove('active');
         currentFilter.classList.add('active');
         return this.chooseFilter(currentFilter);
     }
 
-    static chooseFilter(currentFilter) {
-        const intervalFromElement = document.getElementById('interval-from');
-        const intervalToElement = document.getElementById('interval-to');
+    public static chooseFilter(currentFilter: HTMLElement): string {
+        const intervalFromElement: HTMLElement | null = document.getElementById('interval-from');
+        const intervalToElement: HTMLElement | null = document.getElementById('interval-to');
 
-        let filterType = CommonUtils.getFilterType(currentFilter.innerText);
-        if (filterType === config.filterTypes.interval) {
-            const dateFrom = intervalFromElement.innerText;
-            const dateTo = intervalToElement.innerText;
-            if (!dateFrom || dateFrom === 'Дата' || !dateTo || dateTo === 'Дата') {
-                return;
+        let filterType: string = CommonUtils.getFilterType(currentFilter.innerText);
+        if (intervalFromElement && intervalToElement) {
+            if (filterType === config.filterTypes.interval) {
+                const dateFrom: string = intervalFromElement.innerText;
+                const dateTo: string = intervalToElement.innerText;
+                if (dateFrom && dateFrom !== 'Дата' && dateTo && dateTo !== 'Дата') {
+                    filterType += '&&dateFrom=' + DateUtils.formatDate(dateFrom, '.') + '&dateTo=' + DateUtils.formatDate(dateTo, '.');;
+                }
+            } else {
+                intervalFromElement.innerText = 'Дата';
+                intervalToElement.innerText = 'Дата';
             }
-            filterType += '&&dateFrom=' + DateUtils.formatDate(dateFrom, '.') + '&dateTo=' + DateUtils.formatDate(dateTo, '.');
-        } else {
-            intervalFromElement.innerText = 'Дата';
-            intervalToElement.innerText = 'Дата';
         }
+
         if (filterType === config.filterTypes.today) {
-            const todayFrom = new Date();
-            const dateFrom = (new Intl.DateTimeFormat("ru-RU").format(todayFrom)).toString()
-            const todayTo = new Date();
-            const dateTo = (new Intl.DateTimeFormat("ru-RU").format(todayTo)).toString()
+            const todayFrom: Date = new Date();
+            const dateFrom: string = (new Intl.DateTimeFormat("ru-RU").format(todayFrom)).toString()
+            const todayTo: Date = new Date();
+            const dateTo: string = (new Intl.DateTimeFormat("ru-RU").format(todayTo)).toString()
             filterType = 'interval'+'&&dateFrom=' + DateUtils.formatDate(dateFrom, '.') + '&dateTo=' + DateUtils.formatDate(dateTo, '.');
         }
         return filterType;

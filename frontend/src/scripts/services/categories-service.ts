@@ -22,14 +22,14 @@ export class CategoriesService {
                 }
                 return returnObj;
             }
-            if (result.response as CategoriesType) {
+            if (result.response as CategoriesType[]) {
                 returnObj.categories = result.response;
             }
-            return returnObj;
         }
+        return returnObj;
     }
 
-    public static async loadCategory(type: string, id): Promise<CategoriesResponseType> {
+    public static async loadCategory(type: string, id: string): Promise<CategoriesResponseType> {
         const returnObj: CategoriesResponseType = {
             error: false,
             redirect: null,
@@ -51,7 +51,7 @@ export class CategoriesService {
         return returnObj;
     }
 
-    public static async createCategory(type: string, data): Promise<CategoriesResponseType> {
+    public static async createCategory(type: string, data: CategoriesType): Promise<CategoriesResponseType> {
         const returnObj: CategoriesResponseType = {
             error: false,
             redirect: null,
@@ -77,19 +77,44 @@ export class CategoriesService {
         return returnObj;
     }
 
-    public static async updateCategory(type: string, id: string, data): Promise<CategoriesResponseType> {
+    public static async updateCategory(type: string, id: string, data: CategoriesType): Promise<CategoriesResponseType> {
         const returnObj: CategoriesResponseType = {
             error: false,
             redirect: null,
             categories: null
         }
-        const result: RequestResponseType = await RequestUtils.sendRequest('/categories/' + type + '/' + id, 'POST', true, data);
+        const result: RequestResponseType = await RequestUtils.sendRequest('/categories/' + type + '/' + id, 'PUT', true, data);
         if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
             returnObj.error = true;
             if (result.response.message !== 'This record already exists') {
                 console.log(result.response.message);
-                alert('Возникла ошибка при создании категории. Обратитесь в поддержку');
+                alert('Возникла ошибка при изменении категории. Обратитесь в поддержку');
             }
+            if (result.redirect) {
+                returnObj.redirect = result.redirect;
+            }
+            return returnObj;
+        }
+        if (result.response as CategoriesType) {
+            returnObj.categories = result.response;
+        } else {
+            returnObj.categories = result.response.message;
+        }
+        return returnObj;
+    }
+
+    //TODO: что приходит обратно при удалении, если всё норм?
+    public static async deleteCategory(type: string, id: string): Promise<CategoriesResponseType> {
+        const returnObj: CategoriesResponseType = {
+            error: false,
+            redirect: null,
+            categories: null
+        }
+        const result: RequestResponseType = await RequestUtils.sendRequest('/categories/' + type + '/' + id, 'DELETE');
+        if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
+            returnObj.error = true;
+                console.log(result.response.message);
+                alert('Возникла ошибка при удалении категории. Обратитесь в поддержку');
             if (result.redirect) {
                 returnObj.redirect = result.redirect;
             }

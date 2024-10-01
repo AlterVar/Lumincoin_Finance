@@ -15,13 +15,17 @@ export class BalanceUtils {
             const balanceResult: RequestResponseType = await RequestUtils.sendRequest('/balance', 'GET', true);
             if (balanceResult.error) {
                 resultObj.error = true;
-                balanceResult.response.error ? alert('Не удалось загрузить баланс. Обратитесь в поддержку') && console.log(balanceResult.response.message)
-                    : balanceResult.redirect ? resultObj.redirect = balanceResult.redirect : console.log('возникла какая-то ошибка');
+                if (balanceResult.response.error) {
+                    alert('Не удалось загрузить баланс. Обратитесь в поддержку');
+                    console.log(balanceResult.response.message);
+                } else {
+                    balanceResult.redirect ? resultObj.redirect = balanceResult.redirect : console.log('возникла какая-то ошибка');
+                }
             } else {
                 resultObj.balance = balanceResult.response.balance.toString() + '$';
             }
-            return resultObj;
         }
+        return resultObj;
     }
 
     //TODO: проверить, что приходит при обновлении, укладывается ли это в тип
@@ -46,12 +50,16 @@ export class BalanceUtils {
             });
             if (balanceUpdateResult.error) {
                 resultObj.error = true;
-                balanceUpdateResult.response.error ? alert('Не удалось обновить баланс. Обратитесь в поддержку') && console.log(balanceUpdateResult.response.message)
-                    : balanceUpdateResult.redirect ? resultObj.redirect = balanceUpdateResult.redirect : console.log('возникла какая-то ошибка');
+                if (balanceUpdateResult.response.error) {
+                    alert('Не удалось обновить баланс. Обратитесь в поддержку');
+                    console.log(balanceUpdateResult.response.message);
+                } else {
+                    balanceUpdateResult.redirect ? resultObj.redirect = balanceUpdateResult.redirect : console.log('возникла какая-то ошибка');
+                }
             } else {
                 resultObj.balance = balanceUpdateResult.response.balance.toString() + '$';
             }
-            return resultObj;
         }
+        return resultObj;
     }
 }

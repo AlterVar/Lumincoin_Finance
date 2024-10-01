@@ -7,19 +7,19 @@ export class AuthUtils {
     public static refreshTokenKey: string = 'refreshToken';
     public static userInfoKey: string = 'userInfo';
 
-    public static getAuthInfo(key: string | null = null): AuthInfoType | string {
+    public static getAuthInfo(key: string | null = null): AuthInfoType | string | null {
         if (key && [this.accessTokenKey, this.refreshTokenKey, this.userInfoKey].includes(key)) {
             return localStorage.getItem(key);
         } else {
             return {
                 accessToken: localStorage.getItem(this.accessTokenKey),
                 refreshToken: localStorage.getItem(this.refreshTokenKey),
-                userInfo: localStorage.getItem(this.userInfoKey) as UserInfoType
+                userInfo: localStorage.getItem(this.userInfoKey)
             }
         }
     }
 
-    public static setAuthInfo(accessToken: string, refreshToken: string, userInfo: UserInfoType | null = null): void {
+    public static setAuthInfo(accessToken: string, refreshToken: string, userInfo?: UserInfoType): void {
         localStorage.setItem(this.accessTokenKey, accessToken);
         localStorage.setItem(this.refreshTokenKey, refreshToken);
         if (userInfo) {
@@ -29,7 +29,7 @@ export class AuthUtils {
 
     public static async updateTokens(): Promise<boolean> {
         let result: boolean = false;
-        const refreshToken: string | AuthInfoType = this.getAuthInfo(this.refreshTokenKey);
+        const refreshToken: AuthInfoType | string | null = this.getAuthInfo(this.refreshTokenKey);
         if (refreshToken && typeof refreshToken === "string") {
             const response: Response = await fetch(config.api + '/refresh', {
                 method: 'POST',
@@ -62,5 +62,6 @@ export class AuthUtils {
         localStorage.removeItem(this.accessTokenKey);
         localStorage.removeItem(this.refreshTokenKey);
         localStorage.removeItem(this.userInfoKey);
+        document.getElementById('user-name')!.innerText = '';
     }
 }

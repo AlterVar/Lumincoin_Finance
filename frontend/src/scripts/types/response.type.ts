@@ -21,7 +21,7 @@ export type RequestResponseType = {
 export type OperationsResponseType = {
     error: boolean,
     redirect: string | null,
-    operations: OperationsType[] | null
+    operations: OperationsType[] | OperationsType | string | null
 }
 
 export type CategoriesResponseType = {
@@ -39,7 +39,7 @@ export type LoginResponseType = {
 export type SignupResponseType = {
     error: boolean,
     redirect: string | null
-    signup: SignupInfoType | null
+    signup: SignupInfoType | ErrorResponseType | null
 }
 export type BalanceResponseType = {
     error: boolean,

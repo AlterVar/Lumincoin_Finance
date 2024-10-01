@@ -3,7 +3,7 @@ import {AuthUtils} from "../../utils/auth-utils";
 export class Logout {
     readonly openNewRoute: (route: string) => {};
 
-    constructor(openNewRoute) {
+    constructor(openNewRoute: (route: string) => {}) {
         this.openNewRoute = openNewRoute;
 
         AuthUtils.deleteAuthInfo();

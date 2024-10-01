@@ -1,8 +1,10 @@
 import {LoginResponseType, RequestResponseType, SignupResponseType} from "../types/response.type";
 import {RequestUtils} from "../utils/request-utils";
+import {AuthInfoType, UserInfoType} from "../types/auth-info.type";
 
 export class AuthService {
-    public static async login(data): Promise<LoginResponseType> {
+    //TODO: заменить data:any
+    public static async login(data: any): Promise<LoginResponseType> {
         const returnObj: LoginResponseType = {
             error: false,
             redirect: null,
@@ -25,8 +27,8 @@ export class AuthService {
         }
         return returnObj;
     }
-
-    public static async signUp(data): Promise<SignupResponseType> {
+     //TODO: заменить data:any
+    public static async signUp(data: any): Promise<SignupResponseType> {
         const returnObj: SignupResponseType = {
             error: false,
             redirect: null,

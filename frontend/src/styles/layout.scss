@@ -93,7 +93,11 @@
       }
     }
   }
-  .dropdown-toggle::after {
-    display: none;
+
+  .dropdown-toggle {
+    white-space: wrap;
+    &:after {
+      display: none;
+    }
   }
 }

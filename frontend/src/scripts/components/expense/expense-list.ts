@@ -6,12 +6,12 @@ import {CategoriesType} from "../../types/categories.type";
 
 export class ExpenseList {
     readonly openNewRoute: (route: string) => {};
-    readonly cardsElement: HTMLElement | null;
-    readonly addCardElement: HTMLElement | null;
-    readonly expenseDeleteButton: HTMLElement | null;
-    private deleteButtonArray: NodeList;
+    readonly cardsElement: HTMLElement | null = null;
+    readonly addCardElement: HTMLElement | null = null;
+    readonly expenseDeleteButton: HTMLElement | null = null;
+    private deleteButtonArray: NodeList | null = null;
 
-    constructor(openNewRoute) {
+    constructor(openNewRoute: (route: string) => {}) {
         this.openNewRoute = openNewRoute;
 
         if (!AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
@@ -35,14 +35,14 @@ export class ExpenseList {
                 this.openNewRoute(categoriesInfo.redirect);
                 return;
             }
-        } else if(categoriesInfo.categories) {
-            this.showCategories(categoriesInfo.categories);
+        } else if(categoriesInfo.categories as CategoriesType[]) {
+            this.showCategories(categoriesInfo.categories as CategoriesType[]);
         }
     }
 
     private showCategories(info: CategoriesType[]): void {
         for (let i = 0; i < info.length; i++) {
-            const classes: string[] = ['col-12', 'col-sm-10', 'col-md-8', 'col-lg-6', 'col-xl-4', 'p-2'];
+            const classes: string[] = ['col-12', 'col-sm-10', 'col-md-8', 'col-lg-6', 'col-xl-4', 'p-2', 'card-wrapper'];
             let card: CategoriesType = info[i];
             let cardWrapper: HTMLElement = document.createElement('div');
             classes.forEach((item: string) => {
@@ -50,15 +50,20 @@ export class ExpenseList {
             })
             let cardElement: HTMLElement = document.createElement('div');
             cardElement.classList.add('card');
+            cardElement.classList.add('h-100');
+
             let cardBody: HTMLElement = document.createElement('div');
             cardBody.classList.add('card-body');
+            cardBody.classList.add('d-flex');
+            cardBody.classList.add('flex-column');
+            cardBody.classList.add('justify-content-between');
 
             let cardTitle: HTMLElement = document.createElement('h3');
             cardTitle.classList.add('card-title');
             cardTitle.innerText = card.title;
 
             let cardButtons: HTMLElement = document.createElement('div');
-            cardButtons.innerHTML = CommonUtils.generateButtons('expense', card.id);
+            cardButtons.innerHTML = CommonUtils.generateButtons('expense', card.id!);
 
             cardBody.appendChild(cardTitle);
             cardBody.appendChild(cardButtons);
@@ -81,12 +86,13 @@ export class ExpenseList {
         }
     }
 
-    private deleteRedirect(e): void {
+    private deleteRedirect(e: any): void {
         e.preventDefault();
 
         const urlParams: URLSearchParams = new URLSearchParams(window.location.search);
-        const id: string = urlParams.get('id');
-
-        this.openNewRoute('/expense/delete?id=' + id);
+        const id: string | null = urlParams.get('id');
+        if (id) {
+            this.openNewRoute('/expense/delete?id=' + id);
+        }
     }
 }

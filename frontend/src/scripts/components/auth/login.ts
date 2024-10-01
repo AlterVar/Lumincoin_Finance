@@ -3,6 +3,7 @@ import {ValidationUtils} from "../../utils/validation-utils";
 import {InputType} from "../../types/input.type";
 import {LoginResponseType} from "../../types/response.type";
 import {AuthService} from "../../services/auth-service";
+import {AuthInfoType, UserInfoType} from "../../types/auth-info.type";
 
 export class Login {
     readonly openNewRoute: (route: string) => {};
@@ -12,7 +13,7 @@ export class Login {
     readonly commonErrorElement: HTMLElement | null;
     readonly inputArray: InputType[];
 
-    constructor(openNewRoute) {
+    constructor(openNewRoute: (url: string) => Promise<void>) {
         this.openNewRoute = openNewRoute;
         if (AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
             this.openNewRoute('/');
@@ -45,10 +46,12 @@ export class Login {
                 rememberMe: this.rememberMeElement?.checked
             });
 
-            if (loginResult && !loginResult.error && loginResult.login) {
-                AuthUtils.setAuthInfo(loginResult.login.accessToken, loginResult.login.refreshToken, loginResult.login.userInfo);
-                this.openNewRoute("/");
-                return;
+            if (loginResult && !loginResult.error && loginResult.login && loginResult.login as AuthInfoType) {
+                if (loginResult.login.accessToken && loginResult.login.refreshToken && loginResult.login.userInfo) {
+                    AuthUtils.setAuthInfo(loginResult.login.accessToken, loginResult.login.refreshToken, <UserInfoType>loginResult.login.userInfo);
+                    this.openNewRoute("/");
+                    return;
+                }
             }
             if (this.commonErrorElement) {
                 this.commonErrorElement.style.display = "block";

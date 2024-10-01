@@ -1,4 +1,3 @@
-
 export type RouteType = {
     route: string,
     title?: string,

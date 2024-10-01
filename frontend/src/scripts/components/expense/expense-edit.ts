@@ -5,13 +5,13 @@ import {CategoriesType} from "../../types/categories.type";
 
 export class ExpenseEdit {
     readonly openNewRoute: (route: string) => {};
-    readonly updateExpenseButton: HTMLElement | null;
-    readonly expenseTitleElement: HTMLInputElement | null;
-    readonly categoryId: string | null;
-    private expenseCategoryInfo: CategoriesType;
-    readonly errorElement: HTMLElement | null;
+    readonly updateExpenseButton: HTMLElement | null = null;
+    readonly expenseTitleElement: HTMLInputElement | null = null;
+    readonly categoryId: string | null = null;
+    private expenseCategoryInfo: CategoriesType | null = null;
+    readonly errorElement: HTMLElement | null = null;
 
-    constructor(openNewRoute) {
+    constructor(openNewRoute: (route: string) => {}) {
         this.openNewRoute = openNewRoute;
 
         if (!AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
@@ -34,24 +34,26 @@ export class ExpenseEdit {
     }
 
     private async loadExpenseCategory(): Promise<void> {
-        const expenseCategory: CategoriesResponseType = await CategoriesService.loadCategory('expense', this.categoryId);
-        this.expenseCategoryInfo = expenseCategory.categories as CategoriesType;
-        if (expenseCategory.error) {
-            if (expenseCategory.redirect) {
-                this.openNewRoute(expenseCategory.redirect);
-                return;
-            }
-            if (this.expenseTitleElement) {
-                this.expenseTitleElement.value = (expenseCategory.categories as CategoriesType).title;
+        if (this.categoryId) {
+            const expenseCategory: CategoriesResponseType = await CategoriesService.loadCategory('expense', this.categoryId);
+            this.expenseCategoryInfo = expenseCategory.categories as CategoriesType;
+            if (expenseCategory.error) {
+                if (expenseCategory.redirect) {
+                    this.openNewRoute(expenseCategory.redirect);
+                    return;
+                }
+                if (this.expenseTitleElement) {
+                    this.expenseTitleElement.value = (expenseCategory.categories as CategoriesType).title;
+                }
             }
         }
     }
 
     private async updateExpenseCategory(): Promise<void> {
-        if (this.expenseTitleElement?.value !== this.expenseCategoryInfo.title) {
+        if (this.expenseTitleElement?.value !== this.expenseCategoryInfo!.title) {
             if (this.categoryId) {
                 const updateExpenseResult: CategoriesResponseType = await CategoriesService.updateCategory('expense', this.categoryId, {
-                    title: this.expenseTitleElement?.value
+                    title: this.expenseTitleElement?.value!
                 });
                 if (updateExpenseResult.error) {
                     if (updateExpenseResult.redirect) {
@@ -66,10 +68,10 @@ export class ExpenseEdit {
                 }
                 if (updateExpenseResult.categories as CategoriesType) {
                     this.openNewRoute('/expense');
+                    return;
                 }
-            } else {
-                this.errorElement?.classList.add('d-block');
             }
+            this.errorElement?.classList.add('d-block');
         }
     }
 }

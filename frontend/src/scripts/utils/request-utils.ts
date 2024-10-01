@@ -4,16 +4,11 @@ import {RequestResponseType} from "../types/response.type";
 import {AuthInfoType} from "../types/auth-info.type";
 
 export class RequestUtils {
-
-<<<<<<< Updated upstream:frontend/src/scripts/utils/request-utils.js
-    static async sendRequest(url, method = 'GET', useAuth = false, body = null) {
-        const result = {
-=======
     public static async sendRequest(url: string, method: string = 'GET', useAuth: boolean = true, body: any = null): Promise<RequestResponseType> {
         const result: RequestResponseType = {
->>>>>>> Stashed changes:frontend/src/scripts/utils/request-utils.ts
             error: false,
-            response: null
+            response: null,
+            redirect: null
         }
 
         const params: any = {
@@ -24,16 +19,11 @@ export class RequestUtils {
             }
         }
 
-        let token: string | AuthInfoType | null = null;
+        let token: AuthInfoType | string | null = null;
         if (useAuth) {
             token = AuthUtils.getAuthInfo(AuthUtils.accessTokenKey);
-<<<<<<< Updated upstream:frontend/src/scripts/utils/request-utils.js
             if (token) {
-                params.headers ["authorization"] = token;
-=======
-            if (token as string) {
                 params.headers ["x-auth-token"] = token;
->>>>>>> Stashed changes:frontend/src/scripts/utils/request-utils.ts
             }
         }
 
@@ -54,19 +44,14 @@ export class RequestUtils {
             result.error = true;
             if (useAuth && response.status === 401) {
                 if (!token) {
+                    AuthUtils.deleteAuthInfo();
                     result.redirect = '/login';
                 } else {
                     const updateTokenResult: boolean = await AuthUtils.updateTokens();
-
                     if (updateTokenResult) {
                         return this.sendRequest(url, method, useAuth, body);
-                    } else {
-                        result.redirect = '/login';
                     }
-<<<<<<< Updated upstream:frontend/src/scripts/utils/request-utils.js
-=======
                     result.redirect = '/login';
->>>>>>> Stashed changes:frontend/src/scripts/utils/request-utils.ts
                 }
             }
         }

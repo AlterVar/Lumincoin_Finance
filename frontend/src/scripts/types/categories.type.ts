@@ -1,4 +1,4 @@
 export type CategoriesType = {
-    id: number,
+    id?: number,
     title: string
 }

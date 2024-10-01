@@ -5,11 +5,11 @@ import {CategoriesType} from "../../types/categories.type";
 
 export class ExpenseCreate {
     readonly openNewRoute: (route: string) => {};
-    readonly expenseCreateButton: HTMLElement | null;
-    private expenseTitleElement: HTMLInputElement | null;
-    readonly errorElement: HTMLElement | null;
+    readonly expenseCreateButton: HTMLElement | null = null;
+    private expenseTitleElement: HTMLInputElement | null = null;
+    readonly errorElement: HTMLElement | null = null;
 
-    constructor(openNewRoute) {
+    constructor(openNewRoute: (route: string) => {}) {
         this.openNewRoute = openNewRoute;
 
         if (!AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
@@ -25,7 +25,7 @@ export class ExpenseCreate {
         }
     }
 
-    private async createExpense(e): Promise<void> {
+    private async createExpense(e: any): Promise<void> {
         e.preventDefault();
         if (this.expenseTitleElement?.value) {
             this.errorElement?.classList.remove('d-block');
@@ -46,9 +46,9 @@ export class ExpenseCreate {
             }
             if (createExpenseResult.categories as CategoriesType) {
                 this.openNewRoute('/expense');
+                return;
             }
-        } else {
-            this.errorElement?.classList.add('d-block');
         }
+        this.errorElement?.classList.add('d-block');
     }
 }
