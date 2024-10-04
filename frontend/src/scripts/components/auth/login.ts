@@ -1,13 +1,14 @@
 import {AuthUtils} from "../../utils/auth-utils";
 import {ValidationUtils} from "../../utils/validation-utils";
 import {InputType} from "../../types/input.type";
-import {LoginResponseType} from "../../types/response.type";
+import {ErrorResponseType, LoginResponseType} from "../../types/response.type";
 import {AuthService} from "../../services/auth-service";
-import {AuthInfoType, UserInfoType} from "../../types/auth-info.type";
+import {AuthInfoType, SignupInfoType, UserInfoType} from "../../types/auth-info.type";
+import {ErrorInfo} from "ts-loader/dist/interfaces";
 
 export class Login {
     readonly openNewRoute: (route: string) => {};
-    readonly emailInputElement: HTMLInputElement | null ;
+    readonly emailInputElement: HTMLInputElement | null;
     readonly passwordInputElement: HTMLInputElement | null;
     private rememberMeElement: HTMLInputElement | null;
     readonly commonErrorElement: HTMLElement | null;
@@ -40,21 +41,25 @@ export class Login {
         }
 
         if (ValidationUtils.validateForm(this.inputArray)) {
-            let loginResult: LoginResponseType = await AuthService.login({
+            let loginResult: LoginResponseType | undefined = await AuthService.login({
                 email: this.emailInputElement?.value,
                 password: this.passwordInputElement?.value,
                 rememberMe: this.rememberMeElement?.checked
             });
-
-            if (loginResult && !loginResult.error && loginResult.login && loginResult.login as AuthInfoType) {
-                if (loginResult.login.accessToken && loginResult.login.refreshToken && loginResult.login.userInfo) {
-                    AuthUtils.setAuthInfo(loginResult.login.accessToken, loginResult.login.refreshToken, <UserInfoType>loginResult.login.userInfo);
+            if (loginResult) {
+                if (this.commonErrorElement && (loginResult.login as ErrorResponseType)) {
+                    if ((loginResult.login as ErrorResponseType).message) {
+                        if (this.commonErrorElement) {
+                            this.commonErrorElement.style.display = "block";
+                        }
+                        return;
+                    }
+                }
+                if (loginResult.login as AuthInfoType) {
+                    AuthUtils.setAuthInfo((loginResult.login as AuthInfoType).tokens.accessToken!, (loginResult.login as AuthInfoType).tokens.refreshToken!, <UserInfoType>(loginResult.login as AuthInfoType).user);
                     this.openNewRoute("/");
                     return;
                 }
-            }
-            if (this.commonErrorElement) {
-                this.commonErrorElement.style.display = "block";
             }
         }
     }

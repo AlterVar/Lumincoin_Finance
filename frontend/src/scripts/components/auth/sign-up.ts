@@ -3,7 +3,7 @@ import {ValidationUtils} from "../../utils/validation-utils";
 import {InputType} from "../../types/input.type";
 import {AuthService} from "../../services/auth-service";
 import {ErrorResponseType, LoginResponseType, SignupResponseType} from "../../types/response.type";
-import {SignupInfoType, UserInfoType} from "../../types/auth-info.type";
+import {AuthInfoType, SignupInfoType, UserInfoType} from "../../types/auth-info.type";
 
 export class SignUp {
     readonly openNewRoute: (route: string) => {};
@@ -53,7 +53,7 @@ export class SignUp {
         if (ValidationUtils.validateForm(this.inputArray)) {
             if (this.nameInputElement && this.emailInputElement && this.passwordInputElement) {
                 const userName: string[] = this.nameInputElement.value.split(' ');
-                let signupResult: SignupResponseType = await AuthService.signUp({
+                let signupResult: SignupResponseType | undefined = await AuthService.signUp({
                     name: userName[1],
                     lastName: userName[0],
                     email: this.emailInputElement.value,
@@ -64,6 +64,7 @@ export class SignUp {
                     if (signupResult.error && signupResult.signup as ErrorResponseType) {
                         if ((signupResult.signup as ErrorResponseType).message === "User with given email already exist") {
                             if (this.commonErrorElement) {
+                                this.commonErrorElement.innerText = "Пользователь с таким email уже существует";
                                 this.commonErrorElement.style.display = "block";
                             }
                             return;
@@ -71,13 +72,13 @@ export class SignUp {
                     }
 
                     if (signupResult.signup as SignupInfoType) {
-                        let loginResult: LoginResponseType = await AuthService.login({
-                            email: (signupResult.signup as SignupInfoType).email,
+                        let loginResult: LoginResponseType | undefined = await AuthService.login({
+                            email: (signupResult.signup as SignupInfoType).user.email,
                             password: this.passwordInputElement.value,
                             rememberMe: true
                         });
-                        if (loginResult && !loginResult.error && loginResult.login) {
-                            AuthUtils.setAuthInfo(<string>loginResult.login.accessToken, <string>loginResult.login.refreshToken, <UserInfoType>loginResult.login.userInfo);
+                        if (loginResult && !loginResult.error && loginResult.login as AuthInfoType) {
+                            AuthUtils.setAuthInfo(<string>(loginResult.login as AuthInfoType).tokens.accessToken, <string>(loginResult.login as AuthInfoType).tokens.refreshToken, <UserInfoType>(loginResult.login as AuthInfoType).user);
                             this.openNewRoute("/");
                             return;
                         }

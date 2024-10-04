@@ -1,7 +1,7 @@
 export type AuthInfoType = {
-    accessToken: string | null,
-    refreshToken: string | null,
-    userInfo: UserInfoType | string | null
+    tokens: {accessToken: string | null,
+        refreshToken: string | null,}
+    user: UserInfoType | string | null
 }
 
 export type UserInfoType = {
@@ -11,8 +11,10 @@ export type UserInfoType = {
 }
 
 export type SignupInfoType = {
-    id: number,
-    email: string,
-    name: string,
-    lastName: string
+    user: {
+        id: number,
+        email: string,
+        name: string,
+        lastName: string
+    }
 }

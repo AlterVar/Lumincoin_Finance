@@ -12,9 +12,9 @@ export class AuthUtils {
             return localStorage.getItem(key);
         } else {
             return {
-                accessToken: localStorage.getItem(this.accessTokenKey),
-                refreshToken: localStorage.getItem(this.refreshTokenKey),
-                userInfo: localStorage.getItem(this.userInfoKey)
+                tokens: {accessToken: localStorage.getItem(this.accessTokenKey),
+                    refreshToken: localStorage.getItem(this.refreshTokenKey)},
+                user: localStorage.getItem(this.userInfoKey)
             }
         }
     }

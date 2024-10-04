@@ -16,12 +16,39 @@ export class OperationsService {
         }
 
         if (filter) {
-            let result: RequestResponseType = await RequestUtils.sendRequest('/operations?period=' + filter);
+            let result: RequestResponseType | undefined = await RequestUtils.sendRequest('/operations?period=' + filter);
+            if (result) {
+                if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
+                    returnObj.error = true;
+                    console.log(result.response.message);
+                    alert('Возникла ошибка при запросе операций. Обратитесь в поддержку');
+                    if (result.redirect) {
+                        returnObj.redirect = result.redirect;
+                    }
+                    return returnObj;
+                }
+                if (result.response as OperationsType) {
+                    returnObj.operations = result.response;
+                }
+            }
+        }
+        return returnObj;
 
+    }
+
+    public static async getOperation(id: string): Promise<OperationsResponseType> {
+        const returnObj: OperationsResponseType = {
+            error: false,
+            redirect: null,
+            operations: null
+        }
+
+        let result: RequestResponseType | undefined = await RequestUtils.sendRequest('/operations/' + id);
+        if (result) {
             if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
                 returnObj.error = true;
                 console.log(result.response.message);
-                alert('Возникла ошибка при запросе операций. Обратитесь в поддержку');
+                alert('Возникла ошибка при создании операции. Обратитесь в поддержку');
                 if (result.redirect) {
                     returnObj.redirect = result.redirect;
                 }
@@ -32,29 +59,7 @@ export class OperationsService {
             }
         }
         return returnObj;
-    }
 
-    public static async getOperation(id: string): Promise<OperationsResponseType> {
-        const returnObj: OperationsResponseType = {
-            error: false,
-            redirect: null,
-            operations: null
-        }
-
-        let result: RequestResponseType = await RequestUtils.sendRequest('/operations/' + id);
-        if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
-            returnObj.error = true;
-            console.log(result.response.message);
-            alert('Возникла ошибка при создании операции. Обратитесь в поддержку');
-            if (result.redirect) {
-                returnObj.redirect = result.redirect;
-            }
-            return returnObj;
-        }
-        if (result.response as OperationsType) {
-            returnObj.operations = result.response;
-        }
-        return returnObj;
     }
 
     public static async createOperation(data: OperationsType): Promise<OperationsResponseType> {
@@ -63,21 +68,23 @@ export class OperationsService {
             redirect: null,
             operations: null
         }
-        let result: RequestResponseType = await RequestUtils.sendRequest('/operations', 'POST', true, data);
-
-        if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
-            returnObj.error = true;
-            console.log(result.response.message);
-            alert('Возникла ошибка при создании операции. Обратитесь в поддержку');
-            if (result.redirect) {
-                returnObj.redirect = result.redirect;
+        let result: RequestResponseType | undefined = await RequestUtils.sendRequest('/operations', 'POST', true, data);
+        if (result) {
+            if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
+                returnObj.error = true;
+                console.log(result.response.message);
+                alert('Возникла ошибка при создании операции. Обратитесь в поддержку');
+                if (result.redirect) {
+                    returnObj.redirect = result.redirect;
+                }
+                return returnObj;
             }
-            return returnObj;
-        }
-        if (result.response as OperationsType) {
-            returnObj.operations = result.response;
+            if (result.response as OperationsType) {
+                returnObj.operations = result.response;
+            }
         }
         return returnObj;
+
     }
 
     public static async updateOperation(id: string, data: OperationsType): Promise<OperationsResponseType> {
@@ -86,21 +93,23 @@ export class OperationsService {
             redirect: null,
             operations: null
         }
-        let result: RequestResponseType = await RequestUtils.sendRequest('/operations/' + id, 'PUT', true, data);
-
-        if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
-            returnObj.error = true;
-            console.log(result.response.message);
-            alert('Возникла ошибка при обновлении операции. Обратитесь в поддержку');
-            if (result.redirect) {
-                returnObj.redirect = result.redirect;
+        let result: RequestResponseType | undefined = await RequestUtils.sendRequest('/operations/' + id, 'PUT', true, data);
+        if (result) {
+            if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
+                returnObj.error = true;
+                console.log(result.response.message);
+                alert('Возникла ошибка при обновлении операции. Обратитесь в поддержку');
+                if (result.redirect) {
+                    returnObj.redirect = result.redirect;
+                }
+                return returnObj;
             }
-            return returnObj;
-        }
-        if (result.response as OperationsType) {
-            returnObj.operations = result.response;
+            if (result.response as OperationsType) {
+                returnObj.operations = result.response;
+            }
         }
         return returnObj;
+
     }
 
     public static async deleteOperations(id: string): Promise<OperationsResponseType> {
@@ -109,20 +118,22 @@ export class OperationsService {
             redirect: null,
             operations: null
         }
-        let result: RequestResponseType = await RequestUtils.sendRequest('/operations/' + id, 'DELETE');
-
-        if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
-            returnObj.error = true;
-            console.log(result.response.message);
-            alert('Возникла ошибка при удалении операции. Обратитесь в поддержку');
-            if (result.redirect) {
-                returnObj.redirect = result.redirect;
+        let result: RequestResponseType | undefined = await RequestUtils.sendRequest('/operations/' + id, 'DELETE');
+        if (result) {
+            if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
+                returnObj.error = true;
+                console.log(result.response.message);
+                alert('Возникла ошибка при удалении операции. Обратитесь в поддержку');
+                if (result.redirect) {
+                    returnObj.redirect = result.redirect;
+                }
+                return returnObj;
             }
-            return returnObj;
-        }
-        if (result.response as OperationsType) {
-            returnObj.operations = result.response;
+            if (result.response as OperationsType) {
+                returnObj.operations = result.response;
+            }
         }
         return returnObj;
+
     }
 }

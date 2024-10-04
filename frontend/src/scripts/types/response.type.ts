@@ -33,7 +33,7 @@ export type CategoriesResponseType = {
 export type LoginResponseType = {
     error: boolean,
     redirect: string | null
-    login: AuthInfoType | null
+    login: AuthInfoType | ErrorResponseType | null
 }
 
 export type SignupResponseType = {

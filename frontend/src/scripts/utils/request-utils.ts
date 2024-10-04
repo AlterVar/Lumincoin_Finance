@@ -4,7 +4,7 @@ import {RequestResponseType} from "../types/response.type";
 import {AuthInfoType} from "../types/auth-info.type";
 
 export class RequestUtils {
-    public static async sendRequest(url: string, method: string = 'GET', useAuth: boolean = true, body: any = null): Promise<RequestResponseType> {
+    public static async sendRequest(url: string, method: string = 'GET', useAuth: boolean = true, body: any = null): Promise<RequestResponseType | undefined> {
         const result: RequestResponseType = {
             error: false,
             response: null,
@@ -46,6 +46,7 @@ export class RequestUtils {
                 if (!token) {
                     AuthUtils.deleteAuthInfo();
                     result.redirect = '/login';
+                    return;
                 } else {
                     const updateTokenResult: boolean = await AuthUtils.updateTokens();
                     if (updateTokenResult) {

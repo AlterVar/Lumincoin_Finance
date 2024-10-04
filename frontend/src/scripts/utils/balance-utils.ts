@@ -12,17 +12,21 @@ export class BalanceUtils {
         //TODO: а сюда может приходить редирект?
         const balanceElement: HTMLElement | null = document.getElementById('balance');
         if (balanceElement) {
-            const balanceResult: RequestResponseType = await RequestUtils.sendRequest('/balance', 'GET', true);
-            if (balanceResult.error) {
-                resultObj.error = true;
-                if (balanceResult.response.error) {
-                    alert('Не удалось загрузить баланс. Обратитесь в поддержку');
-                    console.log(balanceResult.response.message);
+            const balanceResult: RequestResponseType | undefined = await RequestUtils.sendRequest('/balance', 'GET', true);
+            if (balanceResult) {
+                if (balanceResult.error) {
+                    resultObj.error = true;
+                    if (balanceResult.response.error) {
+                        alert('Не удалось загрузить баланс. Обратитесь в поддержку');
+                        console.log(balanceResult.response.message);
+                    } else {
+                        balanceResult.redirect ? resultObj.redirect = balanceResult.redirect : console.log('возникла какая-то ошибка');
+                    }
                 } else {
-                    balanceResult.redirect ? resultObj.redirect = balanceResult.redirect : console.log('возникла какая-то ошибка');
+                    resultObj.balance = balanceResult.response.balance.toString() + '$';
                 }
             } else {
-                resultObj.balance = balanceResult.response.balance.toString() + '$';
+                resultObj.error = true;
             }
         }
         return resultObj;
@@ -45,19 +49,23 @@ export class BalanceUtils {
         }
 
         if (balanceValue !== parseInt(balanceElement?.innerText as string)) {
-            const balanceUpdateResult: RequestResponseType = await RequestUtils.sendRequest('/balance', 'PUT', true, {
+            const balanceUpdateResult: RequestResponseType | undefined = await RequestUtils.sendRequest('/balance', 'PUT', true, {
                 newBalance: balanceValue
             });
-            if (balanceUpdateResult.error) {
-                resultObj.error = true;
-                if (balanceUpdateResult.response.error) {
-                    alert('Не удалось обновить баланс. Обратитесь в поддержку');
-                    console.log(balanceUpdateResult.response.message);
+            if (balanceUpdateResult) {
+                if (balanceUpdateResult.error) {
+                    resultObj.error = true;
+                    if (balanceUpdateResult.response.error) {
+                        alert('Не удалось обновить баланс. Обратитесь в поддержку');
+                        console.log(balanceUpdateResult.response.message);
+                    } else {
+                        balanceUpdateResult.redirect ? resultObj.redirect = balanceUpdateResult.redirect : console.log('возникла какая-то ошибка');
+                    }
                 } else {
-                    balanceUpdateResult.redirect ? resultObj.redirect = balanceUpdateResult.redirect : console.log('возникла какая-то ошибка');
+                    resultObj.balance = balanceUpdateResult.response.balance.toString() + '$';
                 }
             } else {
-                resultObj.balance = balanceUpdateResult.response.balance.toString() + '$';
+                resultObj.error = true;
             }
         }
         return resultObj;
