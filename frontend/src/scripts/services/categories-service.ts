@@ -63,7 +63,7 @@ export class CategoriesService {
             redirect: null,
             categories: null
         }
-        const result: RequestResponseType | undefined = await RequestUtils.sendRequest('/categories/expense', 'POST', true, data);
+        const result: RequestResponseType | undefined = await RequestUtils.sendRequest('/categories/' + type, 'POST', true, data);
         if (result) {
             if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
                 returnObj.error = true;
@@ -73,14 +73,10 @@ export class CategoriesService {
                 }
                 if (result.redirect) {
                     returnObj.redirect = result.redirect;
+                    return returnObj;
                 }
-                return returnObj;
             }
-            if (result.response as CategoriesType) {
-                returnObj.categories = result.response;
-            } else {
-                returnObj.categories = result.response.message;
-            }
+            returnObj.categories = result.response;
         }
         return returnObj;
 

@@ -1,8 +1,7 @@
 import {AuthUtils} from "../../utils/auth-utils";
-import {RequestUtils} from "../../utils/request-utils";
 import {CategoriesService} from "../../services/categories-service";
 import {CategoriesType} from "../../types/categories.type";
-import {CategoriesResponseType} from "../../types/response.type";
+import {CategoriesResponseType, ErrorResponseType} from "../../types/response.type";
 
 export class IncomeCreate {
     readonly openNewRoute: (route: string) => {};
@@ -31,7 +30,7 @@ export class IncomeCreate {
         e.preventDefault();
         if (this.incomeTitleElement?.value) {
             this.errorElement?.classList.remove('d-block');
-            const createIncomeResult: CategoriesResponseType = await CategoriesService.createCategory('expense', {
+            const createIncomeResult: CategoriesResponseType = await CategoriesService.createCategory('income', {
                 title: this.incomeTitleElement.value!
             })
 
@@ -40,14 +39,13 @@ export class IncomeCreate {
                     this.openNewRoute(createIncomeResult.redirect);
                     return;
                 }
-                if (createIncomeResult.categories === 'This record already exists') {
+                if ((createIncomeResult.categories as ErrorResponseType).message === 'This record already exists') {
                     if (this.errorElement) {
                         this.errorElement.innerText = 'Такая категория уже существует';
                     }
                 }
-            }
-            if (createIncomeResult.categories as CategoriesType) {
-                this.openNewRoute('/expense');
+            } else {
+                this.openNewRoute('/income');
                 return;
             }
         }

@@ -5,8 +5,6 @@ import {FilterUtils} from "../../utils/filter-utils";
 import {OperationsService} from "../../services/operations-service";
 import {OperationsResponseType} from "../../types/response.type";
 import {OperationsType} from "../../types/operations.type";
-import {Datepicker} from "../../datepicker"
-
 
 export class OperationsList {
     readonly openNewRoute: (route: string) => {};
@@ -14,7 +12,6 @@ export class OperationsList {
     private intervalFromElement: HTMLElement | null = null;
     private intervalToElement: HTMLElement | null = null;
     private operationDeleteButton: HTMLElement | null = null;
-    private deleteButtonArray: NodeList | null = null;
 
 
     constructor(openNewRoute: (route: string) => {}) {
@@ -73,7 +70,7 @@ export class OperationsList {
         const intervalElement: HTMLElement | null = document.getElementById('interval-filter');
 
         //TODO: убрать активацию функции при загрузке страницы
-        <any>new Datepicker(fromElement, {
+        /*new (Datepicker as any)(fromElement, {
             onChange: async function (): Promise<void> {
                 DateUtils.getDateFromPicker(fromElement, null);
                 const operationsResponse: OperationsResponseType = await OperationsService.getOperations(FilterUtils.activateFilter(intervalElement as HTMLElement));
@@ -85,9 +82,9 @@ export class OperationsList {
                     that.createTable(operationsResponse.operations as OperationsType[]);
                 }
             }
-        });
+        });*/
 
-        <any>new Datepicker(toElement, {
+        /*new (Datepicker as any)(toElement, {
             onChange: async function () {
                 DateUtils.getDateFromPicker(null, toElement);
                 const operationsResponse: OperationsResponseType = await OperationsService.getOperations(FilterUtils.activateFilter(intervalElement as HTMLElement));
@@ -98,7 +95,7 @@ export class OperationsList {
                     that.createTable(operationsResponse.operations as OperationsType[]);
                 }
             }
-        });
+        });*/
     }
 
     private createTable(operations: OperationsType[]): void {
@@ -128,11 +125,11 @@ export class OperationsList {
     }
 
     private activateDeleteButton(): void {
-        this.deleteButtonArray = document.querySelectorAll('.delete');
-        for (let i = 0; i < this.deleteButtonArray.length; i++) {
-            const button: Node = this.deleteButtonArray[i];
+        const deleteButtonArray = document.querySelectorAll<HTMLLinkElement>('.delete');
+        for (let i = 0; i < deleteButtonArray.length; i++) {
+            const button: HTMLLinkElement = deleteButtonArray[i];
             button.addEventListener('click', function () {
-                window.location.hash = ("#" + (button as HTMLElement).id).toString(); //???
+                window.location.hash = ("#" + button.search).toString(); //???
             });
         }
     }

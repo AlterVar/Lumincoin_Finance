@@ -27,7 +27,7 @@ export type OperationsResponseType = {
 export type CategoriesResponseType = {
     error: boolean,
     redirect: string | null,
-    categories: CategoriesType[]| CategoriesType | null | string
+    categories: CategoriesType[]| CategoriesType | ErrorResponseType |  null | string
 }
 
 export type LoginResponseType = {

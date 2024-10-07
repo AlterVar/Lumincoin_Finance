@@ -8,7 +8,6 @@ import {CategoriesResponseType, OperationsResponseType} from "../types/response.
 import {CategoriesService} from "../services/categories-service";
 import {CategoriesType} from "../types/categories.type";
 import {OperationsType} from "../types/operations.type";
-import {Datepicker} from "../datepicker";
 
 export class Dashboard {
     readonly openNewRoute: (route: string) => {};
@@ -149,7 +148,7 @@ export class Dashboard {
         const that: Dashboard = this;
         const intervalElement: HTMLElement | null = document.getElementById('interval-filter');
 
-        <any>new Datepicker(fromElement, {
+        /*new (Datepicker as any)(fromElement, {
             onChange: async function (): Promise<void> {
                 DateUtils.getDateFromPicker(fromElement, null);
                 const operationsResponse: OperationsResponseType = await OperationsService.getOperations(FilterUtils.activateFilter(intervalElement as HTMLElement));
@@ -161,9 +160,9 @@ export class Dashboard {
                     that.loadChartsData(operationsResponse.operations as OperationsType[]);
                 }
             }
-        });
+        });*/
 
-        <any>new Datepicker(toElement, {
+        /*new (Datepicker as any)(toElement, {
             onChange: async function (): Promise<void> {
                 DateUtils.getDateFromPicker(null, toElement);
                 const operationsResponse: OperationsResponseType = await OperationsService.getOperations(FilterUtils.activateFilter(intervalElement!));
@@ -175,7 +174,7 @@ export class Dashboard {
                     that.loadChartsData(operationsResponse.operations as OperationsType[]);
                 }
             }
-        });
+        });*/
     }
 
     private async loadChartsData(operationsInfo: OperationsType[]): Promise<void> {

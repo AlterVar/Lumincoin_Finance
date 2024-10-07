@@ -42,9 +42,9 @@ export class ExpenseEdit {
                     this.openNewRoute(expenseCategory.redirect);
                     return;
                 }
-                if (this.expenseTitleElement) {
-                    this.expenseTitleElement.value = (expenseCategory.categories as CategoriesType).title;
-                }
+            }
+            if (this.expenseTitleElement) {
+                this.expenseTitleElement.value = (expenseCategory.categories as CategoriesType).title;
             }
         }
     }

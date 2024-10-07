@@ -58,7 +58,7 @@ module.exports = {
                 {from: "./src/styles/bootstrap", to: "css"},
                 {from: "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js", to: "js"},
                 {from: "./node_modules/chart.js/dist/chart.umd.js", to: "js"},
-                //{from: "./src/scripts/datepicker.ts", to: "js"},
+                //{from: "./src/scripts/datepicker/datepicker.ts", to: "js"},
             ],
         }),
     ],

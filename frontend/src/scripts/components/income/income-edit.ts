@@ -39,9 +39,9 @@ export class IncomeEdit {
                 this.openNewRoute(incomeCategory.redirect);
                 return;
             }
-            if (this.incomeTitleElement) {
-                this.incomeTitleElement.value = (incomeCategory.categories as CategoriesType).title;
-            }
+        }
+        if (this.incomeTitleElement) {
+            this.incomeTitleElement.value = (incomeCategory.categories as CategoriesType).title;
         }
     }
 

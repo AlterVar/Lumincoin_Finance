@@ -4,6 +4,7 @@ import {CategoriesResponseType, OperationsResponseType} from "../../types/respon
 import {OperationsType} from "../../types/operations.type";
 import {CategoriesService} from "../../services/categories-service";
 import {CategoriesType} from "../../types/categories.type";
+import * as url from "url";
 
 export class OperationsEdit {
     readonly openNewRoute: (route: string) => {};
@@ -16,7 +17,7 @@ export class OperationsEdit {
     private dateInputElement: HTMLInputElement | null = null;
     private commentInputElement: HTMLInputElement | null = null;
     private operationInfo: OperationsType | null = null;
-    private operationId: string = '';
+    private operationId: string | null = null;
     private errorElement: HTMLElement | null = null;
     
     constructor(openNewRoute: (route: string) => {}) {
@@ -50,9 +51,9 @@ export class OperationsEdit {
         this.editOperationButton = document.getElementById('edit-operation');
         this.errorElement = document.getElementById('error');
 
-        const urlParams: URLSearchParams = new URLSearchParams(window.location.search);
-        if (this.operationId) {
-            this.operationId = <string>urlParams.get('id');
+        const urlParams: string | null = new URLSearchParams(window.location.search).get('id');
+        if (urlParams) {
+            this.operationId = urlParams;
         }
         if (this.editOperationButton) {
             this.editOperationButton.addEventListener('click', this.editOperation.bind(this));
@@ -140,7 +141,7 @@ export class OperationsEdit {
         if (this.operationCategorySelectOptions && this.operationTypeSelectOptions) {
             const categoryIndex: number = parseInt(this.operationCategorySelectOptions[<number>this.operationCategorySelect?.selectedIndex].id);
 
-            const updateResult: OperationsResponseType = await OperationsService.updateOperation(this.operationId, {
+            const updateResult: OperationsResponseType = await OperationsService.updateOperation(this.operationId!, {
                 type: this.operationTypeSelectOptions[<number>this.operationTypeSelect?.selectedIndex].value! as string,
                 amount: parseInt(this.amountInputElement?.value as string),
                 date: this.dateInputElement?.value!,

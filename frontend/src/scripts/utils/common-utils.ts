@@ -68,7 +68,7 @@ export class CommonUtils {
 
     static generateButtons(entity: string, id: number): string {
         return '<a href="/' + entity + '/edit?id=' + id + '" class="btn btn-primary me-1">Редактировать</a>' +
-        '<a href="?id=' + id + '" data-bs-toggle="modal" data-bs-target="#delete-modal"' +
+        '<a href="' + id + '" data-bs-toggle="modal" data-bs-target="#delete-modal"' +
             ' class="btn btn-danger delete">Удалить</a>'
     }
 

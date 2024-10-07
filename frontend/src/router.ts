@@ -28,6 +28,7 @@ export class Router {
     private userName: string | null = null;
     private routes: RouteType[];
     private balanceInputElement: HTMLInputElement | null = null;
+    private balanceElement: HTMLElement | null = null;
 
     constructor() {
         this.pageTitleElement = document.getElementById('page-title');
@@ -41,7 +42,7 @@ export class Router {
                 title: 'Дашборд',
                 template: '/templates/dashboard.html',
                 layout: true,
-                styles: ['sidebars.css', /*'datepicker.material.css'*/],
+                styles: ['sidebars.css', 'datepicker.material.css'],
                 scripts: ['chart.umd.js'],
                 load: () => {
                     new Dashboard(this.openNewRoute.bind(this));
@@ -83,7 +84,7 @@ export class Router {
                 title: 'Доходы и расходы',
                 template: '/templates/operations/operations-list.html',
                 layout: true,
-                styles: ['sidebars.css', /*'datepicker.material.css'*/],
+                styles: ['sidebars.css', 'datepicker.material.css'],
                 load: () => {
                     new OperationsList(this.openNewRoute.bind(this));
                 }
@@ -310,18 +311,29 @@ export class Router {
     private async loadBalance(): Promise<void> {
         const that: Router = this;
         //обработка события
+        this.balanceElement = document.getElementById('balance');
         this.balanceInputElement!.addEventListener('blur', async function () {
             const balance: BalanceResponseType = await BalanceUtils.updateBalance();
             if (balance) {
-                balance.error ? balance.redirect ? await that.openNewRoute(balance.redirect) : null
-                    : that.balanceInputElement!.innerText = balance.balance!.toString();
+                if (balance.error && balance.redirect) {
+                    await that.openNewRoute(balance.redirect);
+                    return;
+                }
+                if (balance.balance) {
+                    that.balanceElement!.innerText = balance.balance.toString();
+                }
             }
         });
         //получение баланса
         const balance: BalanceResponseType = await BalanceUtils.getBalance();
         if (balance) {
-            balance.error ? balance.redirect ? await that.openNewRoute(balance.redirect) : null
-                : that.balanceInputElement!.innerText = balance.balance!.toString();
+            if (balance.error && balance.redirect) {
+                await this.openNewRoute(balance.redirect);
+                return;
+            }
+            if (balance.balance) {
+                this.balanceElement!.innerText = balance.balance.toString();
+            }
         }
     }
 
@@ -329,7 +341,7 @@ export class Router {
         document.querySelectorAll('.sidebar .nav-link').forEach((item: Element) => {
             const href: string | null = item.getAttribute('href');
             if (href && (route.route.includes(href) && href !== '/') || (route.route === '/' && href === '/')) {
-                if ((route.route === '/expense' && href === '/expense') || (route.route === '/income' && href === '/income')) {
+                if ((route.route.includes('/expense') && href === '/expense') || (route.route.includes('/income') && href === '/income')) {
                     document.getElementById('collapse-btn')?.classList.remove('collapsed');
                     document.getElementById('collapse-btn')?.setAttribute('aria-expanded', 'true');
                     document.getElementById('flush-collapseOne')?.classList.add('show');
