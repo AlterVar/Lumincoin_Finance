@@ -16,20 +16,22 @@ export class FilterUtils {
     }
 
     public static chooseFilter(currentFilter: HTMLElement): string {
-        const intervalFromElement: HTMLElement | null = document.getElementById('interval-from');
-        const intervalToElement: HTMLElement | null = document.getElementById('interval-to');
+        const intervalFromElement: HTMLInputElement | null = <HTMLInputElement>document.getElementById('interval-from');
+        const intervalToElement: HTMLInputElement | null = <HTMLInputElement>document.getElementById('interval-to');
 
         let filterType: string = CommonUtils.getFilterType(currentFilter.innerText);
         if (intervalFromElement && intervalToElement) {
             if (filterType === config.filterTypes.interval) {
-                const dateFrom: string = intervalFromElement.innerText;
-                const dateTo: string = intervalToElement.innerText;
-                if (dateFrom && dateFrom !== 'Дата' && dateTo && dateTo !== 'Дата') {
-                    filterType += '&&dateFrom=' + DateUtils.formatDate(dateFrom, '.') + '&dateTo=' + DateUtils.formatDate(dateTo, '.');;
+                const dateFrom: string = intervalFromElement.value;
+                const dateTo: string = intervalToElement.value;
+                if (dateFrom && dateTo) {
+                    filterType += '&dateFrom=' + DateUtils.formatDate(dateFrom, '.') + '&dateTo=' + DateUtils.formatDate(dateTo, '.');;
                 }
             } else {
-                intervalFromElement.innerText = 'Дата';
-                intervalToElement.innerText = 'Дата';
+                intervalFromElement.type = 'text';
+                intervalFromElement.value = '';
+                intervalToElement.type = 'text';
+                intervalToElement.value = '';
             }
         }
 

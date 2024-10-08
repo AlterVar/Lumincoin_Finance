@@ -1,6 +1,5 @@
-import Chart, {ChartItem} from 'chart.js/auto'
+import Chart, {ChartItem} from 'chart.js/auto';
 import {AuthUtils} from "../utils/auth-utils";
-import {DateUtils} from "../utils/date-utils";
 import {FilterUtils} from "../utils/filter-utils";
 import {CommonUtils} from "../utils/common-utils";
 import {OperationsService} from "../services/operations-service";
@@ -14,10 +13,10 @@ export class Dashboard {
     private incomeChart: Chart<any> | null = null;
     private expenseChart: Chart<any> | null = null;
     private filterButtonArray: NodeList | null = null;
-    private intervalFromElement: HTMLElement | null = null;
-    private intervalToElement: HTMLElement | null = null;
     private incomeCategoriesInfo: CategoriesType[] | null = null;
     private expenseCategoriesInfo: CategoriesType[] | null = null;
+    private labelFromElement: HTMLElement | null = null;
+    private labelToElement: HTMLElement | null = null;
 
     constructor(openNewRoute: (url: string) => Promise<void>) {
         this.openNewRoute = openNewRoute;
@@ -110,8 +109,8 @@ export class Dashboard {
 
     findElements() {
         this.filterButtonArray = document.querySelectorAll('.filter-btn');
-        this.intervalFromElement = document.getElementById('interval-from');
-        this.intervalToElement = document.getElementById('interval-to');
+        this.labelFromElement = document.getElementById('interval-from');
+        this.labelToElement = document.getElementById('interval-to');
     }
 
     private async init(): Promise<void> {
@@ -127,10 +126,8 @@ export class Dashboard {
             this.incomeCategoriesInfo = responses[0].categories as CategoriesType[];
             this.expenseCategoriesInfo = responses[1].categories as CategoriesType[];
         })
+        this.activateDatePicker();
 
-        if (this.intervalFromElement && this.intervalToElement) {
-            this.activateDatePickers(this.intervalFromElement, this.intervalToElement);
-        }
         if (this.filterButtonArray) {
             const operationsResponse: OperationsResponseType = await OperationsService.getOperations(FilterUtils.activateFilter(this.filterButtonArray[0] as HTMLElement));
             if (operationsResponse.error && operationsResponse.redirect) {
@@ -144,37 +141,41 @@ export class Dashboard {
 
     }
 
-    private activateDatePickers (fromElement: HTMLElement | null = null, toElement: HTMLElement | null = null): void {
+    private activateDatePicker() {
         const that: Dashboard = this;
-        const intervalElement: HTMLElement | null = document.getElementById('interval-filter');
+        const intervalElement: HTMLElement = <HTMLElement>document.getElementById('interval-filter');
+        const dateFrom: HTMLInputElement | null = <HTMLInputElement>document.getElementById('interval-from');
+        const dateTo: HTMLInputElement | null = <HTMLInputElement>document.getElementById('interval-to');
+        dateFrom!.addEventListener("focus", function () {
+            dateFrom.type = 'date';
+            dateFrom.showPicker();
+        });
+        dateFrom!.addEventListener('change', async function () {
+            const operationsResponse: OperationsResponseType = await OperationsService.getOperations(FilterUtils.activateFilter(intervalElement));
 
-        /*new (Datepicker as any)(fromElement, {
-            onChange: async function (): Promise<void> {
-                DateUtils.getDateFromPicker(fromElement, null);
-                const operationsResponse: OperationsResponseType = await OperationsService.getOperations(FilterUtils.activateFilter(intervalElement as HTMLElement));
-                if (operationsResponse.error && operationsResponse.redirect) {
-                    that.openNewRoute(operationsResponse.redirect);
-                    return;
-                }
-                if (operationsResponse && operationsResponse.operations && !operationsResponse.redirect && !operationsResponse.error) {
-                    that.loadChartsData(operationsResponse.operations as OperationsType[]);
-                }
+            if (operationsResponse && operationsResponse.redirect) {
+                return that.openNewRoute(operationsResponse.redirect);
             }
-        });*/
+            if (operationsResponse && !operationsResponse.redirect && !operationsResponse.error && operationsResponse.operations as OperationsType[]) {
+                that.loadChartsData(operationsResponse.operations as OperationsType[]);
+            }
+        });
 
-        /*new (Datepicker as any)(toElement, {
-            onChange: async function (): Promise<void> {
-                DateUtils.getDateFromPicker(null, toElement);
-                const operationsResponse: OperationsResponseType = await OperationsService.getOperations(FilterUtils.activateFilter(intervalElement!));
-                if (operationsResponse.error && operationsResponse.redirect) {
-                    that.openNewRoute(operationsResponse.redirect);
-                    return;
-                }
-                if (operationsResponse && operationsResponse.operations && !operationsResponse.redirect && !operationsResponse.error) {
-                    that.loadChartsData(operationsResponse.operations as OperationsType[]);
-                }
+        dateTo!.addEventListener("focus", function () {
+            dateTo.type = 'date';
+            dateTo.showPicker();
+        });
+
+        dateTo!.addEventListener('change', async function () {
+            const operationsResponse: OperationsResponseType = await OperationsService.getOperations(FilterUtils.activateFilter(intervalElement));
+
+            if (operationsResponse && operationsResponse.redirect) {
+                return that.openNewRoute(operationsResponse.redirect);
             }
-        });*/
+            if (operationsResponse && !operationsResponse.redirect && !operationsResponse.error && operationsResponse.operations as OperationsType[]) {
+                that.loadChartsData(operationsResponse.operations as OperationsType[]);
+            }
+        });
     }
 
     private async loadChartsData(operationsInfo: OperationsType[]): Promise<void> {

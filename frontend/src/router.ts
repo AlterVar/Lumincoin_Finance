@@ -42,7 +42,7 @@ export class Router {
                 title: 'Дашборд',
                 template: '/templates/dashboard.html',
                 layout: true,
-                styles: ['sidebars.css', 'datepicker.material.css'],
+                styles: ['sidebars.css'],
                 scripts: ['chart.umd.js'],
                 load: () => {
                     new Dashboard(this.openNewRoute.bind(this));
@@ -84,7 +84,7 @@ export class Router {
                 title: 'Доходы и расходы',
                 template: '/templates/operations/operations-list.html',
                 layout: true,
-                styles: ['sidebars.css', 'datepicker.material.css'],
+                styles: ['sidebars.css'],
                 load: () => {
                     new OperationsList(this.openNewRoute.bind(this));
                 }

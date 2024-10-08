@@ -1,6 +1,35 @@
-@import "auth"; ;
+@import "auth";
+
+;
 @import "layout";
 @import "404";
+
+.interval {
+  input[type="date"], input[type="text"] {
+    border: none;
+    color: #6C757D;
+    text-align: center;
+    position: relative;
+    width: 8vw;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    height: auto;
+    color: transparent;
+    background: transparent;
+  }
+
+  input[type="date"]::-webkit-inner-spin-button,
+  input[type="date"]::-webkit-clear-button {
+    z-index: 1;
+  }
+}
 
 
 body {
@@ -67,6 +96,7 @@ body {
   .table-content {
     .table {
       text-align: center;
+
       th {
         color: #052C65;
       }
@@ -84,6 +114,7 @@ body {
     .cards {
       .card-wrapper {
         min-height: 137px;
+
         .card {
           .card-title {
             color: #052C65;

@@ -124,12 +124,13 @@ export class OperationsList {
         this.activateDeleteButton();
     }
 
+    //TODO: hash еще не закончен
     private activateDeleteButton(): void {
         const deleteButtonArray = document.querySelectorAll<HTMLLinkElement>('.delete');
         for (let i = 0; i < deleteButtonArray.length; i++) {
             const button: HTMLLinkElement = deleteButtonArray[i];
             button.addEventListener('click', function () {
-                window.location.hash = ("#" + button.search).toString(); //???
+                window.location.hash = ("#" + button.href).toString(); //???
             });
         }
     }
