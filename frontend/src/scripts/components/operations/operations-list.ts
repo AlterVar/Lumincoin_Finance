@@ -124,19 +124,22 @@ export class OperationsList {
         this.activateDeleteButton();
     }
 
-    //TODO: hash еще не закончен
     private activateDeleteButton(): void {
-        const deleteButtonArray = document.querySelectorAll<HTMLLinkElement>('.delete');
+        const deleteButtonArray = document.querySelectorAll('.delete');
         for (let i = 0; i < deleteButtonArray.length; i++) {
-            const button: HTMLLinkElement = deleteButtonArray[i];
-            button.addEventListener('click', function () {
-                window.location.hash = ("#" + button.href).toString(); //???
+            const button: Node = deleteButtonArray[i];
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
             });
         }
     }
 
-    private deleteRedirect(): void {
-        const id: string = window.location.hash.substring(1);
-        this.openNewRoute('operations/delete?id=' + id);
+    private deleteRedirect(e:any): void {
+        e.preventDefault();
+        const urlParams: URLSearchParams = new URLSearchParams(window.location.search);
+        const id: string | null = urlParams.get('id');
+        if (id) {
+            this.openNewRoute('/operations/delete?id=' + id);
+        }
     }
 }

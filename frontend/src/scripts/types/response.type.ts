@@ -21,7 +21,7 @@ export type RequestResponseType = {
 export type OperationsResponseType = {
     error: boolean,
     redirect: string | null,
-    operations: OperationsType[] | OperationsType | string | null
+    operations: OperationsType[] | OperationsType | ErrorResponseType | string | null
 }
 
 export type CategoriesResponseType = {

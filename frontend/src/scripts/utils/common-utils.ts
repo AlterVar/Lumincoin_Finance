@@ -48,7 +48,7 @@ export class CommonUtils {
         return filterType;
     }
 
-    public static generateTools(entity: string, id: number): string {
+    public static generateTools(entity: string, id: string): string {
         return '<div class="d-flex justify-content-end gap-2">' +
             '<a href="?id=' + id + '"class="delete" data-bs-toggle="modal" data-bs-target="#delete-btn">' +
             '<svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
@@ -68,7 +68,7 @@ export class CommonUtils {
 
     static generateButtons(entity: string, id: number): string {
         return '<a href="/' + entity + '/edit?id=' + id + '" class="btn btn-primary me-1">Редактировать</a>' +
-        '<a href="' + id + '" data-bs-toggle="modal" data-bs-target="#delete-modal"' +
+        '<a href="?id=' + id + '" data-bs-toggle="modal" data-bs-target="#delete-modal"' +
             ' class="btn btn-danger delete">Удалить</a>'
     }
 

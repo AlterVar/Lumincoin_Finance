@@ -12,7 +12,7 @@ export class BalanceUtils {
         //TODO: а сюда может приходить редирект?
         const balanceElement: HTMLElement | null = document.getElementById('balance');
         if (balanceElement) {
-            const balanceResult: RequestResponseType | undefined = await RequestUtils.sendRequest('/balance', 'GET', true);
+            const balanceResult: RequestResponseType | undefined = await RequestUtils.sendRequest('/balance', 'GET');
             if (balanceResult) {
                 if (balanceResult.error) {
                     resultObj.error = true;

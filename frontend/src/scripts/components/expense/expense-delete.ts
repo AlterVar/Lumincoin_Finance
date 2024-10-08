@@ -23,8 +23,9 @@ export class ExpenseDelete {
         }
     }
 
-    private async deleteIncomeCategory(id: string): Promise<void> {
+    private async deleteExpenseCategory(id: string): Promise<void> {
         const categoryResult = await RequestUtils.sendRequest('/categories/expense/' + id, 'DELETE');
+
         if (categoryResult && !categoryResult.error) {
             this.openNewRoute('/expense');
             return;
@@ -33,22 +34,32 @@ export class ExpenseDelete {
 
     private async deleteOperations(id: string): Promise<void> {
         const categoryResult:CategoriesResponseType = await CategoriesService.deleteCategory('expense', id);
+        if (categoryResult.error && categoryResult.redirect) {
+            this.openNewRoute(categoryResult.redirect);
+            return;
+        }
         if (!categoryResult.error) {
             const operationsList: OperationsResponseType = await OperationsService.getOperations('all');
-            if (operationsList && !operationsList.error && operationsList.operations) {
-                const operationsToDelete: OperationsType[] = (operationsList.operations as OperationsType[]).filter((item: OperationsType) =>
-                    item.category === (categoryResult.categories as CategoriesType).title);
-                if (operationsToDelete) {
-                    for (let i = 0; i < operationsToDelete.length; i++) {
-                        const deleteOperationsResult: OperationsResponseType = await OperationsService.deleteOperations(operationsToDelete[i].id!.toString());
-                        if (deleteOperationsResult.error) {
-                            this.openNewRoute('/expense');
-                            return;
+            if (operationsList) {
+                if (operationsList.error && operationsList.redirect) {
+                    this.openNewRoute(operationsList.redirect);
+                    return;
+                }
+                if (!operationsList.error && !operationsList.redirect && operationsList.operations) {
+                    const operationsToDelete: OperationsType[] = (operationsList.operations as OperationsType[]).filter((item: OperationsType) =>
+                        item.category === (categoryResult.categories as CategoriesType).title);
+                    if (operationsToDelete) {
+                        for (let i = 0; i < operationsToDelete.length; i++) {
+                            const deleteOperationsResult: OperationsResponseType = await OperationsService.deleteOperations(operationsToDelete[i].id!);
+                            if (deleteOperationsResult.error) {
+                                this.openNewRoute('/expense');
+                                return;
+                            }
                         }
                     }
                 }
             }
         }
-        this.deleteIncomeCategory(id);
+        this.deleteExpenseCategory(id);
     }
 }

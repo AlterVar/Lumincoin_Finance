@@ -1,7 +1,7 @@
 export type OperationsType = {
     amount: number,
     category?: string,
-    id?: number,
+    id?: string,
     comment: string
     date: string,
     category_id?: number,

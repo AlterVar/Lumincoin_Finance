@@ -4,13 +4,17 @@
 @import "layout";
 @import "404";
 
+
+.filter-btn {
+  width: 100px;
+}
 .interval {
   input[type="date"], input[type="text"] {
     border: none;
     color: #6C757D;
     text-align: center;
     position: relative;
-    width: 8vw;
+    width: 7vw;
   }
 
   input[type="date"]::-webkit-calendar-picker-indicator {
