@@ -20,11 +20,12 @@ export class OperationsService {
             if (result) {
                 if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
                     returnObj.error = true;
-                    console.log(result.response.message);
-                    alert('Возникла ошибка при запросе операций. Обратитесь в поддержку');
                     if (result.redirect) {
                         returnObj.redirect = result.redirect;
+                        return returnObj;
                     }
+                    console.log(result.response.message);
+                    alert('Возникла ошибка при запросе операций. Обратитесь в поддержку');
                     return returnObj;
                 }
                 if (result.response as OperationsType) {
@@ -47,11 +48,12 @@ export class OperationsService {
         if (result) {
             if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
                 returnObj.error = true;
-                console.log(result.response.message);
-                alert('Возникла ошибка при создании операции. Обратитесь в поддержку');
                 if (result.redirect) {
                     returnObj.redirect = result.redirect;
+                    return returnObj;
                 }
+                console.log(result.response.message);
+                alert('Возникла ошибка при создании операции. Обратитесь в поддержку');
                 return returnObj;
             }
             if (result.response as OperationsType) {
@@ -72,11 +74,12 @@ export class OperationsService {
         if (result) {
             if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
                 returnObj.error = true;
-                console.log(result.response.message);
-                alert('Возникла ошибка при создании операции. Обратитесь в поддержку');
                 if (result.redirect) {
                     returnObj.redirect = result.redirect;
+                    return returnObj;
                 }
+                console.log(result.response.message);
+                alert('Возникла ошибка при создании операции. Обратитесь в поддержку');
                 return returnObj;
             }
             if (result.response as OperationsType) {
@@ -97,11 +100,12 @@ export class OperationsService {
         if (result) {
             if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
                 returnObj.error = true;
-                console.log(result.response.message);
-                alert('Возникла ошибка при обновлении операции. Обратитесь в поддержку');
                 if (result.redirect) {
                     returnObj.redirect = result.redirect;
+                    return returnObj;
                 }
+                console.log(result.response.message);
+                alert('Возникла ошибка при обновлении операции. Обратитесь в поддержку');
                 return returnObj;
             }
             if (result.response as OperationsType) {
@@ -122,11 +126,12 @@ export class OperationsService {
         if (result) {
             if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
                 returnObj.error = true;
-                console.log(result.response.message);
-                alert('Возникла ошибка при удалении операции. Обратитесь в поддержку');
                 if (result.redirect) {
                     returnObj.redirect = result.redirect;
+                    return returnObj;
                 }
+                console.log(result.response.message);
+                alert('Возникла ошибка при удалении операции. Обратитесь в поддержку');
                 return returnObj;
             }
             if (result.response as OperationsType) {

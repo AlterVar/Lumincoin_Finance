@@ -16,11 +16,12 @@ export class CategoriesService {
             if (result) {
                 if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
                     returnObj.error = true;
-                    console.log(result.response.message);
-                    alert('Возникла ошибка при запросе категорий. Обратитесь в поддержку');
                     if (result.redirect) {
                         returnObj.redirect = result.redirect;
+                        return returnObj;
                     }
+                    console.log(result.response.message);
+                    alert('Возникла ошибка при запросе категорий. Обратитесь в поддержку');
                     return returnObj;
                 }
                 if (result.response as CategoriesType[]) {
@@ -42,11 +43,12 @@ export class CategoriesService {
         if (result) {
             if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
                 returnObj.error = true;
-                console.log(result.response.message);
-                alert('Возникла ошибка при запросе категории. Обратитесь в поддержку');
                 if (result.redirect) {
                     returnObj.redirect = result.redirect;
+                    return returnObj;
                 }
+                console.log(result.response.message);
+                alert('Возникла ошибка при запросе категории. Обратитесь в поддержку');
                 return returnObj;
             }
             if (result.response as CategoriesType) {
@@ -67,14 +69,15 @@ export class CategoriesService {
         if (result) {
             if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
                 returnObj.error = true;
-                if (result.response.message !== 'This record already exists') {
-                    console.log(result.response.message);
-                    alert('Возникла ошибка при создании категории. Обратитесь в поддержку');
-                }
                 if (result.redirect) {
                     returnObj.redirect = result.redirect;
                     return returnObj;
                 }
+                if (result.response.message !== 'This record already exists') {
+                    console.log(result.response.message);
+                    alert('Возникла ошибка при создании категории. Обратитесь в поддержку');
+                }
+                return returnObj;
             }
             returnObj.categories = result.response;
         }
@@ -92,20 +95,17 @@ export class CategoriesService {
         if (result) {
             if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
                 returnObj.error = true;
+                if (result.redirect) {
+                    returnObj.redirect = result.redirect;
+                    return returnObj;
+                }
                 if (result.response.message !== 'This record already exists') {
                     console.log(result.response.message);
                     alert('Возникла ошибка при изменении категории. Обратитесь в поддержку');
                 }
-                if (result.redirect) {
-                    returnObj.redirect = result.redirect;
-                }
                 return returnObj;
             }
-            if (result.response as CategoriesType) {
-                returnObj.categories = result.response;
-            } else {
-                returnObj.categories = result.response.message;
-            }
+            returnObj.categories = result.response;
         }
         return returnObj;
 
@@ -122,20 +122,16 @@ export class CategoriesService {
         if (result) {
             if (result.redirect || result.error || !result.response || (result.response && result.response.error)) {
                 returnObj.error = true;
-                console.log(result.response.message);
-                alert('Возникла ошибка при удалении категории. Обратитесь в поддержку');
                 if (result.redirect) {
                     returnObj.redirect = result.redirect;
+                    return returnObj;
                 }
+                console.log(result.response.message);
+                alert('Возникла ошибка при удалении категории. Обратитесь в поддержку');
                 return returnObj;
             }
-            if (result.response as CategoriesType) {
-                returnObj.categories = result.response;
-            } else {
-                returnObj.categories = result.response.message;
-            }
+            returnObj.categories = result.response;
         }
         return returnObj;
-
     }
 }

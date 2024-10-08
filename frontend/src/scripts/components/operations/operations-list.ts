@@ -9,8 +9,6 @@ import {OperationsType} from "../../types/operations.type";
 export class OperationsList {
     readonly openNewRoute: (route: string) => {};
     private filterButtonArray: NodeList | null = null;
-    private intervalFromElement: HTMLElement | null = null;
-    private intervalToElement: HTMLElement | null = null;
     private operationDeleteButton: HTMLElement | null = null;
 
 
@@ -42,8 +40,6 @@ export class OperationsList {
 
     private findElements(): void {
         this.filterButtonArray = document.querySelectorAll('.filter-btn');
-        this.intervalFromElement = document.getElementById('interval-from');
-        this.intervalToElement = document.getElementById('interval-to');
         this.operationDeleteButton = document.getElementById('delete-operation-btn');
     }
 
@@ -51,9 +47,9 @@ export class OperationsList {
         if (this.operationDeleteButton) {
             this.operationDeleteButton.addEventListener('click', this.deleteRedirect.bind(this));
         }
-        if (this.intervalFromElement && this.intervalToElement) {
-            this.activateDatePickers(this.intervalFromElement, this.intervalToElement);
-        }
+
+        this.activateDatePickers();
+
         if (this.filterButtonArray) {
             const operationsResponse: OperationsResponseType = await OperationsService.getOperations
             (FilterUtils.activateFilter(this.filterButtonArray[0] as HTMLElement));
@@ -65,37 +61,41 @@ export class OperationsList {
         }
     }
 
-    private activateDatePickers (fromElement: HTMLElement, toElement: HTMLElement): void {
+    private activateDatePickers (): void {
         const that: OperationsList = this;
         const intervalElement: HTMLElement | null = document.getElementById('interval-filter');
+        const dateFrom: HTMLInputElement | null = <HTMLInputElement>document.getElementById('interval-from');
+        const dateTo: HTMLInputElement | null = <HTMLInputElement>document.getElementById('interval-to');
+        dateFrom!.addEventListener("focus", function () {
+            dateFrom.type = 'date';
+            dateFrom.showPicker();
+        });
+        dateFrom!.addEventListener('change', async function () {
+            const operationsResponse: OperationsResponseType = await OperationsService.getOperations(FilterUtils.activateFilter(intervalElement!));
 
-        //TODO: убрать активацию функции при загрузке страницы
-        /*new (Datepicker as any)(fromElement, {
-            onChange: async function (): Promise<void> {
-                DateUtils.getDateFromPicker(fromElement, null);
-                const operationsResponse: OperationsResponseType = await OperationsService.getOperations(FilterUtils.activateFilter(intervalElement as HTMLElement));
-                if (operationsResponse && operationsResponse.redirect) {
-                    that.openNewRoute(operationsResponse.redirect);
-                    return;
-                }
-                if (operationsResponse && !operationsResponse.redirect && !operationsResponse.error) {
-                    that.createTable(operationsResponse.operations as OperationsType[]);
-                }
+            if (operationsResponse && operationsResponse.redirect) {
+                return that.openNewRoute(operationsResponse.redirect);
             }
-        });*/
+            if (operationsResponse && !operationsResponse.redirect && !operationsResponse.error && operationsResponse.operations as OperationsType[]) {
+                that.createTable(operationsResponse.operations as OperationsType[]);
+            }
+        });
 
-        /*new (Datepicker as any)(toElement, {
-            onChange: async function () {
-                DateUtils.getDateFromPicker(null, toElement);
-                const operationsResponse: OperationsResponseType = await OperationsService.getOperations(FilterUtils.activateFilter(intervalElement as HTMLElement));
-                if (operationsResponse && operationsResponse.redirect) {
-                    return that.openNewRoute(operationsResponse.redirect);
-                }
-                if (operationsResponse && !operationsResponse.redirect && !operationsResponse.error) {
-                    that.createTable(operationsResponse.operations as OperationsType[]);
-                }
+        dateTo!.addEventListener("focus", function () {
+            dateTo.type = 'date';
+            dateTo.showPicker();
+        });
+
+        dateTo!.addEventListener('change', async function () {
+            const operationsResponse: OperationsResponseType = await OperationsService.getOperations(FilterUtils.activateFilter(intervalElement!));
+
+            if (operationsResponse && operationsResponse.redirect) {
+                return that.openNewRoute(operationsResponse.redirect);
             }
-        });*/
+            if (operationsResponse && !operationsResponse.redirect && !operationsResponse.error && operationsResponse.operations as OperationsType[]) {
+                that.createTable(operationsResponse.operations as OperationsType[]);
+            }
+        });
     }
 
     private createTable(operations: OperationsType[]): void {

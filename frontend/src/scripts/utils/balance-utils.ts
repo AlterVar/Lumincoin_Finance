@@ -16,15 +16,15 @@ export class BalanceUtils {
             if (balanceResult) {
                 if (balanceResult.error) {
                     resultObj.error = true;
-                    if (balanceResult.response.error) {
-                        alert('Не удалось загрузить баланс. Обратитесь в поддержку');
-                        console.log(balanceResult.response.message);
-                    } else {
-                        balanceResult.redirect ? resultObj.redirect = balanceResult.redirect : console.log('возникла какая-то ошибка');
+                    if (balanceResult.redirect) {
+                        resultObj.redirect = balanceResult.redirect;
+                        return resultObj;
                     }
-                } else {
-                    resultObj.balance = balanceResult.response.balance.toString() + '$';
+                    alert('Не удалось загрузить баланс. Обратитесь в поддержку');
+                    console.log(balanceResult.response.message);
+                    return resultObj;
                 }
+                resultObj.balance = balanceResult.response.balance.toString() + '$';
             } else {
                 resultObj.error = true;
             }
