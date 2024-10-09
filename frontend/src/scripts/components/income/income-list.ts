@@ -80,7 +80,7 @@ export class IncomeList {
         this.activateDeleteButton();
     }
 
-    activateDeleteButton() {
+    private activateDeleteButton(): void {
         this.deleteButtonArray = document.querySelectorAll('.delete');
         for (let i = 0; i < this.deleteButtonArray.length; i++) {
             const button: Node = this.deleteButtonArray[i];

@@ -4,7 +4,8 @@ import {CategoriesResponseType, OperationsResponseType} from "../../types/respon
 import {OperationsType} from "../../types/operations.type";
 import {CategoriesService} from "../../services/categories-service";
 import {CategoriesType} from "../../types/categories.type";
-import * as url from "url";
+import {ValidationUtils} from "../../utils/validation-utils";
+import {InputType} from "../../types/input.type";
 
 export class OperationsEdit {
     readonly openNewRoute: (route: string) => {};
@@ -19,6 +20,7 @@ export class OperationsEdit {
     private operationInfo: OperationsType | null = null;
     private operationId: string | null = null;
     private errorElement: HTMLElement | null = null;
+    private operationArray: InputType[] = [];
     
     constructor(openNewRoute: (route: string) => {}) {
         this.openNewRoute = openNewRoute;
@@ -50,6 +52,12 @@ export class OperationsEdit {
         this.commentInputElement = <HTMLInputElement>document.getElementById('operation-comment');
         this.editOperationButton = document.getElementById('edit-operation');
         this.errorElement = document.getElementById('error');
+
+        this.operationArray = [
+            {element: this.amountInputElement},
+            {element: this.dateInputElement},
+            {element: this.commentInputElement}
+        ]
 
         const urlParams: string | null = new URLSearchParams(window.location.search).get('id');
         if (urlParams) {
@@ -140,22 +148,23 @@ export class OperationsEdit {
         this.errorElement?.classList.remove('d-block');
         if (this.operationCategorySelectOptions && this.operationTypeSelectOptions) {
             const categoryIndex: number = parseInt(this.operationCategorySelectOptions[<number>this.operationCategorySelect?.selectedIndex].id);
+            if (ValidationUtils.validateForm(this.operationArray)) {
+                const updateResult: OperationsResponseType = await OperationsService.updateOperation(this.operationId!, {
+                    type: this.operationTypeSelectOptions[<number>this.operationTypeSelect?.selectedIndex].value! as string,
+                    amount: parseInt(this.amountInputElement?.value as string),
+                    date: this.dateInputElement?.value!,
+                    comment: this.commentInputElement?.value!,
+                    category_id: categoryIndex
+                });
 
-            const updateResult: OperationsResponseType = await OperationsService.updateOperation(this.operationId!, {
-                type: this.operationTypeSelectOptions[<number>this.operationTypeSelect?.selectedIndex].value! as string,
-                amount: parseInt(this.amountInputElement?.value as string),
-                date: this.dateInputElement?.value!,
-                comment: this.commentInputElement?.value!,
-                category_id: categoryIndex
-            });
-
-            if (updateResult && updateResult.operations as string) {
-                if (updateResult.operations === "This record already exists") {
-                    this.errorElement?.classList.add('d-block');
-                }
-                if (!updateResult.error && updateResult.operations as OperationsType) {
-                    this.openNewRoute('/operations');
-                    return;
+                if (updateResult && updateResult.operations as string) {
+                    if (updateResult.operations === "This record already exists") {
+                        this.errorElement?.classList.add('d-block');
+                    }
+                    if (!updateResult.error && updateResult.operations as OperationsType) {
+                        this.openNewRoute('/operations');
+                        return;
+                    }
                 }
             }
         }
