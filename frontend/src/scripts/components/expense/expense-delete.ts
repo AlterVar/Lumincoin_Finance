@@ -24,12 +24,15 @@ export class ExpenseDelete {
     }
 
     private async deleteOperations(id: string): Promise<void> {
-        const categoryResult:CategoriesResponseType = await CategoriesService.deleteCategory('expense', id);
+        const categoryResult:CategoriesResponseType = await CategoriesService.getCategories('expense');
         if (categoryResult.error && categoryResult.redirect) {
             this.openNewRoute(categoryResult.redirect);
             return;
         }
-        if (!categoryResult.error) {
+        if (categoryResult.categories as CategoriesType[]) {
+            const category: CategoriesType = <CategoriesType>(categoryResult.categories as CategoriesType[]).find(item => item.id === parseInt(id));
+            const title: string = category.title;
+
             const operationsList: OperationsResponseType = await OperationsService.getOperations('all');
             if (operationsList) {
                 if (operationsList.error && operationsList.redirect) {
@@ -38,16 +41,27 @@ export class ExpenseDelete {
                 }
                 if (!operationsList.error && !operationsList.redirect && operationsList.operations) {
                     const operationsToDelete: OperationsType[] = (operationsList.operations as OperationsType[]).filter((item: OperationsType) =>
-                        item.category === (categoryResult.categories as CategoriesType).title);
-                    if (operationsToDelete) {
+                        item.category === title);
+                    if (operationsToDelete && operationsToDelete.length > 0) {
                         for (let i = 0; i < operationsToDelete.length; i++) {
                             const deleteOperationsResult: OperationsResponseType = await OperationsService.deleteOperations(operationsToDelete[i].id!);
+                            if (deleteOperationsResult.error && deleteOperationsResult.redirect) {
+                                this.openNewRoute(deleteOperationsResult.redirect);
+                                return;
+                            }
                         }
                     }
                 }
             }
         }
-        this.openNewRoute('/expense');
-        return;
+        this.deleteCategory(id);
+    }
+
+    async deleteCategory (id:string) {
+        const deleteCategoryResult:CategoriesResponseType = await CategoriesService.deleteCategory('expense', id);
+        if (deleteCategoryResult && !deleteCategoryResult.error) {
+            this.openNewRoute('/expense');
+            return;
+        }
     }
 }

@@ -320,7 +320,7 @@ export class Router {
                     return;
                 }
                 if (balance.balance) {
-                    that.balanceElement!.innerText = balance.balance.toString();
+                    that.balanceElement!.innerText = balance.balance;
                 }
             }
         });
@@ -332,7 +332,7 @@ export class Router {
                 return;
             }
             if (balance.balance) {
-                this.balanceElement!.innerText = balance.balance.toString();
+                this.balanceElement!.innerText = balance.balance;
             }
         }
     }
