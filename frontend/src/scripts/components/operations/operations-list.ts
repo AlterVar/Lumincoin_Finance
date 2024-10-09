@@ -127,9 +127,12 @@ export class OperationsList {
     private activateDeleteButton(): void {
         const deleteButtonArray = document.querySelectorAll('.delete');
         for (let i = 0; i < deleteButtonArray.length; i++) {
-            const button: Node = deleteButtonArray[i];
+            const button: Element = deleteButtonArray[i];
             button.addEventListener('click', function (e) {
                 e.preventDefault();
+                const url: string = window.location.href;
+                const id: string | null = button.id;
+                history.pushState(null, '', url + '?id=' + id);
             });
         }
     }

@@ -50,7 +50,7 @@ export class CommonUtils {
 
     public static generateTools(entity: string, id: string): string {
         return '<div class="d-flex justify-content-end gap-2">' +
-            '<a href="?id=' + id + '"class="delete" data-bs-toggle="modal" data-bs-target="#delete-btn">' +
+            '<a href="javascript:void(0)" id="' + id + '" class="delete" data-bs-toggle="modal" data-bs-target="#delete-btn">' +
             '<svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
             '                                <path d="M4.5 5.5C4.77614 5.5 5 5.72386 5 6V12C5 12.2761 4.77614 12.5 4.5 12.5C4.22386 12.5 4 12.2761 4 12V6C4 5.72386 4.22386 5.5 4.5 5.5Z" fill="black"/>\n' +
             '                                <path d="M7 5.5C7.27614 5.5 7.5 5.72386 7.5 6V12C7.5 12.2761 7.27614 12.5 7 12.5C6.72386 12.5 6.5 12.2761 6.5 12V6C6.5 5.72386 6.72386 5.5 7 5.5Z" fill="black"/>\n' +

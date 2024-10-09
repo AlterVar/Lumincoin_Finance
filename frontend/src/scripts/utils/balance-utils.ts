@@ -9,7 +9,7 @@ export class BalanceUtils {
             redirect: null,
             balance: null
         }
-        //TODO: а сюда может приходить редирект?
+
         const balanceElement: HTMLElement | null = document.getElementById('balance');
         if (balanceElement) {
             const balanceResult: RequestResponseType | undefined = await RequestUtils.sendRequest('/balance', 'GET');
@@ -32,7 +32,6 @@ export class BalanceUtils {
         return resultObj;
     }
 
-    //TODO: проверить, что приходит при обновлении, укладывается ли это в тип
     public static async updateBalance(): Promise<BalanceResponseType> {
         const resultObj: BalanceResponseType = {
             error: false,
@@ -43,7 +42,6 @@ export class BalanceUtils {
         const balanceInputElement: HTMLInputElement | null = <HTMLInputElement>document.getElementById('balance-input');
         const balanceValue: number = parseInt(balanceInputElement?.value as string);
 
-        //TODO: убедиться, что всё правильно работает
         if (!balanceValue) {
             balanceInputElement.value = '0';
         }

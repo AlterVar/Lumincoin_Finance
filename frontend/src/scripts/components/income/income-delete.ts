@@ -24,14 +24,6 @@ export class IncomeDelete {
         }
     }
 
-    private async deleteIncomeCategory(id: string): Promise<void> {
-        const categoryResult = await RequestUtils.sendRequest('/categories/income/' + id, 'DELETE');
-        if (categoryResult && !categoryResult.error) {
-            this.openNewRoute('/income');
-            return;
-        }
-    }
-
     private async deleteOperations(id: string): Promise<void> {
         const categoryResult:CategoriesResponseType = await CategoriesService.deleteCategory('income', id);
         if (!categoryResult.error) {
@@ -42,14 +34,11 @@ export class IncomeDelete {
                 if (operationsToDelete) {
                     for (let i = 0; i < operationsToDelete.length; i++) {
                         const deleteOperationsResult: OperationsResponseType = await OperationsService.deleteOperations(operationsToDelete[i].id!.toString());
-                        if (deleteOperationsResult.error) {
-                            this.openNewRoute('/income');
-                            return;
-                        }
                     }
                 }
             }
         }
-        this.deleteIncomeCategory(id);
+        this.openNewRoute('/income');
+        return;
     }
 }
